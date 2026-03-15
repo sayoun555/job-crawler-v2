@@ -1,0 +1,2625 @@
+- generic [active] [ref=e1]:
+  - link "본문 바로가기" [ref=e2] [cursor=pointer]:
+    - /url: "#sri_section"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "사람인" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - button "커리어 매치, 사람인!" [ref=e8] [cursor=pointer]:
+        - img [ref=e9]
+        - generic [ref=e11]: 커리어 매치, 사람인!
+      - generic [ref=e12]:
+        - link "로그인" [ref=e14] [cursor=pointer]:
+          - /url: /zf_user/auth
+        - button "기업서비스" [ref=e16] [cursor=pointer]:
+          - text: 기업서비스
+          - img [ref=e17]
+      - generic [ref=e19]:
+        - button "전체메뉴" [ref=e20] [cursor=pointer]:
+          - img [ref=e21]
+          - generic [ref=e23]: 전체메뉴
+        - generic [ref=e24]:
+          - link "채용정보" [ref=e26] [cursor=pointer]:
+            - /url: /zf_user/jobs/list/domestic
+            - generic [ref=e27]: 채용정보
+          - link "취업축하금" [ref=e29] [cursor=pointer]:
+            - /url: /zf_user/jobs/theme/it-headhunting
+            - generic [ref=e30]: 취업축하금
+          - link "신입·인턴" [ref=e32] [cursor=pointer]:
+            - /url: /zf_user/jobs/public/home
+            - generic [ref=e35]: 신입·인턴
+          - link "사람인스토어" [ref=e37] [cursor=pointer]:
+            - /url: /zf_user/store/main?t_ref=gnb
+            - generic [ref=e38]: 사람인스토어
+          - link "기업·연봉" [ref=e40] [cursor=pointer]:
+            - /url: /zf_user/company-review
+            - generic [ref=e41]: 기업·연봉
+          - link "커뮤니티" [ref=e43] [cursor=pointer]:
+            - /url: https://career.saramin.co.kr?t_ref=pc_main_gnb_title
+            - generic [ref=e44]: 커뮤니티
+          - link "취업 자료" [ref=e46] [cursor=pointer]:
+            - /url: https://mentor-match.saramin.co.kr
+            - generic [ref=e47]: 취업 자료
+  - generic [ref=e48]:
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e53]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - link "(주)씨아이테크" [ref=e57] [cursor=pointer]:
+                - /url: /zf_user/company-info/view?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09&popup_yn=y
+              - button "관심기업" [ref=e58] [cursor=pointer]:
+                - img [ref=e59]
+                - generic [ref=e61]: 관심기업
+            - heading "2026년 상반기 각 부문별 신입 및 경력 채용" [level=1] [ref=e62]
+            - button "스크랩 1090건" [ref=e63] [cursor=pointer]:
+              - generic [ref=e64]: 1,090
+            - generic [ref=e65]:
+              - generic [ref=e66]: D-26
+              - button "입사지원" [ref=e67] [cursor=pointer]:
+                - generic [ref=e68]: 입사지원
+          - generic [ref=e69]:
+            - heading "핵심 정보" [level=2] [ref=e70]
+            - generic [ref=e71]:
+              - generic [ref=e72]:
+                - generic [ref=e73]:
+                  - term [ref=e74]: 경력
+                  - definition [ref=e75]:
+                    - strong [ref=e76]: 신입·경력
+                - generic [ref=e77]:
+                  - term [ref=e78]: 학력
+                  - definition [ref=e79]:
+                    - strong [ref=e80]: 대졸(2,3년제) 이상
+                    - text: 각 모집 부문에 따라 상이함
+                - generic [ref=e81]:
+                  - term [ref=e82]: 근무형태
+                  - definition [ref=e83]:
+                    - strong [ref=e84]: 정규직
+                    - text: 수습기간 3개월
+              - generic [ref=e85]:
+                - generic [ref=e86]:
+                  - term [ref=e87]: 급여
+                  - definition [ref=e88]: 면접 후 결정
+                - generic [ref=e89]:
+                  - term [ref=e90]: 근무일시
+                  - definition [ref=e91]: 주 5일(월~금) 09:00~18:00
+                - generic [ref=e92]:
+                  - term [ref=e93]: 근무지역
+                  - definition [ref=e94]:
+                    - text: 서울 송파구, 서울전체, 강남구, 서대문구, 경기전체, 경기 성남시, 경남전체, 충북전체, 충남전체
+                    - button "지도보기" [ref=e95] [cursor=pointer]:
+                      - generic [ref=e96]: 지도보기
+                      - img [ref=e97]
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - strong [ref=e101]: 최저임금계산에 대한 알림
+                  - text: 하단에 명시된 급여, 근무 내용 등이 최저임금에 미달하는 경우 위 내용이 우선합니다.
+                - list [ref=e102]:
+                  - listitem [ref=e103]:
+                    - text: 조회수
+                    - strong [ref=e104]: 67,088
+                  - listitem [ref=e105]:
+                    - button "공유하기" [ref=e107] [cursor=pointer]:
+                      - img [ref=e108]
+                      - text: 공유하기
+                  - listitem [ref=e110]:
+                    - link "신고하기" [ref=e111] [cursor=pointer]:
+                      - /url: /zf_user/help/inquery/email-inquiry-write?rec_idx=52737994&view_type=list
+                      - img [ref=e112]
+                      - text: 신고하기
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - heading "AI 서류 합격률" [level=2] [ref=e116]
+              - button [ref=e118] [cursor=pointer]:
+                - img [ref=e119]
+            - generic [ref=e121]:
+              - img "그래픽" [ref=e123]
+              - generic [ref=e124]:
+                - strong [ref=e125]: 로그인하면 경쟁자들 대비, 나의 서류 합격률을 미리 알 수 있어요!
+                - generic [ref=e126]: 가고 싶은 기업의 인재상과 비교 분석 받아보세요!
+              - button "로그인하고 합격률 확인" [ref=e128] [cursor=pointer]
+          - generic [ref=e130]:
+            - heading "상세요강" [level=2] [ref=e131]
+            - iframe [ref=e133]:
+              - table [ref=f9e3]:
+                - rowgroup [ref=f9e4]:
+                  - row "㈜씨아이테크 | 2026년 상반기 각 부문별 신입 및 경력 채용 PA 사업 (음향 영상 솔루션 사업) 주식회사 씨아이테크 미디어 사업 (Hi-Fi ROSE 오디오 사업) MOD 사업 (병상 미디어 솔루션 사업)" [ref=f9e5]:
+                    - cell "㈜씨아이테크 | 2026년 상반기 각 부문별 신입 및 경력 채용 PA 사업 (음향 영상 솔루션 사업) 주식회사 씨아이테크 미디어 사업 (Hi-Fi ROSE 오디오 사업) MOD 사업 (병상 미디어 솔루션 사업)" [ref=f9e6]:
+                      - img "㈜씨아이테크 | 2026년 상반기 각 부문별 신입 및 경력 채용" [ref=f9e7]
+                      - generic:
+                        - link "PA 사업 (음향 영상 솔루션 사업)":
+                          - /url: https://pa.citech.kr/
+                        - link "주식회사 씨아이테크":
+                          - /url: https://www.citech.kr/
+                        - link "미디어 사업 (Hi-Fi ROSE 오디오 사업)":
+                          - /url: https://hifirose.com/
+                        - link "MOD 사업 (병상 미디어 솔루션 사업)":
+                          - /url: https://www.modtv.co.kr/
+                  - row:
+                    - cell
+          - generic [ref=e134]:
+            - heading "근무지위치" [level=2] [ref=e135]
+            - generic [ref=e136]:
+              - generic [ref=e138]:
+                - img [ref=e140]
+                - text: (05699) 서울 송파구 양재대로 932, 가락몰 업무동 11층 동관
+              - button "지도 보기" [ref=e143] [cursor=pointer]:
+                - img [ref=e144]
+                - generic [ref=e150]: 지도 보기
+          - generic [ref=e151]:
+            - heading "접수기간 및 방법" [level=2] [ref=e152]
+            - generic [ref=e153]:
+              - generic [ref=e154]:
+                - generic [ref=e155]:
+                  - generic [ref=e156]: 남은 기간
+                  - generic [ref=e157]: "26"
+                  - generic [ref=e158]: 일
+                  - generic [ref=e159]: 05:14:03
+                - generic [ref=e160]:
+                  - term [ref=e161]: 시작일
+                  - definition [ref=e162]: 2026.01.06 00:00
+                  - term [ref=e163]: 마감일
+                  - definition [ref=e164]: 2026.04.09 23:59
+                - button "입사지원" [ref=e165] [cursor=pointer]:
+                  - generic [ref=e166]: 입사지원
+              - generic [ref=e167]:
+                - term [ref=e168]: 지원방법
+                - definition [ref=e169]:
+                  - button "사람인 입사지원" [ref=e170] [cursor=pointer]
+              - paragraph [ref=e171]:
+                - img [ref=e172]
+                - text: 마감일은 기업의 사정, 조기마감 등으로 변경될 수 있습니다.
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - heading "지원자 통계" [level=2] [ref=e176]
+              - button [ref=e178] [cursor=pointer]:
+                - img [ref=e179]
+            - generic [ref=e181]:
+              - generic [ref=e182]:
+                - img "사람 이미지" [ref=e184]
+                - strong [ref=e185]: 이 공고의 경쟁자들이 궁금하다면?
+                - paragraph [ref=e186]:
+                  - text: 로그인 하시고 지원자들의 경력, 성별, 학력 등
+                  - text: 경쟁 스펙을 분석해 확인해보세요!
+                - button "로그인하고 분석하기" [ref=e187] [cursor=pointer]:
+                  - img [ref=e188]
+                  - text: 로그인하고 분석하기
+              - generic [ref=e190]:
+                - generic [ref=e192]:
+                  - generic [ref=e193]:
+                    - strong [ref=e194]: 경쟁력 분석
+                    - generic [ref=e195]:
+                      - img [ref=e196]
+                      - generic [ref=e198]: 나
+                      - generic [ref=e199]: 님
+                    - generic [ref=e200]:
+                      - img [ref=e201]
+                      - text: 경쟁자
+                  - img [ref=e206]:
+                    - generic [ref=e207]:
+                      - generic [ref=e221]: 스킬
+                      - generic [ref=e223]: 기타스펙 - 자격증 - 어학시험
+                      - generic [ref=e225]: 경험/활동/교육
+                      - generic [ref=e227]: 경력
+                - generic [ref=e231]:
+                  - generic [ref=e232]:
+                    - img [ref=e233]
+                    - generic [ref=e236]: 경쟁자들의 역량 키워드
+                  - list [ref=e237]:
+                    - listitem [ref=e238]:
+                      - generic [ref=e239]: 유연한 사고
+                    - listitem [ref=e240]:
+                      - generic [ref=e241]: 데이터 기반 의사결정
+                    - listitem [ref=e242]:
+                      - generic [ref=e243]: 웹디자인
+                    - listitem [ref=e244]:
+                      - generic [ref=e245]: 피그마
+                    - listitem [ref=e246]:
+                      - generic [ref=e247]: AI 활용 능력
+                    - listitem [ref=e248]:
+                      - generic [ref=e249]: 자기주도 학습
+                  - generic [ref=e250]:
+                    - img [ref=e251]
+                    - strong [ref=e255]: 경쟁자들의 Skill
+                  - list [ref=e256]:
+                    - listitem [ref=e257]:
+                      - generic [ref=e258]: 프로토 타이핑
+                    - listitem [ref=e259]:
+                      - generic [ref=e260]: 그래픽/UI디자인 툴
+                    - listitem [ref=e261]:
+                      - generic [ref=e262]: Design System 구축
+                  - generic [ref=e265]:
+                    - img [ref=e266]
+                    - generic [ref=e274]: 이력서에 활용하기 좋은 정보가 있어요
+          - link [ref=e276] [cursor=pointer]:
+            - /url: /zf_user/member/job-pass?inner_source=saramin&inner_medium=banner&inner_campaign=public_recrtiut_view&inner_term=jobpass
+            - img [ref=e277]
+          - generic [ref=e278]:
+            - heading "기업정보" [level=2] [ref=e280]
+            - generic [ref=e281]:
+              - generic [ref=e282]:
+                - generic [ref=e283]:
+                  - heading "(주)씨아이테크 관심기업" [level=3] [ref=e285]:
+                    - link "(주)씨아이테크" [ref=e286] [cursor=pointer]:
+                      - /url: /zf_user/company-info/view?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09
+                    - button "관심기업" [ref=e287] [cursor=pointer]:
+                      - img [ref=e288]
+                      - generic [ref=e290]: 관심기업
+                  - link "(주)씨아이테크" [ref=e292] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09
+                    - img "(주)씨아이테크" [ref=e293]
+                - generic [ref=e294]:
+                  - generic [ref=e295]:
+                    - term [ref=e296]: 대표자명
+                    - definition [ref=e297]: 김대영
+                  - generic [ref=e298]:
+                    - term [ref=e299]: 기업형태
+                    - definition [ref=e300]: 코스피, 외부감사법인, 수출입 기업
+                  - generic [ref=e301]:
+                    - term [ref=e302]: 업종
+                    - definition [ref=e303]: 비디오 및 기타 영상기기 제조업
+                  - generic [ref=e304]:
+                    - term [ref=e305]: 사원수
+                    - definition [ref=e306]: 113 명 (2026년 기준)
+                  - generic [ref=e307]:
+                    - term [ref=e308]: 설립일
+                    - definition [ref=e309]: 1967년 1월 17일 (업력 60년차)
+                  - generic [ref=e310]:
+                    - term [ref=e311]: 홈페이지
+                    - definition [ref=e312]:
+                      - link "www.citech.kr" [ref=e313] [cursor=pointer]:
+                        - /url: http://www.citech.kr
+                  - generic [ref=e314]:
+                    - term [ref=e315]: 기업주소
+                    - definition [ref=e316]: 서울 송파구 양재대로 932, 가락몰 업무동 11층 동관
+                - generic [ref=e318]:
+                  - link "채용정보 1건" [ref=e319] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view-inner-recruit?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09
+                    - generic [ref=e320]:
+                      - text: 채용정보
+                      - strong [ref=e321]: "1"
+                      - text: 건
+                  - link "기업리뷰" [ref=e322] [cursor=pointer]:
+                    - /url: /zf_user/company-review/view?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09
+                    - generic [ref=e323]: 기업리뷰
+                  - link "연봉정보" [ref=e324] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view-inner-salary?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09
+                    - generic [ref=e325]: 연봉정보
+                - generic [ref=e326]: "* 본 기업정보는 다양한 정보제공사업자(NICE평가정보, 기업회원 등)로부터 제공된 자료를 기반으로 표시됩니다. 실시간 정보와 상이할 수 있으므로, 정확한 정보는 기업공시 시스템 또는 해당 기업의 홈페이지 등을 통해 재차 확인하시기 바랍니다."
+              - link "기업정보 전체보기" [ref=e327] [cursor=pointer]:
+                - /url: /zf_user/company-info/view?csn=REd6aTkvU3NQUGhsL0xKTDI1OFFCQT09
+                - generic [ref=e328]: 기업정보 전체보기
+          - generic [ref=e329]:
+            - heading "이런 상품은 어때요? 스토어 바로가기" [level=3] [ref=e330]:
+              - text: 이런 상품은 어때요?
+              - link "스토어 바로가기" [ref=e331] [cursor=pointer]:
+                - /url: /zf_user/store/main?t_ref=relay_view
+                - text: 스토어 바로가기
+                - img [ref=e332]
+            - list [ref=e335]:
+              - listitem [ref=e336]:
+                - generic [ref=e337]:
+                  - link "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기" [ref=e338] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PMc089ef950f97433da1&t_ref=search&t_ref_content=
+                    - img "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기" [ref=e339]
+                  - button "찜하기" [ref=e340] [cursor=pointer]:
+                    - img [ref=e341]
+                    - generic [ref=e343]: 찜하기
+                - link "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기 19,000원" [ref=e344] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PMc089ef950f97433da1&t_ref=search&t_ref_content=
+                  - generic [ref=e345]:
+                    - strong [ref=e346]: "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기"
+                    - strong [ref=e348]: 19,000원
+              - listitem [ref=e349]:
+                - generic [ref=e350]:
+                  - link "[사람인 공식] 취업준비 필수 인적성 검사" [ref=e351] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM3708978cbe6041d28c&t_ref=search&t_ref_content=
+                    - img "[사람인 공식] 취업준비 필수 인적성 검사" [ref=e352]
+                  - button "찜하기" [ref=e353] [cursor=pointer]:
+                    - img [ref=e354]
+                    - generic [ref=e356]: 찜하기
+                - link "[사람인 공식] 취업준비 필수 인적성 검사 22,800원 21% 22,800원" [ref=e357] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM3708978cbe6041d28c&t_ref=search&t_ref_content=
+                  - generic [ref=e358]:
+                    - strong [ref=e359]: "[사람인 공식] 취업준비 필수 인적성 검사"
+                    - generic [ref=e360]:
+                      - generic [ref=e361]: 22,800원
+                      - generic [ref=e362]:
+                        - generic [ref=e363]: 21%
+                        - strong [ref=e364]: 22,800원
+              - listitem [ref=e365]:
+                - generic [ref=e366]:
+                  - link "카이스트 출신의 자소서 작성법" [ref=e367] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM7ab7e12fc59e42adbb&t_ref=search&t_ref_content=
+                    - img "카이스트 출신의 자소서 작성법" [ref=e368]
+                  - button "찜하기" [ref=e369] [cursor=pointer]:
+                    - img [ref=e370]
+                    - generic [ref=e372]: 찜하기
+                - link "카이스트 출신의 자소서 작성법 119,000원 67% 119,000원" [ref=e373] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM7ab7e12fc59e42adbb&t_ref=search&t_ref_content=
+                  - generic [ref=e374]:
+                    - strong [ref=e375]: 카이스트 출신의 자소서 작성법
+                    - generic [ref=e376]:
+                      - generic [ref=e377]: 119,000원
+                      - generic [ref=e378]:
+                        - generic [ref=e379]: 67%
+                        - strong [ref=e380]: 119,000원
+              - listitem [ref=e381]:
+                - generic [ref=e382]:
+                  - link "믿고 맡길 수 있는 자소서/학업계획서" [ref=e383] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM559dc64a46194d77b5&t_ref=search&t_ref_content=
+                    - img "믿고 맡길 수 있는 자소서/학업계획서" [ref=e384]
+                  - button "찜하기" [ref=e385] [cursor=pointer]:
+                    - img [ref=e386]
+                    - generic [ref=e388]: 찜하기
+                - link "믿고 맡길 수 있는 자소서/학업계획서 50,000원" [ref=e389] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM559dc64a46194d77b5&t_ref=search&t_ref_content=
+                  - generic [ref=e390]:
+                    - strong [ref=e391]: 믿고 맡길 수 있는 자소서/학업계획서
+                    - strong [ref=e393]: 50,000원
+              - listitem [ref=e394]:
+                - generic [ref=e395]:
+                  - link "한눈에 보는 깔끔한 경력기술서" [ref=e396] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM40b156de4c894c8abd&t_ref=search&t_ref_content=
+                    - img "한눈에 보는 깔끔한 경력기술서" [ref=e397]
+                  - button "찜하기" [ref=e398] [cursor=pointer]:
+                    - img [ref=e399]
+                    - generic [ref=e401]: 찜하기
+                - link "한눈에 보는 깔끔한 경력기술서 100,000원 50% 100,000원" [ref=e402] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM40b156de4c894c8abd&t_ref=search&t_ref_content=
+                  - generic [ref=e403]:
+                    - strong [ref=e404]: 한눈에 보는 깔끔한 경력기술서
+                    - generic [ref=e405]:
+                      - generic [ref=e406]: 100,000원
+                      - generic [ref=e407]:
+                        - generic [ref=e408]: 50%
+                        - strong [ref=e409]: 100,000원
+              - listitem [ref=e410]:
+                - generic [ref=e411]:
+                  - link "[사람인 AI] 자소서 코칭 (30회권)" [ref=e412] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PMfa819b45146e47d688&t_ref=search&t_ref_content=
+                    - img "[사람인 AI] 자소서 코칭 (30회권)" [ref=e413]
+                  - button "찜하기" [ref=e414] [cursor=pointer]:
+                    - img [ref=e415]
+                    - generic [ref=e417]: 찜하기
+                - link "[사람인 AI] 자소서 코칭 (30회권) 12,500원 40% 12,500원" [ref=e418] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PMfa819b45146e47d688&t_ref=search&t_ref_content=
+                  - generic [ref=e419]:
+                    - strong [ref=e420]: "[사람인 AI] 자소서 코칭 (30회권)"
+                    - generic [ref=e421]:
+                      - generic [ref=e422]: 12,500원
+                      - generic [ref=e423]:
+                        - generic [ref=e424]: 40%
+                        - strong [ref=e425]: 12,500원
+              - listitem [ref=e426]:
+                - generic [ref=e427]:
+                  - link "대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트" [ref=e428] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PMa435d370cbbe4406a5&t_ref=search&t_ref_content=
+                    - img "대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트" [ref=e429]
+                  - button "찜하기" [ref=e430] [cursor=pointer]:
+                    - img [ref=e431]
+                    - generic [ref=e433]: 찜하기
+                - link "대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트 10,000원" [ref=e434] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PMa435d370cbbe4406a5&t_ref=search&t_ref_content=
+                  - generic [ref=e435]:
+                    - strong [ref=e436]: 대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트
+                    - strong [ref=e438]: 10,000원
+              - listitem [ref=e439]:
+                - generic [ref=e440]:
+                  - link "인사담당자를 사로잡는 합격자소서 컨설팅" [ref=e441] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM511ce054d79f49ab90&t_ref=search&t_ref_content=
+                    - img "인사담당자를 사로잡는 합격자소서 컨설팅" [ref=e442]
+                  - button "찜하기" [ref=e443] [cursor=pointer]:
+                    - img [ref=e444]
+                    - generic [ref=e446]: 찜하기
+                - link "인사담당자를 사로잡는 합격자소서 컨설팅 112,000원" [ref=e447] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM511ce054d79f49ab90&t_ref=search&t_ref_content=
+                  - generic [ref=e448]:
+                    - strong [ref=e449]: 인사담당자를 사로잡는 합격자소서 컨설팅
+                    - strong [ref=e451]: 112,000원
+              - listitem [ref=e452]:
+                - generic [ref=e453]:
+                  - link "합격비법_이력서,자기소개서,면접법 (신입~임원)" [ref=e454] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM21934f4d9f90473dac&t_ref=search&t_ref_content=
+                    - img "합격비법_이력서,자기소개서,면접법 (신입~임원)" [ref=e455]
+                  - button "찜하기" [ref=e456] [cursor=pointer]:
+                    - img [ref=e457]
+                    - generic [ref=e459]: 찜하기
+                - link "합격비법_이력서,자기소개서,면접법 (신입~임원) 10,000원" [ref=e460] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM21934f4d9f90473dac&t_ref=search&t_ref_content=
+                  - generic [ref=e461]:
+                    - strong [ref=e462]: 합격비법_이력서,자기소개서,면접법 (신입~임원)
+                    - strong [ref=e464]: 10,000원
+              - listitem [ref=e465]:
+                - generic [ref=e466]:
+                  - link "나도 모르는 나를 발견하는 계기, 인문학적 자소서" [ref=e467] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM01379f591a744ac9b9&t_ref=search&t_ref_content=
+                    - img "나도 모르는 나를 발견하는 계기, 인문학적 자소서" [ref=e468]
+                  - button "찜하기" [ref=e469] [cursor=pointer]:
+                    - img [ref=e470]
+                    - generic [ref=e472]: 찜하기
+                - link "나도 모르는 나를 발견하는 계기, 인문학적 자소서 10,000원" [ref=e473] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM01379f591a744ac9b9&t_ref=search&t_ref_content=
+                  - generic [ref=e474]:
+                    - strong [ref=e475]: 나도 모르는 나를 발견하는 계기, 인문학적 자소서
+                    - strong [ref=e477]: 10,000원
+            - generic [ref=e478]:
+              - button "Previous slide" [disabled] [ref=e479] [cursor=pointer]:
+                - img [ref=e480]
+              - button "Next slide" [ref=e482] [cursor=pointer]:
+                - img [ref=e483]
+          - generic [ref=e485]:
+            - generic [ref=e486]:
+              - heading "직업전체 HOT100" [level=4] [ref=e487]:
+                - text: 직업전체
+                - emphasis [ref=e488]: HOT100
+              - link "더보기 - 직업전체" [ref=e489] [cursor=pointer]:
+                - /url: /zf_user/jobs/hot100?&career_cd=1
+                - text: 더보기 >
+            - generic [ref=e490]:
+              - paragraph [ref=e491]:
+                - emphasis [ref=e492]: "1"
+                - text: /3
+              - button "이전" [ref=e493] [cursor=pointer]:
+                - generic [ref=e494]: 이전
+              - list [ref=e496]:
+                - listitem [ref=e497]:
+                  - 'link "(주)엘티엔터테인먼트 제주 드림타워 복합리조트 [카지노&호텔] 대규모 신입/경력 공채 직종 #정규직 · 계약직 지역 #제주 제주시" [ref=e498] [cursor=pointer]':
+                    - /url: /zf_user/jobs/relay/view?rec_idx=51438642&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e499]: (주)엘티엔터테인먼트
+                    - generic [ref=e500]: 제주 드림타워 복합리조트 [카지노&호텔] 대규모 신입/경력 공채
+                    - generic [ref=e501]:
+                      - generic [ref=e502]:
+                        - generic [ref=e503]: 직종
+                        - text: "#정규직 · 계약직"
+                      - generic [ref=e504]:
+                        - generic [ref=e505]: 지역
+                        - text: "#제주 제주시"
+                  - button "스크랩" [ref=e506] [cursor=pointer]:
+                    - img [ref=e507]
+                  - generic [ref=e509]:
+                    - generic [ref=e510]: 공고 마감일
+                    - generic [ref=e511]: ~ 03/31(화)
+                    - button "입사지원" [ref=e512] [cursor=pointer]:
+                      - generic [ref=e513]: 입사지원
+                - listitem [ref=e514]:
+                  - 'link "한국산업단지공단 2026년 상반기 신입직원 채용 공고 직종 #정규직 지역 #대구전체" [ref=e515] [cursor=pointer]':
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53236585&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e516]: 한국산업단지공단
+                    - generic [ref=e517]: 2026년 상반기 신입직원 채용 공고
+                    - generic [ref=e518]:
+                      - generic [ref=e519]:
+                        - generic [ref=e520]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e521]:
+                        - generic [ref=e522]: 지역
+                        - text: "#대구전체"
+                  - button "스크랩" [ref=e523] [cursor=pointer]:
+                    - img [ref=e524]
+                  - generic [ref=e526]:
+                    - generic [ref=e527]: 공고 마감일
+                    - generic [ref=e528]: ~ 03/19(목)
+                    - link "홈페이지 지원" [ref=e529] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53236585
+                      - generic [ref=e530]: 홈페이지 지원
+                - listitem [ref=e531]:
+                  - 'link "메가박스중앙(주) 2026년 상반기 메가박스중앙 신입사원 공개채용 직종 #정규직 지역 #서울 강남구" [ref=e532] [cursor=pointer]':
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53278500&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e533]: 메가박스중앙(주)
+                    - generic [ref=e534]: 2026년 상반기 메가박스중앙 신입사원 공개채용
+                    - generic [ref=e535]:
+                      - generic [ref=e536]:
+                        - generic [ref=e537]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e538]:
+                        - generic [ref=e539]: 지역
+                        - text: "#서울 강남구"
+                  - button "스크랩" [ref=e540] [cursor=pointer]:
+                    - img [ref=e541]
+                  - generic [ref=e543]:
+                    - generic [ref=e544]: 공고 마감일
+                    - generic [ref=e545]: ~ 03/29(일)
+                    - link "홈페이지 지원" [ref=e546] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53278500
+                      - generic [ref=e547]: 홈페이지 지원
+                - listitem [ref=e548]:
+                  - link [ref=e549] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53185813&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e550]: (주)서연이화
+                    - generic [ref=e551]: "[2026년] 부문별 채용 연계형 인턴사원 공개 모집"
+                    - generic [ref=e552]:
+                      - generic [ref=e553]:
+                        - generic [ref=e554]: 직종
+                        - text: "#인턴직"
+                      - generic [ref=e555]:
+                        - generic [ref=e556]: 지역
+                        - text: "#경기 안양시"
+                  - button [ref=e557] [cursor=pointer]:
+                    - img [ref=e558]
+                  - generic [ref=e560]:
+                    - generic [ref=e561]: 공고 마감일
+                    - generic [ref=e562]: 내일마감
+                    - link [ref=e563] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53185813
+                      - generic [ref=e564]: 홈페이지 지원
+                - listitem [ref=e565]:
+                  - link [ref=e566] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53217694&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e567]: 에이에스엠엘코리아(유)
+                    - generic [ref=e568]: 2026년 상반기 ASML 신입사원 채용
+                    - generic [ref=e569]:
+                      - generic [ref=e570]:
+                        - generic [ref=e571]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e572]:
+                        - generic [ref=e573]: 지역
+                        - text: "#경기 화성시"
+                  - button [ref=e574] [cursor=pointer]:
+                    - img [ref=e575]
+                  - generic [ref=e577]:
+                    - generic [ref=e578]: 공고 마감일
+                    - generic [ref=e579]: ~ 03/16(월)
+                    - link [ref=e580] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53217694
+                      - generic [ref=e581]: 홈페이지 지원
+                - listitem [ref=e582]:
+                  - link [ref=e583] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53316491&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e584]: 현대오토에버(주)
+                    - generic [ref=e585]: 2026년 상반기 현대오토에버 신입사원 채용
+                    - generic [ref=e586]:
+                      - generic [ref=e587]:
+                        - generic [ref=e588]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e589]:
+                        - generic [ref=e590]: 지역
+                        - text: "#전국"
+                  - button [ref=e591] [cursor=pointer]:
+                    - img [ref=e592]
+                  - generic [ref=e594]:
+                    - generic [ref=e595]: 공고 마감일
+                    - generic [ref=e596]: ~ 03/23(월)
+                    - link [ref=e597] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53316491
+                      - generic [ref=e598]: 홈페이지 지원
+                - listitem [ref=e599]:
+                  - link [ref=e600] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53289873&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e601]: (주)에스원
+                    - generic [ref=e602]: 2026년 상반기 3급 신입사원/인턴 채용공고
+                    - generic [ref=e603]:
+                      - generic [ref=e604]:
+                        - generic [ref=e605]: 직종
+                        - text: "#정규직 · 인턴직"
+                      - generic [ref=e606]:
+                        - generic [ref=e607]: 지역
+                        - text: "#서울 중구"
+                  - button [ref=e608] [cursor=pointer]:
+                    - img [ref=e609]
+                  - generic [ref=e611]:
+                    - generic [ref=e612]: 공고 마감일
+                    - generic [ref=e613]: ~ 03/17(화)
+                    - link [ref=e614] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53289873
+                      - generic [ref=e615]: 홈페이지 지원
+                - listitem [ref=e616]:
+                  - link [ref=e617] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53219353&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e618]: 한국은행
+                    - generic [ref=e619]: 2026년도 한국은행 일반기능직원 채용
+                    - generic [ref=e620]:
+                      - generic [ref=e621]:
+                        - generic [ref=e622]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e623]:
+                        - generic [ref=e624]: 지역
+                        - text: "#서울전체"
+                  - button [ref=e625] [cursor=pointer]:
+                    - img [ref=e626]
+                  - generic [ref=e628]:
+                    - generic [ref=e629]: 공고 마감일
+                    - generic [ref=e630]: ~ 03/16(월)
+                    - link [ref=e631] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53219353
+                      - generic [ref=e632]: 홈페이지 지원
+                - listitem [ref=e633]:
+                  - link [ref=e634] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53260301&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e635]: 한국바이린(주)
+                    - generic [ref=e636]: 한국바이린 영업, 재무, 총무, 생산 신입 채용
+                    - generic [ref=e637]:
+                      - generic [ref=e638]:
+                        - generic [ref=e639]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e640]:
+                        - generic [ref=e641]: 지역
+                        - text: "#경기 평택시"
+                  - button [ref=e642] [cursor=pointer]:
+                    - img [ref=e643]
+                  - generic [ref=e645]:
+                    - generic [ref=e646]: 공고 마감일
+                    - generic [ref=e647]: ~ 03/18(수)
+                    - button [ref=e648] [cursor=pointer]:
+                      - generic [ref=e649]: 입사지원
+              - button "다음" [ref=e650] [cursor=pointer]:
+                - generic [ref=e651]: 다음
+          - generic [ref=e652]:
+            - heading "관련 태그" [level=2] [ref=e653]
+            - generic [ref=e654]:
+              - generic [ref=e655]:
+                - list [ref=e656]:
+                  - listitem [ref=e657]:
+                    - link "#신입·인턴" [ref=e658] [cursor=pointer]:
+                      - /url: /zf_user/jobs/public/list?t_ref=relay_view
+                  - listitem [ref=e659]:
+                    - link "#마케팅·홍보·조사" [ref=e660] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=14
+                  - listitem [ref=e661]:
+                    - link "#광고마케팅" [ref=e662] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1421
+                  - listitem [ref=e663]:
+                    - link "#글로벌마케팅" [ref=e664] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1423
+                  - listitem [ref=e665]:
+                    - link "#기업홍보" [ref=e666] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1424
+                  - listitem [ref=e667]:
+                    - link "#마케팅" [ref=e668] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2201
+                  - listitem [ref=e669]:
+                    - link "#마케팅기획" [ref=e670] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1412
+                  - listitem [ref=e671]:
+                    - link "#마케팅전략" [ref=e672] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1413
+                  - listitem [ref=e673]:
+                    - link "#브랜드마케팅" [ref=e674] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1429
+                  - listitem [ref=e675]:
+                    - link "#오프라인마케팅" [ref=e676] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1431
+                  - listitem [ref=e677]:
+                    - link "#온라인마케팅" [ref=e678] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1432
+                  - listitem [ref=e679]:
+                    - link "#인플루언서마케팅" [ref=e680] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1416
+                  - listitem [ref=e681]:
+                    - link "#제휴마케팅" [ref=e682] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1433
+                  - listitem [ref=e683]:
+                    - link "#콘텐츠기획" [ref=e684] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1420
+                  - listitem [ref=e685]:
+                    - link "#콘텐츠마케팅" [ref=e686] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1435
+                  - listitem [ref=e687]:
+                    - link "#행사기획" [ref=e688] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1418
+                  - listitem [ref=e689]:
+                    - link "#홍보" [ref=e690] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2210
+                  - listitem [ref=e691]:
+                    - link "#SNS마케팅" [ref=e692] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1419
+                  - listitem [ref=e693]:
+                    - link "#검색광고" [ref=e694] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1449
+                  - listitem [ref=e695]:
+                    - link "#매체관리" [ref=e696] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1453
+                  - listitem [ref=e697]:
+                    - link "#배너광고" [ref=e698] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1454
+                  - listitem [ref=e699]:
+                    - link "#언론홍보" [ref=e700] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1461
+                  - listitem [ref=e701]:
+                    - link "#채널관리" [ref=e702] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1464
+                  - listitem [ref=e703]:
+                    - link "#키워드광고" [ref=e704] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1465
+                  - listitem [ref=e705]:
+                    - link "#통계/분석" [ref=e706] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1466
+                  - listitem [ref=e707]:
+                    - link "#IT개발·데이터" [ref=e708] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=2
+                  - listitem [ref=e709]:
+                    - link "#백엔드/서버개발" [ref=e710] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=84
+                  - listitem [ref=e711]:
+                    - link "#보안관제" [ref=e712] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2239
+                  - listitem [ref=e713]:
+                    - link "#정보보안" [ref=e714] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=90
+                  - listitem [ref=e715]:
+                    - link "#프론트엔드" [ref=e716] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=92
+                  - listitem [ref=e717]:
+                    - link "#딥러닝" [ref=e718] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=108
+                  - listitem [ref=e719]:
+                    - link "#머신러닝" [ref=e720] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=109
+                  - listitem [ref=e721]:
+                    - link "#영상처리" [ref=e722] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=123
+                  - listitem [ref=e723]:
+                    - link "#음성인식" [ref=e724] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=125
+                  - listitem [ref=e725]:
+                    - link "#클라우드" [ref=e726] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=136
+                  - listitem [ref=e727]:
+                    - link "#API" [ref=e728] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=142
+                  - listitem [ref=e729]:
+                    - link "#NLP(자연어처리)" [ref=e730] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=160
+                  - listitem [ref=e731]:
+                    - link "#SDK" [ref=e732] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=169
+                  - listitem [ref=e733]:
+                    - link "#AWS" [ref=e734] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=201
+                  - listitem [ref=e735]:
+                    - link "#Azure" [ref=e736] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=202
+                  - listitem [ref=e737]:
+                    - link "#C#" [ref=e738] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=204
+                  - listitem [ref=e739]:
+                    - link "#Django" [ref=e740] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=213
+                  - listitem [ref=e741]:
+                    - link "#Docker" [ref=e742] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=214
+                  - listitem [ref=e743]:
+                    - link "#Flutter" [ref=e744] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=220
+                  - listitem [ref=e745]:
+                    - link "#GCP" [ref=e746] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=221
+                  - listitem [ref=e747]:
+                    - link "#Git" [ref=e748] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=222
+                  - listitem [ref=e749]:
+                    - link "#GraphQL" [ref=e750] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=224
+                  - listitem [ref=e751]:
+                    - link "#Java" [ref=e752] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=235
+                  - listitem [ref=e753]:
+                    - link "#Javascript" [ref=e754] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=236
+                  - listitem [ref=e755]:
+                    - link "#JPA" [ref=e756] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=238
+                  - listitem [ref=e757]:
+                    - link "#Kafka" [ref=e758] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=241
+                  - listitem [ref=e759]:
+                    - link "#Kotlin" [ref=e760] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=243
+                  - listitem [ref=e761]:
+                    - link "#Kubernetes" [ref=e762] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=244
+                  - listitem [ref=e763]:
+                    - link "#MongoDB" [ref=e764] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=254
+                  - listitem [ref=e765]:
+                    - link "#Node.js" [ref=e766] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=258
+                  - listitem [ref=e767]:
+                    - link "#NoSQL" [ref=e768] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=259
+                  - listitem [ref=e769]:
+                    - link "#PostgreSQL" [ref=e770] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=270
+                  - listitem [ref=e771]:
+                    - link "#Python" [ref=e772] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=272
+                  - listitem [ref=e773]:
+                    - link "#Pytorch" [ref=e774] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=273
+                  - listitem [ref=e775]:
+                    - link "#React" [ref=e776] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=277
+                  - listitem [ref=e777]:
+                    - link "#RestAPI" [ref=e778] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=282
+                  - listitem [ref=e779]:
+                    - link "#Spark" [ref=e780] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=289
+                  - listitem [ref=e781]:
+                    - link "#SpringBoot" [ref=e782] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=292
+                  - listitem [ref=e783]:
+                    - link "#SQL" [ref=e784] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=293
+                  - listitem [ref=e785]:
+                    - link "#Tensorflow" [ref=e786] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=300
+                  - listitem [ref=e787]:
+                    - link "#TypeScript" [ref=e788] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=302
+                  - listitem [ref=e789]:
+                    - link "#Vue.js" [ref=e790] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=312
+                  - listitem [ref=e791]:
+                    - link "#WPF" [ref=e792] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=317
+                  - listitem [ref=e793]:
+                    - link "#디자인" [ref=e794] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=15
+                  - listitem [ref=e795]:
+                    - link "#브랜드디자인" [ref=e796] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1493
+                  - listitem [ref=e797]:
+                    - link "#3D디자인" [ref=e798] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1531
+                  - listitem [ref=e799]:
+                    - link "#영업·판매·무역" [ref=e800] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=8
+                  - listitem [ref=e801]:
+                    - link "#기계판매" [ref=e802] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=714
+                  - listitem [ref=e803]:
+                    - link "#기술영업" [ref=e804] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=692
+                  - listitem [ref=e805]:
+                    - link "#네트워크영업" [ref=e806] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=715
+                  - listitem [ref=e807]:
+                    - link "#보안솔루션영업" [ref=e808] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2241
+                  - listitem [ref=e809]:
+                    - link "#솔루션기술영업" [ref=e810] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=719
+                  - listitem [ref=e811]:
+                    - link "#시스템영업" [ref=e812] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=720
+                  - listitem [ref=e813]:
+                    - link "#영업" [ref=e814] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2203
+                  - listitem [ref=e815]:
+                    - link "#영업관리" [ref=e816] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=699
+                  - listitem [ref=e817]:
+                    - link "#영업기획" [ref=e818] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2208
+                  - listitem [ref=e819]:
+                    - link "#영업전략" [ref=e820] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=724
+                  - listitem [ref=e821]:
+                    - link "#영업지원" [ref=e822] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=700
+                  - listitem [ref=e823]:
+                    - link "#영업직" [ref=e824] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=701
+                  - listitem [ref=e825]:
+                    - link "#영업판촉" [ref=e826] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=725
+                  - listitem [ref=e827]:
+                    - link "#장비영업" [ref=e828] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=733
+                  - listitem [ref=e829]:
+                    - link "#IT영업" [ref=e830] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=751
+                  - listitem [ref=e831]:
+                    - link "#SI영업" [ref=e832] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=752
+                  - listitem [ref=e833]:
+                    - link "#거래처관리" [ref=e834] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=758
+                  - listitem [ref=e835]:
+                    - link "#거래처납품" [ref=e836] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=759
+                  - listitem [ref=e837]:
+                    - link "#거래처영업" [ref=e838] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=760
+                  - listitem [ref=e839]:
+                    - link "#고객관리" [ref=e840] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=761
+                  - listitem [ref=e841]:
+                    - link "#기업영업" [ref=e842] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=764
+                  - listitem [ref=e843]:
+                    - link "#매출관리" [ref=e844] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=769
+                  - listitem [ref=e845]:
+                    - link "#수/발주" [ref=e846] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=777
+                  - listitem [ref=e847]:
+                    - link "#고객상담·TM" [ref=e848] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=21
+                  - listitem [ref=e849]:
+                    - link "#상담원" [ref=e850] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1972
+                  - listitem [ref=e851]:
+                    - link "#아웃바운드" [ref=e852] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1973
+                  - listitem [ref=e853]:
+                    - link "#인바운드" [ref=e854] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1975
+                  - listitem [ref=e855]:
+                    - link "#CS" [ref=e856] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1977
+                  - listitem [ref=e857]:
+                    - link "#고객관리" [ref=e858] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1981
+                  - listitem [ref=e859]:
+                    - link "#기술상담" [ref=e860] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1984
+                  - listitem [ref=e861]:
+                    - link "#단순안내" [ref=e862] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1985
+                  - listitem [ref=e863]:
+                    - link "#메일상담" [ref=e864] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1987
+                  - listitem [ref=e865]:
+                    - link "#배송상담" [ref=e866] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1990
+                  - listitem [ref=e867]:
+                    - link "#전화상담" [ref=e868] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1993
+                  - listitem [ref=e869]:
+                    - link "#접수/예약" [ref=e870] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1994
+                  - listitem [ref=e871]:
+                    - link "#주문상담" [ref=e872] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1995
+                  - listitem [ref=e873]:
+                    - link "#채팅상담" [ref=e874] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1996
+                  - listitem [ref=e875]:
+                    - link "#A/S상담" [ref=e876] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2002
+                  - listitem [ref=e877]:
+                    - link "#구매·자재·물류" [ref=e878] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=18
+                  - listitem [ref=e879]:
+                    - link "#구매관리" [ref=e880] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1750
+                  - listitem [ref=e881]:
+                    - link "#물류관리" [ref=e882] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1751
+                  - listitem [ref=e883]:
+                    - link "#유통관리" [ref=e884] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1761
+                  - listitem [ref=e885]:
+                    - link "#자재관리" [ref=e886] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1754
+                  - listitem [ref=e887]:
+                    - link "#재고관리" [ref=e888] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1755
+                  - listitem [ref=e889]:
+                    - link "#창고관리" [ref=e890] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1756
+                  - listitem [ref=e891]:
+                    - link "#거래처관리" [ref=e892] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1766
+                  - listitem [ref=e893]:
+                    - link "#수/발주" [ref=e894] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1777
+                  - listitem [ref=e895]:
+                    - link "#입고/입하" [ref=e896] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1784
+                  - listitem [ref=e897]:
+                    - link "#출고/출하" [ref=e898] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1791
+                  - listitem [ref=e899]:
+                    - link "#생산" [ref=e900] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=11
+                  - listitem [ref=e901]:
+                    - link "#공정관리" [ref=e902] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2211
+                  - listitem [ref=e903]:
+                    - link "#구조해석/설계" [ref=e904] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1011
+                  - listitem [ref=e905]:
+                    - link "#금형설계" [ref=e906] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1012
+                  - listitem [ref=e907]:
+                    - link "#기계설계" [ref=e908] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1013
+                  - listitem [ref=e909]:
+                    - link "#기구설계" [ref=e910] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1014
+                  - listitem [ref=e911]:
+                    - link "#기술설계" [ref=e912] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1015
+                  - listitem [ref=e913]:
+                    - link "#기술엔지니어" [ref=e914] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1005
+                  - listitem [ref=e915]:
+                    - link "#생산관리" [ref=e916] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=993
+                  - listitem [ref=e917]:
+                    - link "#생산기술" [ref=e918] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2200
+                  - listitem [ref=e919]:
+                    - link "#생산설계" [ref=e920] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1017
+                  - listitem [ref=e921]:
+                    - link "#설계엔지니어" [ref=e922] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1006
+                  - listitem [ref=e923]:
+                    - link "#제품설계" [ref=e924] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1010
+                  - listitem [ref=e925]:
+                    - link "#다이캐스팅" [ref=e926] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1048
+                  - listitem [ref=e927]:
+                    - link "#도면해독" [ref=e928] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1126
+                  - listitem [ref=e929]:
+                    - link "#사출금형" [ref=e930] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1064
+                  - listitem [ref=e931]:
+                    - link "#사출성형" [ref=e932] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1065
+                  - listitem [ref=e933]:
+                    - link "#솔리드웍스" [ref=e934] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1157
+                  - listitem [ref=e935]:
+                    - link "#프레스금형" [ref=e936] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1107
+                  - listitem [ref=e937]:
+                    - link "#AutoCAD" [ref=e938] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1162
+                  - listitem [ref=e939]:
+                    - link "#Creo(Pro-E)" [ref=e940] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1165
+                  - listitem [ref=e941]:
+                    - link "#2D설계" [ref=e942] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1038
+                  - listitem [ref=e943]:
+                    - link "#3D설계" [ref=e944] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1039
+                  - listitem [ref=e945]:
+                    - link "#프레스" [ref=e946] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1196
+                  - listitem [ref=e947]:
+                    - link "#NC/CNC밀링" [ref=e948] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1199
+                  - listitem [ref=e949]:
+                    - link "#NC/CNC보링" [ref=e950] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1200
+                  - listitem [ref=e951]:
+                    - link "#NC/CNC선반" [ref=e952] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1201
+                  - listitem [ref=e953]:
+                    - link "#건설·건축" [ref=e954] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=22
+                  - listitem [ref=e955]:
+                    - link "#전기기사" [ref=e956] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2040
+                  - listitem [ref=e957]:
+                    - link "#전기설계" [ref=e958] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2071
+                  - listitem [ref=e959]:
+                    - link "#통신설계" [ref=e960] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2060
+                  - listitem [ref=e961]:
+                    - link "#현장관리자" [ref=e962] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2048
+                  - listitem [ref=e963]:
+                    - link "#현장기사" [ref=e964] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2049
+                  - listitem [ref=e965]:
+                    - link "#건축전기" [ref=e966] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2081
+                  - listitem [ref=e967]:
+                    - link "#전기설비" [ref=e968] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2140
+                  - listitem [ref=e969]:
+                    - link "#전기시공" [ref=e970] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2141
+                  - listitem [ref=e971]:
+                    - link "#전기제어" [ref=e972] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2178
+                  - listitem [ref=e973]:
+                    - link "#통신공사" [ref=e974] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2156
+                  - listitem [ref=e975]:
+                    - link "#서울" [ref=e976] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=101000
+                  - listitem [ref=e977]:
+                    - link "#강남구" [ref=e978] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=101010
+                  - listitem [ref=e979]:
+                    - link "#서대문구" [ref=e980] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=101140
+                  - listitem [ref=e981]:
+                    - link "#송파구" [ref=e982] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=101180
+                  - listitem [ref=e983]:
+                    - link "#경기" [ref=e984] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=102000
+                  - listitem [ref=e985]:
+                    - link "#성남시" [ref=e986] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=102180
+                  - listitem [ref=e987]:
+                    - link "#경남" [ref=e988] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=110000
+                  - listitem [ref=e989]:
+                    - link "#충북" [ref=e990] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=114000
+                  - listitem [ref=e991]:
+                    - link "#충남" [ref=e992] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=115000
+                - button "태그 더보기" [ref=e993] [cursor=pointer]:
+                  - generic [ref=e994]: 태그 더보기
+              - generic [ref=e995]:
+                - paragraph [ref=e996]:
+                  - img [ref=e997]
+                  - text: 본 채용정보에 불법·허위·과장, 최저임금 위반 등 잘못된 내용이 있을 경우
+                  - link "신고" [ref=e999] [cursor=pointer]:
+                    - /url: /zf_user/help/inquery/email-inquiry-write?rec_idx=52737994&view_type=list
+                  - text: 해주세요!
+                - link "신고하기" [ref=e1001] [cursor=pointer]:
+                  - /url: /zf_user/help/inquery/email-inquiry-write?rec_idx=52737994&view_type=list
+                  - img [ref=e1002]
+                  - text: 신고하기
+                - button "공유하기" [ref=e1005] [cursor=pointer]:
+                  - img [ref=e1006]
+                  - text: 공유하기
+                - button "인쇄하기" [ref=e1008] [cursor=pointer]:
+                  - img [ref=e1009]
+                  - text: 인쇄하기
+        - generic [ref=e1015]:
+          - generic [ref=e1017]:
+            - generic [ref=e1018]:
+              - link "(주)코난테크놀로지" [ref=e1019] [cursor=pointer]:
+                - /url: /zf_user/company-info/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09&popup_yn=y
+              - button "관심기업" [ref=e1020] [cursor=pointer]:
+                - img [ref=e1021]
+                - generic [ref=e1023]: 관심기업
+            - heading "2026년 각부문 신입 및 경력 채용" [level=1] [ref=e1024]
+            - button "스크랩 366건" [ref=e1025] [cursor=pointer]:
+              - generic [ref=e1026]: "366"
+            - generic [ref=e1027]:
+              - generic [ref=e1028]: D-28
+              - button "홈페이지 지원" [ref=e1029] [cursor=pointer]:
+                - generic [ref=e1030]: 홈페이지 지원
+          - generic [ref=e1031]:
+            - heading "핵심 정보" [level=2] [ref=e1032]
+            - generic [ref=e1033]:
+              - generic [ref=e1034]:
+                - generic [ref=e1035]:
+                  - term [ref=e1036]: 경력
+                  - definition [ref=e1037]:
+                    - strong [ref=e1038]: 신입·경력
+                - generic [ref=e1039]:
+                  - term [ref=e1040]: 학력
+                  - definition [ref=e1041]:
+                    - strong [ref=e1042]: 대졸(4년제) 이상
+                - generic [ref=e1043]:
+                  - term [ref=e1044]: 근무형태
+                  - definition [ref=e1045]:
+                    - strong [ref=e1046]: 정규직
+                    - text: 수습기간 3개월
+              - generic [ref=e1047]:
+                - generic [ref=e1048]:
+                  - term [ref=e1049]: 급여
+                  - definition [ref=e1050]: 면접 후 결정
+                - generic [ref=e1051]:
+                  - term [ref=e1052]: 근무지역
+                  - definition [ref=e1053]:
+                    - text: 서울 서초구, 서울전체
+                    - button "지도보기" [ref=e1054] [cursor=pointer]:
+                      - generic [ref=e1055]: 지도보기
+                      - img [ref=e1056]
+              - generic [ref=e1058]:
+                - generic [ref=e1059]:
+                  - strong [ref=e1060]: 최저임금계산에 대한 알림
+                  - text: 하단에 명시된 급여, 근무 내용 등이 최저임금에 미달하는 경우 위 내용이 우선합니다.
+                - list [ref=e1061]:
+                  - listitem [ref=e1062]:
+                    - text: 조회수
+                    - strong [ref=e1063]: 12,945
+                  - listitem [ref=e1064]:
+                    - text: 홈페이지접속
+                    - strong [ref=e1065]: 6,608
+                  - listitem [ref=e1066]:
+                    - button "공유하기" [ref=e1068] [cursor=pointer]:
+                      - img [ref=e1069]
+                      - text: 공유하기
+                  - listitem [ref=e1071]:
+                    - link "신고하기" [ref=e1072] [cursor=pointer]:
+                      - /url: /zf_user/help/inquery/email-inquiry-write?rec_idx=52783795&view_type=list
+                      - img [ref=e1073]
+                      - text: 신고하기
+          - generic [ref=e1075]:
+            - generic [ref=e1076]:
+              - heading "AI 서류 합격률" [level=2] [ref=e1077]
+              - button [ref=e1079] [cursor=pointer]:
+                - img [ref=e1080]
+            - generic [ref=e1082]:
+              - img "그래픽" [ref=e1084]
+              - generic [ref=e1085]:
+                - strong [ref=e1086]: 로그인하면 경쟁자들 대비, 나의 서류 합격률을 미리 알 수 있어요!
+                - generic [ref=e1087]: 가고 싶은 기업의 인재상과 비교 분석 받아보세요!
+              - button "로그인하고 합격률 확인" [ref=e1089] [cursor=pointer]
+          - generic [ref=e1091]:
+            - heading "상세요강" [level=2] [ref=e1092]
+            - iframe [ref=e1094]:
+              - table [ref=f10e4]:
+                - rowgroup [ref=f10e5]:
+                  - row "㈜코난테크놀로지 | 2026년 각부문 신입 및 경력 채용" [ref=f10e6]:
+                    - cell "㈜코난테크놀로지 | 2026년 각부문 신입 및 경력 채용" [ref=f10e7]:
+                      - table [ref=f10e8]:
+                        - rowgroup [ref=f10e9]:
+                          - row "㈜코난테크놀로지 | 2026년 각부문 신입 및 경력 채용" [ref=f10e10]:
+                            - cell "㈜코난테크놀로지 | 2026년 각부문 신입 및 경력 채용" [ref=f10e11]:
+                              - img "㈜코난테크놀로지 | 2026년 각부문 신입 및 경력 채용" [ref=f10e12]
+                  - row "모집부문 소속 채용공고명 모집인원 상세내용 /지원하기 인공지능 연구소 LLM AI 엔지니어 (LLM그룹) O명 지원하기 LLM 풀스택 개발 (LLM그룹) O명 지원하기 PHM - AI알고리즘 개발 (디지털트윈그룹) O명 지원하기 PM (자율에이전트그룹) O명 지원하기 강화학습 개발자 (자율에이전트그룹) O명 지원하기 시뮬레이션 개발자 (자율에이전트그룹) O명 지원하기 영업부문 IT기술영업 (AI디바이스) O명 지원하기 IT기술영업 (솔루션 영업) (주니어) O명 지원하기 IT 사업기획 (Business Development) O명 지원하기 IT 서비스 기획 / 사업관리 (팀장급) O명 지원하기 IT기술영업 (국방분야, 제조분야) O명 지원하기 시스템 운영 및 프로그램/웹 개발 O명 지원하기 PM (데이터사이언스) O명 지원하기 IT기술영업 (데이터사이언스) O명 지원하기 백엔드개발 (데이터사이언스) O명 지원하기 데이터 수집 개발자 (데이터사이언스) O명 지원하기 IT기술영업 (솔루션 및 유지보수) O명 지원하기 AI사업 부문 PM (AI사업부문) O명 지원하기 PMO (AI사업부문) O명 지원하기 LLM/RAG 백엔드 개발자 (AI사업부문) O명 지원하기 TA - Technical Architect (AI사업부문) O명 지원하기 웹서비스 개발자 (AI사업부문) O명 지원하기" [ref=f10e13]:
+                    - cell "모집부문 소속 채용공고명 모집인원 상세내용 /지원하기 인공지능 연구소 LLM AI 엔지니어 (LLM그룹) O명 지원하기 LLM 풀스택 개발 (LLM그룹) O명 지원하기 PHM - AI알고리즘 개발 (디지털트윈그룹) O명 지원하기 PM (자율에이전트그룹) O명 지원하기 강화학습 개발자 (자율에이전트그룹) O명 지원하기 시뮬레이션 개발자 (자율에이전트그룹) O명 지원하기 영업부문 IT기술영업 (AI디바이스) O명 지원하기 IT기술영업 (솔루션 영업) (주니어) O명 지원하기 IT 사업기획 (Business Development) O명 지원하기 IT 서비스 기획 / 사업관리 (팀장급) O명 지원하기 IT기술영업 (국방분야, 제조분야) O명 지원하기 시스템 운영 및 프로그램/웹 개발 O명 지원하기 PM (데이터사이언스) O명 지원하기 IT기술영업 (데이터사이언스) O명 지원하기 백엔드개발 (데이터사이언스) O명 지원하기 데이터 수집 개발자 (데이터사이언스) O명 지원하기 IT기술영업 (솔루션 및 유지보수) O명 지원하기 AI사업 부문 PM (AI사업부문) O명 지원하기 PMO (AI사업부문) O명 지원하기 LLM/RAG 백엔드 개발자 (AI사업부문) O명 지원하기 TA - Technical Architect (AI사업부문) O명 지원하기 웹서비스 개발자 (AI사업부문) O명 지원하기" [ref=f10e14]:
+                      - table [ref=f10e15]:
+                        - rowgroup [ref=f10e16]:
+                          - row [ref=f10e17]:
+                            - cell [ref=f10e18]
+                            - cell [ref=f10e19]
+                          - row [ref=f10e20]:
+                            - cell [ref=f10e21]
+                          - row "모집부문" [ref=f10e22]:
+                            - cell "모집부문" [ref=f10e23]
+                          - row [ref=f10e24]:
+                            - cell [ref=f10e25]
+                          - row "소속 채용공고명 모집인원 상세내용 /지원하기 인공지능 연구소 LLM AI 엔지니어 (LLM그룹) O명 지원하기 LLM 풀스택 개발 (LLM그룹) O명 지원하기 PHM - AI알고리즘 개발 (디지털트윈그룹) O명 지원하기 PM (자율에이전트그룹) O명 지원하기 강화학습 개발자 (자율에이전트그룹) O명 지원하기 시뮬레이션 개발자 (자율에이전트그룹) O명 지원하기 영업부문 IT기술영업 (AI디바이스) O명 지원하기 IT기술영업 (솔루션 영업) (주니어) O명 지원하기 IT 사업기획 (Business Development) O명 지원하기 IT 서비스 기획 / 사업관리 (팀장급) O명 지원하기 IT기술영업 (국방분야, 제조분야) O명 지원하기 시스템 운영 및 프로그램/웹 개발 O명 지원하기 PM (데이터사이언스) O명 지원하기 IT기술영업 (데이터사이언스) O명 지원하기 백엔드개발 (데이터사이언스) O명 지원하기 데이터 수집 개발자 (데이터사이언스) O명 지원하기 IT기술영업 (솔루션 및 유지보수) O명 지원하기 AI사업 부문 PM (AI사업부문) O명 지원하기 PMO (AI사업부문) O명 지원하기 LLM/RAG 백엔드 개발자 (AI사업부문) O명 지원하기 TA - Technical Architect (AI사업부문) O명 지원하기 웹서비스 개발자 (AI사업부문) O명 지원하기" [ref=f10e26]:
+                            - cell "소속 채용공고명 모집인원 상세내용 /지원하기 인공지능 연구소 LLM AI 엔지니어 (LLM그룹) O명 지원하기 LLM 풀스택 개발 (LLM그룹) O명 지원하기 PHM - AI알고리즘 개발 (디지털트윈그룹) O명 지원하기 PM (자율에이전트그룹) O명 지원하기 강화학습 개발자 (자율에이전트그룹) O명 지원하기 시뮬레이션 개발자 (자율에이전트그룹) O명 지원하기 영업부문 IT기술영업 (AI디바이스) O명 지원하기 IT기술영업 (솔루션 영업) (주니어) O명 지원하기 IT 사업기획 (Business Development) O명 지원하기 IT 서비스 기획 / 사업관리 (팀장급) O명 지원하기 IT기술영업 (국방분야, 제조분야) O명 지원하기 시스템 운영 및 프로그램/웹 개발 O명 지원하기 PM (데이터사이언스) O명 지원하기 IT기술영업 (데이터사이언스) O명 지원하기 백엔드개발 (데이터사이언스) O명 지원하기 데이터 수집 개발자 (데이터사이언스) O명 지원하기 IT기술영업 (솔루션 및 유지보수) O명 지원하기 AI사업 부문 PM (AI사업부문) O명 지원하기 PMO (AI사업부문) O명 지원하기 LLM/RAG 백엔드 개발자 (AI사업부문) O명 지원하기 TA - Technical Architect (AI사업부문) O명 지원하기 웹서비스 개발자 (AI사업부문) O명 지원하기" [ref=f10e27]:
+                              - table [ref=f10e28]:
+                                - rowgroup [ref=f10e29]:
+                                  - row "소속 채용공고명 모집인원 상세내용 /지원하기" [ref=f10e30]:
+                                    - cell "소속" [ref=f10e31]
+                                    - cell "채용공고명" [ref=f10e32]
+                                    - cell "모집인원" [ref=f10e33]
+                                    - cell "상세내용 /지원하기" [ref=f10e34]:
+                                      - generic [ref=f10e35]:
+                                        - text: 상세내용
+                                        - text: /지원하기
+                                  - row "인공지능 연구소 LLM AI 엔지니어 (LLM그룹) O명 지원하기" [ref=f10e36]:
+                                    - cell "인공지능 연구소" [ref=f10e37]:
+                                      - generic [ref=f10e38]:
+                                        - text: 인공지능
+                                        - text: 연구소
+                                    - cell "LLM AI 엔지니어 (LLM그룹)" [ref=f10e39]: LLM AI 엔지니어 (LLM그룹)
+                                    - cell "O명" [ref=f10e40]
+                                    - cell "지원하기" [ref=f10e41]:
+                                      - link "지원하기" [ref=f10e42] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/78708
+                                        - generic [ref=f10e43]: 지원하기
+                                  - row "LLM 풀스택 개발 (LLM그룹) O명 지원하기" [ref=f10e44]:
+                                    - cell "LLM 풀스택 개발 (LLM그룹)" [ref=f10e45]
+                                    - cell "O명" [ref=f10e46]
+                                    - cell "지원하기" [ref=f10e47]:
+                                      - link "지원하기" [ref=f10e48] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/82740
+                                        - generic [ref=f10e49]: 지원하기
+                                  - row "PHM - AI알고리즘 개발 (디지털트윈그룹) O명 지원하기" [ref=f10e50]:
+                                    - cell "PHM - AI알고리즘 개발 (디지털트윈그룹)" [ref=f10e51]:
+                                      - text: PHM - AI알고리즘 개발
+                                      - text: (디지털트윈그룹)
+                                    - cell "O명" [ref=f10e52]
+                                    - cell "지원하기" [ref=f10e53]:
+                                      - link "지원하기" [ref=f10e54] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/82749
+                                        - generic [ref=f10e55]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "PM (자율에이전트그룹) O명 지원하기" [ref=f10e56]:
+                                    - cell "PM (자율에이전트그룹)" [ref=f10e57]
+                                    - cell "O명" [ref=f10e58]
+                                    - cell "지원하기" [ref=f10e59]:
+                                      - link "지원하기" [ref=f10e60] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197786
+                                        - generic [ref=f10e61]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "강화학습 개발자 (자율에이전트그룹) O명 지원하기" [ref=f10e62]:
+                                    - cell "강화학습 개발자 (자율에이전트그룹)" [ref=f10e63]:
+                                      - text: 강화학습 개발자
+                                      - text: (자율에이전트그룹)
+                                    - cell "O명" [ref=f10e64]
+                                    - cell "지원하기" [ref=f10e65]:
+                                      - link "지원하기" [ref=f10e66] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/82748
+                                        - generic [ref=f10e67]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "시뮬레이션 개발자 (자율에이전트그룹) O명 지원하기" [ref=f10e68]:
+                                    - cell "시뮬레이션 개발자 (자율에이전트그룹)" [ref=f10e69]:
+                                      - text: 시뮬레이션 개발자
+                                      - text: (자율에이전트그룹)
+                                    - cell "O명" [ref=f10e70]
+                                    - cell "지원하기" [ref=f10e71]:
+                                      - link "지원하기" [ref=f10e72] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197789
+                                        - generic [ref=f10e73]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "영업부문 IT기술영업 (AI디바이스) O명 지원하기" [ref=f10e74]:
+                                    - cell "영업부문" [ref=f10e75]
+                                    - cell "IT기술영업 (AI디바이스)" [ref=f10e76]:
+                                      - text: IT기술영업
+                                      - text: (AI디바이스)
+                                    - cell "O명" [ref=f10e77]
+                                    - cell "지원하기" [ref=f10e78]:
+                                      - link "지원하기" [ref=f10e79] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197197
+                                        - generic [ref=f10e80]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "IT기술영업 (솔루션 영업) (주니어) O명 지원하기" [ref=f10e81]:
+                                    - cell "IT기술영업 (솔루션 영업) (주니어)" [ref=f10e82]:
+                                      - text: IT기술영업 (솔루션 영업)
+                                      - text: (주니어)
+                                    - cell "O명" [ref=f10e83]
+                                    - cell "지원하기" [ref=f10e84]:
+                                      - link "지원하기" [ref=f10e85] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197221
+                                        - generic [ref=f10e86]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "IT 사업기획 (Business Development) O명 지원하기" [ref=f10e87]:
+                                    - cell "IT 사업기획 (Business Development)" [ref=f10e88]:
+                                      - text: IT 사업기획
+                                      - text: (Business Development)
+                                    - cell "O명" [ref=f10e89]
+                                    - cell "지원하기" [ref=f10e90]:
+                                      - link "지원하기" [ref=f10e91] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197779
+                                        - generic [ref=f10e92]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "IT 서비스 기획 / 사업관리 (팀장급) O명 지원하기" [ref=f10e93]:
+                                    - cell "IT 서비스 기획 / 사업관리 (팀장급)" [ref=f10e94]:
+                                      - text: IT 서비스 기획 /
+                                      - text: 사업관리
+                                      - text: (팀장급)
+                                    - cell "O명" [ref=f10e95]
+                                    - cell "지원하기" [ref=f10e96]:
+                                      - link "지원하기" [ref=f10e97] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/99698
+                                        - generic [ref=f10e98]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "IT기술영업 (국방분야, 제조분야) O명 지원하기" [ref=f10e99]:
+                                    - cell "IT기술영업 (국방분야, 제조분야)" [ref=f10e100]:
+                                      - text: IT기술영업
+                                      - text: (국방분야, 제조분야)
+                                    - cell "O명" [ref=f10e101]
+                                    - cell "지원하기" [ref=f10e102]:
+                                      - link "지원하기" [ref=f10e103] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197772
+                                        - generic [ref=f10e104]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "시스템 운영 및 프로그램/웹 개발 O명 지원하기" [ref=f10e105]:
+                                    - cell "시스템 운영 및 프로그램/웹 개발" [ref=f10e106]:
+                                      - text: 시스템 운영 및
+                                      - text: 프로그램/웹 개발
+                                    - cell "O명" [ref=f10e107]
+                                    - cell "지원하기" [ref=f10e108]:
+                                      - link "지원하기" [ref=f10e109] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/197880
+                                        - generic [ref=f10e110]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "PM (데이터사이언스) O명 지원하기" [ref=f10e111]:
+                                    - cell "PM (데이터사이언스)" [ref=f10e112]:
+                                      - text: PM
+                                      - text: (데이터사이언스)
+                                    - cell "O명" [ref=f10e113]
+                                    - cell "지원하기" [ref=f10e114]:
+                                      - link "지원하기" [ref=f10e115] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/203821
+                                        - generic [ref=f10e116]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "IT기술영업 (데이터사이언스) O명 지원하기" [ref=f10e117]:
+                                    - cell "IT기술영업 (데이터사이언스)" [ref=f10e118]:
+                                      - text: IT기술영업
+                                      - text: (데이터사이언스)
+                                    - cell "O명" [ref=f10e119]
+                                    - cell "지원하기" [ref=f10e120]:
+                                      - link "지원하기" [ref=f10e121] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/203820
+                                        - generic [ref=f10e122]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "백엔드개발 (데이터사이언스) O명 지원하기" [ref=f10e123]:
+                                    - cell "백엔드개발 (데이터사이언스)" [ref=f10e124]:
+                                      - text: 백엔드개발
+                                      - text: (데이터사이언스)
+                                    - cell "O명" [ref=f10e125]
+                                    - cell "지원하기" [ref=f10e126]:
+                                      - link "지원하기" [ref=f10e127] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/203823
+                                        - generic [ref=f10e128]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "데이터 수집 개발자 (데이터사이언스) O명 지원하기" [ref=f10e129]:
+                                    - cell "데이터 수집 개발자 (데이터사이언스)" [ref=f10e130]:
+                                      - text: 데이터 수집 개발자
+                                      - text: (데이터사이언스)
+                                    - cell "O명" [ref=f10e131]
+                                    - cell "지원하기" [ref=f10e132]:
+                                      - link "지원하기" [ref=f10e133] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/203825
+                                        - generic [ref=f10e134]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "IT기술영업 (솔루션 및 유지보수) O명 지원하기" [ref=f10e135]:
+                                    - cell "IT기술영업 (솔루션 및 유지보수)" [ref=f10e136]:
+                                      - text: IT기술영업
+                                      - text: (솔루션 및 유지보수)
+                                    - cell "O명" [ref=f10e137]
+                                    - cell "지원하기" [ref=f10e138]:
+                                      - link "지원하기" [ref=f10e139] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/84536
+                                        - generic [ref=f10e140]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "AI사업 부문 PM (AI사업부문) O명 지원하기" [ref=f10e141]:
+                                    - cell "AI사업 부문" [ref=f10e142]:
+                                      - generic [ref=f10e143]:
+                                        - text: AI사업
+                                        - text: 부문
+                                    - cell "PM (AI사업부문)" [ref=f10e144]
+                                    - cell "O명" [ref=f10e145]
+                                    - cell "지원하기" [ref=f10e146]:
+                                      - link "지원하기" [ref=f10e147] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/82757
+                                        - generic [ref=f10e148]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "PMO (AI사업부문) O명 지원하기" [ref=f10e149]:
+                                    - cell "PMO (AI사업부문)" [ref=f10e150]
+                                    - cell "O명" [ref=f10e151]
+                                    - cell "지원하기" [ref=f10e152]:
+                                      - link "지원하기" [ref=f10e153] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/204661
+                                        - generic [ref=f10e154]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "LLM/RAG 백엔드 개발자 (AI사업부문) O명 지원하기" [ref=f10e155]:
+                                    - cell "LLM/RAG 백엔드 개발자 (AI사업부문)" [ref=f10e156]:
+                                      - text: LLM/RAG 백엔드 개발자
+                                      - text: (AI사업부문)
+                                    - cell "O명" [ref=f10e157]
+                                    - cell "지원하기" [ref=f10e158]:
+                                      - link "지원하기" [ref=f10e159] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/204667
+                                        - generic [ref=f10e160]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "TA - Technical Architect (AI사업부문) O명 지원하기" [ref=f10e161]:
+                                    - cell "TA - Technical Architect (AI사업부문)" [ref=f10e162]:
+                                      - text: TA - Technical Architect
+                                      - text: (AI사업부문)
+                                    - cell "O명" [ref=f10e163]
+                                    - cell "지원하기" [ref=f10e164]:
+                                      - link "지원하기" [ref=f10e165] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/203166
+                                        - generic [ref=f10e166]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                                  - row "웹서비스 개발자 (AI사업부문) O명 지원하기" [ref=f10e167]:
+                                    - cell "웹서비스 개발자 (AI사업부문)" [ref=f10e168]: 웹서비스 개발자 (AI사업부문)
+                                    - cell "O명" [ref=f10e169]
+                                    - cell "지원하기" [ref=f10e170]:
+                                      - link "지원하기" [ref=f10e171] [cursor=pointer]:
+                                        - /url: https://konantec.career.greetinghr.com/ko/o/204675
+                                        - generic [ref=f10e172]: 지원하기
+                                      - link:
+                                        - /url: https://www.saraminimage.co.kr/recruit/bbs_recruit7/35_sub_221220_03.html
+                  - row [ref=f10e173]:
+                    - cell [ref=f10e174]
+                  - row [ref=f10e175]:
+                    - cell [ref=f10e176]
+                  - 'row "근무조건 ㆍ근무형태 : 정규직(수습기간)-3개월 ㆍ근무일시 : 주 5일(월~금) 오전 9시~오후 6시 ㆍ근무지역 : (06627) 서울 서초구 강남대로 327 대륭서초타워 6층(서초동) - 신분당선 강남에서 800m 이내" [ref=f10e177]':
+                    - 'cell "근무조건 ㆍ근무형태 : 정규직(수습기간)-3개월 ㆍ근무일시 : 주 5일(월~금) 오전 9시~오후 6시 ㆍ근무지역 : (06627) 서울 서초구 강남대로 327 대륭서초타워 6층(서초동) - 신분당선 강남에서 800m 이내" [ref=f10e178]':
+                      - table [ref=f10e179]:
+                        - rowgroup [ref=f10e180]:
+                          - row "근무조건" [ref=f10e181]:
+                            - cell "근무조건" [ref=f10e182]
+                          - row [ref=f10e183]:
+                            - cell [ref=f10e184]
+                          - 'row "ㆍ근무형태 : 정규직(수습기간)-3개월 ㆍ근무일시 : 주 5일(월~금) 오전 9시~오후 6시 ㆍ근무지역 : (06627) 서울 서초구 강남대로 327 대륭서초타워 6층(서초동) - 신분당선 강남에서 800m 이내" [ref=f10e185]':
+                            - 'cell "ㆍ근무형태 : 정규직(수습기간)-3개월 ㆍ근무일시 : 주 5일(월~금) 오전 9시~오후 6시 ㆍ근무지역 : (06627) 서울 서초구 강남대로 327 대륭서초타워 6층(서초동) - 신분당선 강남에서 800m 이내" [ref=f10e186]':
+                              - text: "ㆍ근무형태 : 정규직(수습기간)-3개월"
+                              - text: "ㆍ근무일시 : 주 5일(월~금) 오전 9시~오후 6시"
+                              - text: "ㆍ근무지역 : (06627) 서울 서초구 강남대로 327 대륭서초타워 6층(서초동) - 신분당선 강남에서 800m 이내"
+                  - row [ref=f10e187]:
+                    - cell [ref=f10e188]
+                  - row "01 자유로운 연차 사용 02 장기근속자 포상 및 휴가 03 온/오프라인 교육지원 04 선택적 복리후생 (연 110만원 이상) 05 생일 축하금, 명절선물 06 건강검진비용지원 07 시차출퇴근제도 08 개발자 역량 향상 프로그램 09 도서 구입비 지원 10 경조 비용&물품&휴가지원 11 인력추천/특허수당, 사우회 운영 등 12 자유복장" [ref=f10e189]:
+                    - cell "01 자유로운 연차 사용 02 장기근속자 포상 및 휴가 03 온/오프라인 교육지원 04 선택적 복리후생 (연 110만원 이상) 05 생일 축하금, 명절선물 06 건강검진비용지원 07 시차출퇴근제도 08 개발자 역량 향상 프로그램 09 도서 구입비 지원 10 경조 비용&물품&휴가지원 11 인력추천/특허수당, 사우회 운영 등 12 자유복장" [ref=f10e190]:
+                      - img "01 자유로운 연차 사용 02 장기근속자 포상 및 휴가 03 온/오프라인 교육지원 04 선택적 복리후생 (연 110만원 이상) 05 생일 축하금, 명절선물 06 건강검진비용지원 07 시차출퇴근제도 08 개발자 역량 향상 프로그램 09 도서 구입비 지원 10 경조 비용&물품&휴가지원 11 인력추천/특허수당, 사우회 운영 등 12 자유복장" [ref=f10e191]
+                  - row [ref=f10e192]:
+                    - cell [ref=f10e193]
+                  - row "지원절차 STEP 01 서류전형 STEP 02 1차 면접 STEP 03 2차 면접 STEP 04 최종합격 * 개발 직군의 경우 코딩테스트를 실시할 수 있습니다. * PM 직군의 경우 사전 전화 인터뷰를 실시할 수 있습니다. * 필요시 평판조회가 진행될 수 있습니다." [ref=f10e194]:
+                    - cell "지원절차 STEP 01 서류전형 STEP 02 1차 면접 STEP 03 2차 면접 STEP 04 최종합격 * 개발 직군의 경우 코딩테스트를 실시할 수 있습니다. * PM 직군의 경우 사전 전화 인터뷰를 실시할 수 있습니다. * 필요시 평판조회가 진행될 수 있습니다." [ref=f10e195]:
+                      - table [ref=f10e196]:
+                        - rowgroup [ref=f10e197]:
+                          - row "지원절차" [ref=f10e198]:
+                            - cell "지원절차" [ref=f10e199]
+                          - row [ref=f10e200]:
+                            - cell [ref=f10e201]
+                          - row "STEP 01 서류전형 STEP 02 1차 면접 STEP 03 2차 면접 STEP 04 최종합격" [ref=f10e202]:
+                            - cell "STEP 01 서류전형 STEP 02 1차 면접 STEP 03 2차 면접 STEP 04 최종합격" [ref=f10e203]:
+                              - table [ref=f10e204]:
+                                - rowgroup [ref=f10e205]:
+                                  - row "STEP 01 서류전형 STEP 02 1차 면접 STEP 03 2차 면접 STEP 04 최종합격" [ref=f10e206]:
+                                    - cell "STEP 01 서류전형" [ref=f10e207]:
+                                      - text: STEP 01
+                                      - text: 서류전형
+                                    - cell [ref=f10e208]
+                                    - cell "STEP 02 1차 면접" [ref=f10e209]:
+                                      - text: STEP 02
+                                      - text: 1차 면접
+                                    - cell [ref=f10e210]
+                                    - cell "STEP 03 2차 면접" [ref=f10e211]:
+                                      - text: STEP 03
+                                      - text: 2차 면접
+                                    - cell [ref=f10e212]
+                                    - cell "STEP 04 최종합격" [ref=f10e213]:
+                                      - text: STEP 04
+                                      - text: 최종합격
+                          - row [ref=f10e214]:
+                            - cell [ref=f10e215]
+                          - row "* 개발 직군의 경우 코딩테스트를 실시할 수 있습니다. * PM 직군의 경우 사전 전화 인터뷰를 실시할 수 있습니다. * 필요시 평판조회가 진행될 수 있습니다." [ref=f10e216]:
+                            - cell "* 개발 직군의 경우 코딩테스트를 실시할 수 있습니다. * PM 직군의 경우 사전 전화 인터뷰를 실시할 수 있습니다. * 필요시 평판조회가 진행될 수 있습니다." [ref=f10e217]:
+                              - text: "* 개발 직군의 경우 코딩테스트를 실시할 수 있습니다."
+                              - text: "* PM 직군의 경우 사전 전화 인터뷰를 실시할 수 있습니다."
+                              - text: "* 필요시 평판조회가 진행될 수 있습니다."
+                  - row [ref=f10e218]:
+                    - cell [ref=f10e219]
+                  - 'row "접수기간 및 방법 ㆍ접수기간 : 2026년 04월 11일 마감 ㆍ접수방법 : 사람인 온라인 입사지원 ㆍ이력서양식 : 사람인 온라인 이력서" [ref=f10e220]':
+                    - 'cell "접수기간 및 방법 ㆍ접수기간 : 2026년 04월 11일 마감 ㆍ접수방법 : 사람인 온라인 입사지원 ㆍ이력서양식 : 사람인 온라인 이력서" [ref=f10e221]':
+                      - table [ref=f10e222]:
+                        - rowgroup [ref=f10e223]:
+                          - row "접수기간 및 방법" [ref=f10e224]:
+                            - cell "접수기간 및 방법" [ref=f10e225]: 접수기간 및 방법
+                          - row [ref=f10e226]:
+                            - cell [ref=f10e227]
+                          - 'row "ㆍ접수기간 : 2026년 04월 11일 마감 ㆍ접수방법 : 사람인 온라인 입사지원 ㆍ이력서양식 : 사람인 온라인 이력서" [ref=f10e228]':
+                            - 'cell "ㆍ접수기간 : 2026년 04월 11일 마감 ㆍ접수방법 : 사람인 온라인 입사지원 ㆍ이력서양식 : 사람인 온라인 이력서" [ref=f10e229]':
+                              - text: "ㆍ접수기간 :"
+                              - generic [ref=f10e230]: 2026년 04월 11일 마감
+                              - text: "ㆍ접수방법 : 사람인 온라인 입사지원"
+                              - text: "ㆍ이력서양식 : 사람인 온라인 이력서"
+                  - row [ref=f10e231]:
+                    - cell [ref=f10e232]
+                  - row "유의사항 ㆍ지원하기 전 담당업무 및 자격요건을 숙지하여 주시기 바랍니다. ㆍ입사지원 서류에 허위사실이 발견될 경우, 채용확정 이후라도 채용이 취소될 수 있습니다." [ref=f10e233]:
+                    - cell "유의사항 ㆍ지원하기 전 담당업무 및 자격요건을 숙지하여 주시기 바랍니다. ㆍ입사지원 서류에 허위사실이 발견될 경우, 채용확정 이후라도 채용이 취소될 수 있습니다." [ref=f10e234]:
+                      - table [ref=f10e235]:
+                        - rowgroup [ref=f10e236]:
+                          - row "유의사항" [ref=f10e237]:
+                            - cell "유의사항" [ref=f10e238]
+                          - row [ref=f10e239]:
+                            - cell [ref=f10e240]
+                          - row "ㆍ지원하기 전 담당업무 및 자격요건을 숙지하여 주시기 바랍니다. ㆍ입사지원 서류에 허위사실이 발견될 경우, 채용확정 이후라도 채용이 취소될 수 있습니다." [ref=f10e241]:
+                            - cell "ㆍ지원하기 전 담당업무 및 자격요건을 숙지하여 주시기 바랍니다. ㆍ입사지원 서류에 허위사실이 발견될 경우, 채용확정 이후라도 채용이 취소될 수 있습니다." [ref=f10e242]:
+                              - text: ㆍ지원하기 전 담당업무 및 자격요건을 숙지하여 주시기 바랍니다.
+                              - text: ㆍ입사지원 서류에 허위사실이 발견될 경우, 채용확정 이후라도 채용이 취소될 수 있습니다.
+                  - row [ref=f10e243]:
+                    - cell [ref=f10e244]
+                  - row [ref=f10e245]:
+                    - cell [ref=f10e246]
+                  - row "회사개요 코난테크놀로지는 인공지능 소프트웨어 전문기업입니다. 오픈소스가 아닌 자체 개발한 AI 원천기술을 확보하고 있습니다. 회사명 ㈜코난테크놀로지 (Konan Technology Inc.) 주요사업 LLM, AI 검색/분석/챗봇, AI 영상처리/ 음성처리, PHM, AI Pilot 대표이사 김영섬 주요기술 Text AI, Video AI, Digital Twin 설립일 1999년 4월 직원수 234명 주소 서울특별시 서초구 강남대로 327 대륭서초타워 6, 7, 9층 기업형태 코스닥 상장기업, 이노비즈, 벤처기업, 강소기업" [ref=f10e247]:
+                    - cell "회사개요 코난테크놀로지는 인공지능 소프트웨어 전문기업입니다. 오픈소스가 아닌 자체 개발한 AI 원천기술을 확보하고 있습니다. 회사명 ㈜코난테크놀로지 (Konan Technology Inc.) 주요사업 LLM, AI 검색/분석/챗봇, AI 영상처리/ 음성처리, PHM, AI Pilot 대표이사 김영섬 주요기술 Text AI, Video AI, Digital Twin 설립일 1999년 4월 직원수 234명 주소 서울특별시 서초구 강남대로 327 대륭서초타워 6, 7, 9층 기업형태 코스닥 상장기업, 이노비즈, 벤처기업, 강소기업" [ref=f10e248]:
+                      - table [ref=f10e249]:
+                        - rowgroup [ref=f10e250]:
+                          - row "회사개요" [ref=f10e251]:
+                            - cell "회사개요" [ref=f10e252]
+                          - row [ref=f10e253]:
+                            - cell [ref=f10e254]
+                          - row "코난테크놀로지는 인공지능 소프트웨어 전문기업입니다. 오픈소스가 아닌 자체 개발한 AI 원천기술을 확보하고 있습니다." [ref=f10e255]:
+                            - cell "코난테크놀로지는 인공지능 소프트웨어 전문기업입니다. 오픈소스가 아닌 자체 개발한 AI 원천기술을 확보하고 있습니다." [ref=f10e256]
+                          - row [ref=f10e257]:
+                            - cell [ref=f10e258]
+                          - row "회사명 ㈜코난테크놀로지 (Konan Technology Inc.) 주요사업 LLM, AI 검색/분석/챗봇, AI 영상처리/ 음성처리, PHM, AI Pilot 대표이사 김영섬 주요기술 Text AI, Video AI, Digital Twin 설립일 1999년 4월 직원수 234명 주소 서울특별시 서초구 강남대로 327 대륭서초타워 6, 7, 9층 기업형태 코스닥 상장기업, 이노비즈, 벤처기업, 강소기업" [ref=f10e259]:
+                            - cell "회사명 ㈜코난테크놀로지 (Konan Technology Inc.) 주요사업 LLM, AI 검색/분석/챗봇, AI 영상처리/ 음성처리, PHM, AI Pilot 대표이사 김영섬 주요기술 Text AI, Video AI, Digital Twin 설립일 1999년 4월 직원수 234명 주소 서울특별시 서초구 강남대로 327 대륭서초타워 6, 7, 9층 기업형태 코스닥 상장기업, 이노비즈, 벤처기업, 강소기업" [ref=f10e260]:
+                              - table [ref=f10e261]:
+                                - rowgroup [ref=f10e262]:
+                                  - row "회사명 ㈜코난테크놀로지 (Konan Technology Inc.) 주요사업 LLM, AI 검색/분석/챗봇, AI 영상처리/ 음성처리, PHM, AI Pilot" [ref=f10e263]:
+                                    - cell "회사명" [ref=f10e264]
+                                    - cell "㈜코난테크놀로지 (Konan Technology Inc.)" [ref=f10e265]:
+                                      - text: ㈜코난테크놀로지
+                                      - text: (Konan Technology Inc.)
+                                    - cell "주요사업" [ref=f10e266]
+                                    - cell "LLM, AI 검색/분석/챗봇, AI 영상처리/ 음성처리, PHM, AI Pilot" [ref=f10e267]:
+                                      - text: LLM, AI 검색/분석/챗봇, AI 영상처리/
+                                      - text: 음성처리, PHM, AI Pilot
+                                  - row "대표이사 김영섬 주요기술 Text AI, Video AI, Digital Twin" [ref=f10e268]:
+                                    - cell "대표이사" [ref=f10e269]
+                                    - cell "김영섬" [ref=f10e270]
+                                    - cell "주요기술" [ref=f10e271]
+                                    - cell "Text AI, Video AI, Digital Twin" [ref=f10e272]
+                                  - row "설립일 1999년 4월 직원수 234명" [ref=f10e273]:
+                                    - cell "설립일" [ref=f10e274]
+                                    - cell "1999년 4월" [ref=f10e275]
+                                    - cell "직원수" [ref=f10e276]
+                                    - cell "234명" [ref=f10e277]
+                                  - row "주소 서울특별시 서초구 강남대로 327 대륭서초타워 6, 7, 9층 기업형태 코스닥 상장기업, 이노비즈, 벤처기업, 강소기업" [ref=f10e278]:
+                                    - cell "주소" [ref=f10e279]
+                                    - cell "서울특별시 서초구 강남대로 327 대륭서초타워 6, 7, 9층" [ref=f10e280]:
+                                      - text: 서울특별시 서초구 강남대로 327
+                                      - text: 대륭서초타워 6, 7, 9층
+                                    - cell "기업형태" [ref=f10e281]
+                                    - cell "코스닥 상장기업, 이노비즈, 벤처기업, 강소기업" [ref=f10e282]
+                  - row [ref=f10e283]:
+                    - cell [ref=f10e284]
+                  - row "사업내용 코난테크놀로지는 \"사람처럼 보고, 듣고, 이해하고, 말하는 AI\"를 실현하기 위한 기술 상용화에 집중하고 있습니다. 사업내용 자세한 내용은 회사소개서 참조" [ref=f10e285]:
+                    - cell "사업내용 코난테크놀로지는 \"사람처럼 보고, 듣고, 이해하고, 말하는 AI\"를 실현하기 위한 기술 상용화에 집중하고 있습니다. 사업내용 자세한 내용은 회사소개서 참조" [ref=f10e286]:
+                      - table [ref=f10e287]:
+                        - rowgroup [ref=f10e288]:
+                          - row "사업내용" [ref=f10e289]:
+                            - cell "사업내용" [ref=f10e290]
+                          - row [ref=f10e291]:
+                            - cell [ref=f10e292]
+                          - row "코난테크놀로지는 \"사람처럼 보고, 듣고, 이해하고, 말하는 AI\"를 실현하기 위한 기술 상용화에 집중하고 있습니다." [ref=f10e293]:
+                            - cell "코난테크놀로지는 \"사람처럼 보고, 듣고, 이해하고, 말하는 AI\"를 실현하기 위한 기술 상용화에 집중하고 있습니다." [ref=f10e294]
+                          - row [ref=f10e295]:
+                            - cell [ref=f10e296]
+                          - row "사업내용" [ref=f10e297]:
+                            - cell "사업내용" [ref=f10e298]:
+                              - img "사업내용" [ref=f10e299]
+                          - row [ref=f10e300]:
+                            - cell [ref=f10e301]
+                          - row "자세한 내용은 회사소개서 참조" [ref=f10e302]:
+                            - cell "자세한 내용은 회사소개서 참조" [ref=f10e303]:
+                              - link "자세한 내용은 회사소개서 참조" [ref=f10e304] [cursor=pointer]:
+                                - /url: "https://brochure.konantech.com/ "
+                                - generic [ref=f10e305]: 자세한 내용은 회사소개서 참조
+                  - row [ref=f10e306]:
+                    - cell [ref=f10e307]
+                  - row "Designed by saramin" [ref=f10e308]:
+                    - cell "Designed by saramin" [ref=f10e309]:
+                      - img "Designed by saramin" [ref=f10e310]
+                  - row [ref=f10e311]:
+                    - cell [ref=f10e312]
+          - generic [ref=e1095]:
+            - heading "근무지위치" [level=2] [ref=e1096]
+            - generic [ref=e1097]:
+              - generic [ref=e1098]:
+                - generic [ref=e1099]:
+                  - img [ref=e1101]
+                  - text: (06627) 서울 서초구 강남대로 327, 6층, 7층, 9층
+                - generic [ref=e1104]:
+                  - img [ref=e1106]
+                  - text: 서울 2호선 강남역에서 800m 이내
+              - button "지도 보기" [ref=e1113] [cursor=pointer]:
+                - img [ref=e1114]
+                - generic [ref=e1120]: 지도 보기
+          - generic [ref=e1121]:
+            - heading "접수기간 및 방법" [level=2] [ref=e1122]
+            - generic [ref=e1123]:
+              - generic [ref=e1124]:
+                - generic [ref=e1125]:
+                  - generic [ref=e1126]: 남은 기간
+                  - generic [ref=e1127]: "28"
+                  - generic [ref=e1128]: 일
+                  - generic [ref=e1129]: 05:14:03
+                - generic [ref=e1130]:
+                  - term [ref=e1131]: 시작일
+                  - definition [ref=e1132]: 2026.01.12 00:00
+                  - term [ref=e1133]: 마감일
+                  - definition [ref=e1134]: 2026.04.11 23:59
+              - generic [ref=e1135]:
+                - term [ref=e1136]: 지원방법
+                - definition [ref=e1137]:
+                  - link "홈페이지 지원" [ref=e1138] [cursor=pointer]:
+                    - /url: "#"
+                - term [ref=e1139]: 접수양식
+                - definition [ref=e1140]:
+                  - button "제출서류 보기" [ref=e1142] [cursor=pointer]:
+                    - text: 제출서류 보기
+                    - img [ref=e1143]
+                - term [ref=e1145]: 담당자
+                - definition [ref=e1146]: 채용담당
+              - paragraph [ref=e1147]:
+                - img [ref=e1148]
+                - text: 마감일은 기업의 사정, 조기마감 등으로 변경될 수 있습니다.
+          - generic [ref=e1150]:
+            - generic [ref=e1151]:
+              - heading "지원 예정자 통계" [level=2] [ref=e1152]
+              - button [ref=e1154] [cursor=pointer]:
+                - img [ref=e1155]
+            - generic [ref=e1157]:
+              - generic [ref=e1158]:
+                - img "사람 이미지" [ref=e1160]
+                - strong [ref=e1161]: 이 공고의 경쟁자들이 궁금하다면?
+                - paragraph [ref=e1162]:
+                  - text: 로그인 하시고 지원자들의 경력, 성별, 학력 등
+                  - text: 경쟁 스펙을 분석해 확인해보세요!
+                - button "로그인하고 분석하기" [ref=e1163] [cursor=pointer]:
+                  - img [ref=e1164]
+                  - text: 로그인하고 분석하기
+              - generic [ref=e1166]:
+                - generic [ref=e1168]:
+                  - generic [ref=e1169]:
+                    - strong [ref=e1170]: 경쟁력 분석
+                    - generic [ref=e1171]:
+                      - img [ref=e1172]
+                      - generic [ref=e1174]: 나
+                      - generic [ref=e1175]: 님
+                    - generic [ref=e1176]:
+                      - img [ref=e1177]
+                      - text: 경쟁자
+                  - img [ref=e1182]:
+                    - generic [ref=e1183]:
+                      - generic [ref=e1197]: 스킬
+                      - generic [ref=e1199]: 기타스펙 - 자격증 - 어학시험
+                      - generic [ref=e1201]: 경험/활동/교육
+                      - generic [ref=e1203]: 경력
+                - generic [ref=e1207]:
+                  - generic [ref=e1208]:
+                    - img [ref=e1209]
+                    - generic [ref=e1212]: 경쟁자들의 역량 키워드
+                  - list [ref=e1213]:
+                    - listitem [ref=e1214]:
+                      - generic [ref=e1215]: 유연한 사고
+                    - listitem [ref=e1216]:
+                      - generic [ref=e1217]: 데이터 기반 의사결정
+                    - listitem [ref=e1218]:
+                      - generic [ref=e1219]: 웹디자인
+                    - listitem [ref=e1220]:
+                      - generic [ref=e1221]: 피그마
+                    - listitem [ref=e1222]:
+                      - generic [ref=e1223]: AI 활용 능력
+                    - listitem [ref=e1224]:
+                      - generic [ref=e1225]: 자기주도 학습
+                  - generic [ref=e1226]:
+                    - img [ref=e1227]
+                    - strong [ref=e1231]: 경쟁자들의 Skill
+                  - list [ref=e1232]:
+                    - listitem [ref=e1233]:
+                      - generic [ref=e1234]: 프로토 타이핑
+                    - listitem [ref=e1235]:
+                      - generic [ref=e1236]: 그래픽/UI디자인 툴
+                    - listitem [ref=e1237]:
+                      - generic [ref=e1238]: Design System 구축
+                  - generic [ref=e1241]:
+                    - img [ref=e1242]
+                    - generic [ref=e1250]: 이력서에 활용하기 좋은 정보가 있어요
+          - link [ref=e1252] [cursor=pointer]:
+            - /url: /zf_user/member/job-pass?inner_source=saramin&inner_medium=banner&inner_campaign=public_recrtiut_view&inner_term=jobpass
+            - img [ref=e1253]
+          - generic [ref=e1254]:
+            - heading "기업정보" [level=2] [ref=e1256]
+            - generic [ref=e1257]:
+              - generic [ref=e1258]:
+                - generic [ref=e1259]:
+                  - heading "(주)코난테크놀로지 관심기업" [level=3] [ref=e1261]:
+                    - link "(주)코난테크놀로지" [ref=e1262] [cursor=pointer]:
+                      - /url: /zf_user/company-info/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                    - button "관심기업" [ref=e1263] [cursor=pointer]:
+                      - img [ref=e1264]
+                      - generic [ref=e1266]: 관심기업
+                  - link "(주)코난테크놀로지" [ref=e1268] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                    - img "(주)코난테크놀로지" [ref=e1269]
+                - generic [ref=e1270]:
+                  - generic [ref=e1271]:
+                    - term [ref=e1272]: 대표자명
+                    - definition [ref=e1273]: 김영섬
+                  - generic [ref=e1274]:
+                    - term [ref=e1275]: 기업형태
+                    - definition [ref=e1276]: 코스닥, 중소기업, 외부감사법인, 주식회..
+                  - generic [ref=e1277]:
+                    - term [ref=e1278]: 업종
+                    - definition [ref=e1279]: 응용 소프트웨어 개발 및 공급업
+                  - generic [ref=e1280]:
+                    - term [ref=e1281]: 사원수
+                    - definition [ref=e1282]: 207 명 (2026년 기준)
+                  - generic [ref=e1283]:
+                    - term [ref=e1284]: 설립일
+                    - definition [ref=e1285]: 1999년 4월 17일 (업력 28년차)
+                  - generic [ref=e1286]:
+                    - term [ref=e1287]: 매출액
+                    - definition [ref=e1288]: 263억 1,851만원 (2024년 기준)
+                  - generic [ref=e1289]:
+                    - term [ref=e1290]: 홈페이지
+                    - definition [ref=e1291]:
+                      - link "www.konantech.com" [ref=e1292] [cursor=pointer]:
+                        - /url: http://www.konantech.com
+                  - generic [ref=e1293]:
+                    - term [ref=e1294]: 기업주소
+                    - definition [ref=e1295]: 서울 서초구 강남대로 327, 6층, 7층, 9층 (서초동,대륭서초타워)
+                - generic [ref=e1297]:
+                  - link "채용정보 1건" [ref=e1298] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view-inner-recruit?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                    - generic [ref=e1299]:
+                      - text: 채용정보
+                      - strong [ref=e1300]: "1"
+                      - text: 건
+                  - link "면접후기 1건" [ref=e1301] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                    - generic [ref=e1302]:
+                      - text: 면접후기
+                      - strong [ref=e1303]: "1"
+                      - text: 건
+                  - link "기업리뷰" [ref=e1304] [cursor=pointer]:
+                    - /url: /zf_user/company-review/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                    - generic [ref=e1305]: 기업리뷰
+                  - link "연봉정보" [ref=e1306] [cursor=pointer]:
+                    - /url: /zf_user/company-info/view-inner-salary?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                    - generic [ref=e1307]: 연봉정보
+                - generic [ref=e1308]: "* 본 기업정보는 다양한 정보제공사업자(NICE평가정보, 기업회원 등)로부터 제공된 자료를 기반으로 표시됩니다. 실시간 정보와 상이할 수 있으므로, 정확한 정보는 기업공시 시스템 또는 해당 기업의 홈페이지 등을 통해 재차 확인하시기 바랍니다."
+              - link "기업정보 전체보기" [ref=e1309] [cursor=pointer]:
+                - /url: /zf_user/company-info/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                - generic [ref=e1310]: 기업정보 전체보기
+          - generic [ref=e1311]:
+            - heading "마지막으로 필요한 건 선배들의 Tip" [level=3] [ref=e1312]
+            - list [ref=e1314]:
+              - listitem [ref=e1315]:
+                - link "기업리뷰 현직원 리뷰 유연근무제 출퇴근 눈치 잘안보임 2024.03.01" [ref=e1316] [cursor=pointer]:
+                  - /url: /zf_user/company-review/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                  - generic [ref=e1318]: 기업리뷰
+                  - generic [ref=e1319]:
+                    - strong [ref=e1320]:
+                      - generic [ref=e1321]: 현직원 리뷰
+                    - paragraph [ref=e1322]: 유연근무제 출퇴근 눈치 잘안보임
+                  - generic [ref=e1324]: 2024.03.01
+              - listitem [ref=e1325]:
+                - link "기업리뷰 현직원 리뷰 여러 업무를 다양하게 배울 수 있음. 2021.08.18" [ref=e1326] [cursor=pointer]:
+                  - /url: /zf_user/company-review/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                  - generic [ref=e1328]: 기업리뷰
+                  - generic [ref=e1329]:
+                    - strong [ref=e1330]:
+                      - generic [ref=e1331]: 현직원 리뷰
+                    - paragraph [ref=e1332]: 여러 업무를 다양하게 배울 수 있음.
+                  - generic [ref=e1334]: 2021.08.18
+              - listitem [ref=e1335]:
+                - link "기업리뷰 현직원 리뷰 복지카드, 명절상품권 2019.08.05" [ref=e1336] [cursor=pointer]:
+                  - /url: /zf_user/company-review/view?csn=bUFmNmVjQ2x2VEVrOSt0STg3dms5Zz09
+                  - generic [ref=e1338]: 기업리뷰
+                  - generic [ref=e1339]:
+                    - strong [ref=e1340]:
+                      - generic [ref=e1341]: 현직원 리뷰
+                    - paragraph [ref=e1342]: 복지카드, 명절상품권
+                  - generic [ref=e1344]: 2019.08.05
+              - listitem [ref=e1345]:
+                - 'link "면접후기 사업기획 합격 1차 - 실무진 면접 (실무진 3명 : 면접자 1명) 경력/지원동기 등 이력 위주의 면접이었습니다. 2차 - 임원 면접 (실무진 2명 : 면접자 1명) 인성 위주의 면접 이었습니다. 난이도 보통 2021.09.06" [ref=e1346] [cursor=pointer]':
+                  - /url: /zf_user/interview-review/detail?idx=13446
+                  - generic [ref=e1348]: 면접후기
+                  - generic [ref=e1349]:
+                    - strong [ref=e1350]:
+                      - generic [ref=e1351]: 사업기획
+                      - generic [ref=e1352]: 합격
+                    - paragraph [ref=e1353]: "1차 - 실무진 면접 (실무진 3명 : 면접자 1명) 경력/지원동기 등 이력 위주의 면접이었습니다. 2차 - 임원 면접 (실무진 2명 : 면접자 1명) 인성 위주의 면접 이었습니다."
+                  - generic [ref=e1354]:
+                    - generic [ref=e1355]:
+                      - generic [ref=e1356]: 난이도
+                      - generic [ref=e1357]: 보통
+                    - generic [ref=e1358]: 2021.09.06
+            - generic [ref=e1359]:
+              - button "Previous slide" [disabled] [ref=e1360] [cursor=pointer]:
+                - img [ref=e1361]
+              - button "Next slide" [ref=e1363] [cursor=pointer]:
+                - img [ref=e1364]
+          - generic [ref=e1366]:
+            - heading "이런 상품은 어때요? 스토어 바로가기" [level=3] [ref=e1367]:
+              - text: 이런 상품은 어때요?
+              - link "스토어 바로가기" [ref=e1368] [cursor=pointer]:
+                - /url: /zf_user/store/main?t_ref=relay_view
+                - text: 스토어 바로가기
+                - img [ref=e1369]
+            - list [ref=e1372]:
+              - listitem [ref=e1373]:
+                - generic [ref=e1374]:
+                  - link "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기" [ref=e1375] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PMc089ef950f97433da1&t_ref=search&t_ref_content=
+                    - img "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기" [ref=e1376]
+                  - button "찜하기" [ref=e1377] [cursor=pointer]:
+                    - img [ref=e1378]
+                    - generic [ref=e1380]: 찜하기
+                - link "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기 19,000원" [ref=e1381] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PMc089ef950f97433da1&t_ref=search&t_ref_content=
+                  - generic [ref=e1382]:
+                    - strong [ref=e1383]: "[사람인 취업꿀템] 채용담당자를 휘어잡는 이력서 만들기"
+                    - strong [ref=e1385]: 19,000원
+              - listitem [ref=e1386]:
+                - generic [ref=e1387]:
+                  - link "[사람인 공식] 취업준비 필수 인적성 검사" [ref=e1388] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM3708978cbe6041d28c&t_ref=search&t_ref_content=
+                    - img "[사람인 공식] 취업준비 필수 인적성 검사" [ref=e1389]
+                  - button "찜하기" [ref=e1390] [cursor=pointer]:
+                    - img [ref=e1391]
+                    - generic [ref=e1393]: 찜하기
+                - link "[사람인 공식] 취업준비 필수 인적성 검사 22,800원 21% 22,800원" [ref=e1394] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM3708978cbe6041d28c&t_ref=search&t_ref_content=
+                  - generic [ref=e1395]:
+                    - strong [ref=e1396]: "[사람인 공식] 취업준비 필수 인적성 검사"
+                    - generic [ref=e1397]:
+                      - generic [ref=e1398]: 22,800원
+                      - generic [ref=e1399]:
+                        - generic [ref=e1400]: 21%
+                        - strong [ref=e1401]: 22,800원
+              - listitem [ref=e1402]:
+                - generic [ref=e1403]:
+                  - link "카이스트 출신의 자소서 작성법" [ref=e1404] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM7ab7e12fc59e42adbb&t_ref=search&t_ref_content=
+                    - img "카이스트 출신의 자소서 작성법" [ref=e1405]
+                  - button "찜하기" [ref=e1406] [cursor=pointer]:
+                    - img [ref=e1407]
+                    - generic [ref=e1409]: 찜하기
+                - link "카이스트 출신의 자소서 작성법 119,000원 67% 119,000원" [ref=e1410] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM7ab7e12fc59e42adbb&t_ref=search&t_ref_content=
+                  - generic [ref=e1411]:
+                    - strong [ref=e1412]: 카이스트 출신의 자소서 작성법
+                    - generic [ref=e1413]:
+                      - generic [ref=e1414]: 119,000원
+                      - generic [ref=e1415]:
+                        - generic [ref=e1416]: 67%
+                        - strong [ref=e1417]: 119,000원
+              - listitem [ref=e1418]:
+                - generic [ref=e1419]:
+                  - link "믿고 맡길 수 있는 자소서/학업계획서" [ref=e1420] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM559dc64a46194d77b5&t_ref=search&t_ref_content=
+                    - img "믿고 맡길 수 있는 자소서/학업계획서" [ref=e1421]
+                  - button "찜하기" [ref=e1422] [cursor=pointer]:
+                    - img [ref=e1423]
+                    - generic [ref=e1425]: 찜하기
+                - link "믿고 맡길 수 있는 자소서/학업계획서 50,000원" [ref=e1426] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM559dc64a46194d77b5&t_ref=search&t_ref_content=
+                  - generic [ref=e1427]:
+                    - strong [ref=e1428]: 믿고 맡길 수 있는 자소서/학업계획서
+                    - strong [ref=e1430]: 50,000원
+              - listitem [ref=e1431]:
+                - generic [ref=e1432]:
+                  - link "한눈에 보는 깔끔한 경력기술서" [ref=e1433] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM40b156de4c894c8abd&t_ref=search&t_ref_content=
+                    - img "한눈에 보는 깔끔한 경력기술서" [ref=e1434]
+                  - button "찜하기" [ref=e1435] [cursor=pointer]:
+                    - img [ref=e1436]
+                    - generic [ref=e1438]: 찜하기
+                - link "한눈에 보는 깔끔한 경력기술서 100,000원 50% 100,000원" [ref=e1439] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM40b156de4c894c8abd&t_ref=search&t_ref_content=
+                  - generic [ref=e1440]:
+                    - strong [ref=e1441]: 한눈에 보는 깔끔한 경력기술서
+                    - generic [ref=e1442]:
+                      - generic [ref=e1443]: 100,000원
+                      - generic [ref=e1444]:
+                        - generic [ref=e1445]: 50%
+                        - strong [ref=e1446]: 100,000원
+              - listitem [ref=e1447]:
+                - generic [ref=e1448]:
+                  - link "[사람인 AI] 자소서 코칭 (30회권)" [ref=e1449] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PMfa819b45146e47d688&t_ref=search&t_ref_content=
+                    - img "[사람인 AI] 자소서 코칭 (30회권)" [ref=e1450]
+                  - button "찜하기" [ref=e1451] [cursor=pointer]:
+                    - img [ref=e1452]
+                    - generic [ref=e1454]: 찜하기
+                - link "[사람인 AI] 자소서 코칭 (30회권) 12,500원 40% 12,500원" [ref=e1455] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PMfa819b45146e47d688&t_ref=search&t_ref_content=
+                  - generic [ref=e1456]:
+                    - strong [ref=e1457]: "[사람인 AI] 자소서 코칭 (30회권)"
+                    - generic [ref=e1458]:
+                      - generic [ref=e1459]: 12,500원
+                      - generic [ref=e1460]:
+                        - generic [ref=e1461]: 40%
+                        - strong [ref=e1462]: 12,500원
+              - listitem [ref=e1463]:
+                - generic [ref=e1464]:
+                  - link "대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트" [ref=e1465] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PMa435d370cbbe4406a5&t_ref=search&t_ref_content=
+                    - img "대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트" [ref=e1466]
+                  - button "찜하기" [ref=e1467] [cursor=pointer]:
+                    - img [ref=e1468]
+                    - generic [ref=e1470]: 찜하기
+                - link "대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트 10,000원" [ref=e1471] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PMa435d370cbbe4406a5&t_ref=search&t_ref_content=
+                  - generic [ref=e1472]:
+                    - strong [ref=e1473]: 대기업 인사담당자가 극찬한 최고의 자소서 전문컨설턴트
+                    - strong [ref=e1475]: 10,000원
+              - listitem [ref=e1476]:
+                - generic [ref=e1477]:
+                  - link "인사담당자를 사로잡는 합격자소서 컨설팅" [ref=e1478] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM511ce054d79f49ab90&t_ref=search&t_ref_content=
+                    - img "인사담당자를 사로잡는 합격자소서 컨설팅" [ref=e1479]
+                  - button "찜하기" [ref=e1480] [cursor=pointer]:
+                    - img [ref=e1481]
+                    - generic [ref=e1483]: 찜하기
+                - link "인사담당자를 사로잡는 합격자소서 컨설팅 112,000원" [ref=e1484] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM511ce054d79f49ab90&t_ref=search&t_ref_content=
+                  - generic [ref=e1485]:
+                    - strong [ref=e1486]: 인사담당자를 사로잡는 합격자소서 컨설팅
+                    - strong [ref=e1488]: 112,000원
+              - listitem [ref=e1489]:
+                - generic [ref=e1490]:
+                  - link "합격비법_이력서,자기소개서,면접법 (신입~임원)" [ref=e1491] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM21934f4d9f90473dac&t_ref=search&t_ref_content=
+                    - img "합격비법_이력서,자기소개서,면접법 (신입~임원)" [ref=e1492]
+                  - button "찜하기" [ref=e1493] [cursor=pointer]:
+                    - img [ref=e1494]
+                    - generic [ref=e1496]: 찜하기
+                - link "합격비법_이력서,자기소개서,면접법 (신입~임원) 10,000원" [ref=e1497] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM21934f4d9f90473dac&t_ref=search&t_ref_content=
+                  - generic [ref=e1498]:
+                    - strong [ref=e1499]: 합격비법_이력서,자기소개서,면접법 (신입~임원)
+                    - strong [ref=e1501]: 10,000원
+              - listitem [ref=e1502]:
+                - generic [ref=e1503]:
+                  - link "나도 모르는 나를 발견하는 계기, 인문학적 자소서" [ref=e1504] [cursor=pointer]:
+                    - /url: /zf_user/store/product?salePrdCd=PM01379f591a744ac9b9&t_ref=search&t_ref_content=
+                    - img "나도 모르는 나를 발견하는 계기, 인문학적 자소서" [ref=e1505]
+                  - button "찜하기" [ref=e1506] [cursor=pointer]:
+                    - img [ref=e1507]
+                    - generic [ref=e1509]: 찜하기
+                - link "나도 모르는 나를 발견하는 계기, 인문학적 자소서 10,000원" [ref=e1510] [cursor=pointer]:
+                  - /url: /zf_user/store/product?salePrdCd=PM01379f591a744ac9b9&t_ref=search&t_ref_content=
+                  - generic [ref=e1511]:
+                    - strong [ref=e1512]: 나도 모르는 나를 발견하는 계기, 인문학적 자소서
+                    - strong [ref=e1514]: 10,000원
+            - generic [ref=e1515]:
+              - button "Previous slide" [disabled] [ref=e1516] [cursor=pointer]:
+                - img [ref=e1517]
+              - button "Next slide" [ref=e1519] [cursor=pointer]:
+                - img [ref=e1520]
+          - generic [ref=e1522]:
+            - generic [ref=e1523]:
+              - heading "직업전체 HOT100" [level=4] [ref=e1524]:
+                - text: 직업전체
+                - emphasis [ref=e1525]: HOT100
+              - link "더보기 - 직업전체" [ref=e1526] [cursor=pointer]:
+                - /url: /zf_user/jobs/hot100?&career_cd=1
+                - text: 더보기 >
+            - generic [ref=e1527]:
+              - paragraph [ref=e1528]:
+                - emphasis [ref=e1529]: "1"
+                - text: /3
+              - button "이전" [ref=e1530] [cursor=pointer]:
+                - generic [ref=e1531]: 이전
+              - list [ref=e1533]:
+                - listitem [ref=e1534]:
+                  - 'link "(주)엘티엔터테인먼트 제주 드림타워 복합리조트 [카지노&호텔] 대규모 신입/경력 공채 직종 #정규직 · 계약직 지역 #제주 제주시" [ref=e1535] [cursor=pointer]':
+                    - /url: /zf_user/jobs/relay/view?rec_idx=51438642&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1536]: (주)엘티엔터테인먼트
+                    - generic [ref=e1537]: 제주 드림타워 복합리조트 [카지노&호텔] 대규모 신입/경력 공채
+                    - generic [ref=e1538]:
+                      - generic [ref=e1539]:
+                        - generic [ref=e1540]: 직종
+                        - text: "#정규직 · 계약직"
+                      - generic [ref=e1541]:
+                        - generic [ref=e1542]: 지역
+                        - text: "#제주 제주시"
+                  - button "스크랩" [ref=e1543] [cursor=pointer]:
+                    - img [ref=e1544]
+                  - generic [ref=e1546]:
+                    - generic [ref=e1547]: 공고 마감일
+                    - generic [ref=e1548]: ~ 03/31(화)
+                    - button "입사지원" [ref=e1549] [cursor=pointer]:
+                      - generic [ref=e1550]: 입사지원
+                - listitem [ref=e1551]:
+                  - 'link "한국산업단지공단 2026년 상반기 신입직원 채용 공고 직종 #정규직 지역 #대구전체" [ref=e1552] [cursor=pointer]':
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53236585&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1553]: 한국산업단지공단
+                    - generic [ref=e1554]: 2026년 상반기 신입직원 채용 공고
+                    - generic [ref=e1555]:
+                      - generic [ref=e1556]:
+                        - generic [ref=e1557]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e1558]:
+                        - generic [ref=e1559]: 지역
+                        - text: "#대구전체"
+                  - button "스크랩" [ref=e1560] [cursor=pointer]:
+                    - img [ref=e1561]
+                  - generic [ref=e1563]:
+                    - generic [ref=e1564]: 공고 마감일
+                    - generic [ref=e1565]: ~ 03/19(목)
+                    - link "홈페이지 지원" [ref=e1566] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53236585
+                      - generic [ref=e1567]: 홈페이지 지원
+                - listitem [ref=e1568]:
+                  - 'link "메가박스중앙(주) 2026년 상반기 메가박스중앙 신입사원 공개채용 직종 #정규직 지역 #서울 강남구" [ref=e1569] [cursor=pointer]':
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53278500&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1570]: 메가박스중앙(주)
+                    - generic [ref=e1571]: 2026년 상반기 메가박스중앙 신입사원 공개채용
+                    - generic [ref=e1572]:
+                      - generic [ref=e1573]:
+                        - generic [ref=e1574]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e1575]:
+                        - generic [ref=e1576]: 지역
+                        - text: "#서울 강남구"
+                  - button "스크랩" [ref=e1577] [cursor=pointer]:
+                    - img [ref=e1578]
+                  - generic [ref=e1580]:
+                    - generic [ref=e1581]: 공고 마감일
+                    - generic [ref=e1582]: ~ 03/29(일)
+                    - link "홈페이지 지원" [ref=e1583] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53278500
+                      - generic [ref=e1584]: 홈페이지 지원
+                - listitem [ref=e1585]:
+                  - link [ref=e1586] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53185813&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1587]: (주)서연이화
+                    - generic [ref=e1588]: "[2026년] 부문별 채용 연계형 인턴사원 공개 모집"
+                    - generic [ref=e1589]:
+                      - generic [ref=e1590]:
+                        - generic [ref=e1591]: 직종
+                        - text: "#인턴직"
+                      - generic [ref=e1592]:
+                        - generic [ref=e1593]: 지역
+                        - text: "#경기 안양시"
+                  - button [ref=e1594] [cursor=pointer]:
+                    - img [ref=e1595]
+                  - generic [ref=e1597]:
+                    - generic [ref=e1598]: 공고 마감일
+                    - generic [ref=e1599]: 내일마감
+                    - link [ref=e1600] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53185813
+                      - generic [ref=e1601]: 홈페이지 지원
+                - listitem [ref=e1602]:
+                  - link [ref=e1603] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53217694&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1604]: 에이에스엠엘코리아(유)
+                    - generic [ref=e1605]: 2026년 상반기 ASML 신입사원 채용
+                    - generic [ref=e1606]:
+                      - generic [ref=e1607]:
+                        - generic [ref=e1608]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e1609]:
+                        - generic [ref=e1610]: 지역
+                        - text: "#경기 화성시"
+                  - button [ref=e1611] [cursor=pointer]:
+                    - img [ref=e1612]
+                  - generic [ref=e1614]:
+                    - generic [ref=e1615]: 공고 마감일
+                    - generic [ref=e1616]: ~ 03/16(월)
+                    - link [ref=e1617] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53217694
+                      - generic [ref=e1618]: 홈페이지 지원
+                - listitem [ref=e1619]:
+                  - link [ref=e1620] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53316491&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1621]: 현대오토에버(주)
+                    - generic [ref=e1622]: 2026년 상반기 현대오토에버 신입사원 채용
+                    - generic [ref=e1623]:
+                      - generic [ref=e1624]:
+                        - generic [ref=e1625]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e1626]:
+                        - generic [ref=e1627]: 지역
+                        - text: "#전국"
+                  - button [ref=e1628] [cursor=pointer]:
+                    - img [ref=e1629]
+                  - generic [ref=e1631]:
+                    - generic [ref=e1632]: 공고 마감일
+                    - generic [ref=e1633]: ~ 03/23(월)
+                    - link [ref=e1634] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53316491
+                      - generic [ref=e1635]: 홈페이지 지원
+                - listitem [ref=e1636]:
+                  - link [ref=e1637] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53289873&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1638]: (주)에스원
+                    - generic [ref=e1639]: 2026년 상반기 3급 신입사원/인턴 채용공고
+                    - generic [ref=e1640]:
+                      - generic [ref=e1641]:
+                        - generic [ref=e1642]: 직종
+                        - text: "#정규직 · 인턴직"
+                      - generic [ref=e1643]:
+                        - generic [ref=e1644]: 지역
+                        - text: "#서울 중구"
+                  - button [ref=e1645] [cursor=pointer]:
+                    - img [ref=e1646]
+                  - generic [ref=e1648]:
+                    - generic [ref=e1649]: 공고 마감일
+                    - generic [ref=e1650]: ~ 03/17(화)
+                    - link [ref=e1651] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53289873
+                      - generic [ref=e1652]: 홈페이지 지원
+                - listitem [ref=e1653]:
+                  - link [ref=e1654] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53219353&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1655]: 한국은행
+                    - generic [ref=e1656]: 2026년도 한국은행 일반기능직원 채용
+                    - generic [ref=e1657]:
+                      - generic [ref=e1658]:
+                        - generic [ref=e1659]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e1660]:
+                        - generic [ref=e1661]: 지역
+                        - text: "#서울전체"
+                  - button [ref=e1662] [cursor=pointer]:
+                    - img [ref=e1663]
+                  - generic [ref=e1665]:
+                    - generic [ref=e1666]: 공고 마감일
+                    - generic [ref=e1667]: ~ 03/16(월)
+                    - link [ref=e1668] [cursor=pointer]:
+                      - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=53219353
+                      - generic [ref=e1669]: 홈페이지 지원
+                - listitem [ref=e1670]:
+                  - link [ref=e1671] [cursor=pointer]:
+                    - /url: /zf_user/jobs/relay/view?rec_idx=53260301&t_ref=jobcategory_recruit&t_ref_content=hot100
+                    - strong [ref=e1672]: 한국바이린(주)
+                    - generic [ref=e1673]: 한국바이린 영업, 재무, 총무, 생산 신입 채용
+                    - generic [ref=e1674]:
+                      - generic [ref=e1675]:
+                        - generic [ref=e1676]: 직종
+                        - text: "#정규직"
+                      - generic [ref=e1677]:
+                        - generic [ref=e1678]: 지역
+                        - text: "#경기 평택시"
+                  - button [ref=e1679] [cursor=pointer]:
+                    - img [ref=e1680]
+                  - generic [ref=e1682]:
+                    - generic [ref=e1683]: 공고 마감일
+                    - generic [ref=e1684]: ~ 03/18(수)
+                    - button [ref=e1685] [cursor=pointer]:
+                      - generic [ref=e1686]: 입사지원
+              - button "다음" [ref=e1687] [cursor=pointer]:
+                - generic [ref=e1688]: 다음
+          - generic [ref=e1689]:
+            - heading "관련 태그" [level=2] [ref=e1690]
+            - generic [ref=e1691]:
+              - generic [ref=e1692]:
+                - list [ref=e1693]:
+                  - listitem [ref=e1694]:
+                    - link "#신입·인턴" [ref=e1695] [cursor=pointer]:
+                      - /url: /zf_user/jobs/public/list?t_ref=relay_view
+                  - listitem [ref=e1696]:
+                    - link "#기획·전략" [ref=e1697] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=16
+                  - listitem [ref=e1698]:
+                    - link "#기획" [ref=e1699] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2205
+                  - listitem [ref=e1700]:
+                    - link "#사업기획" [ref=e1701] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1633
+                  - listitem [ref=e1702]:
+                    - link "#서비스기획" [ref=e1703] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1635
+                  - listitem [ref=e1704]:
+                    - link "#전략기획" [ref=e1705] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1639
+                  - listitem [ref=e1706]:
+                    - link "#IT컨설팅" [ref=e1707] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1647
+                  - listitem [ref=e1708]:
+                    - link "#PL(프로젝트리더)" [ref=e1709] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1648
+                  - listitem [ref=e1710]:
+                    - link "#PM(프로젝트매니저)" [ref=e1711] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1649
+                  - listitem [ref=e1712]:
+                    - link "#사업개발" [ref=e1713] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1659
+                  - listitem [ref=e1714]:
+                    - link "#사업관리" [ref=e1715] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1660
+                  - listitem [ref=e1716]:
+                    - link "#사업제휴" [ref=e1717] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1661
+                  - listitem [ref=e1718]:
+                    - link "#스토리보드" [ref=e1719] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1662
+                  - listitem [ref=e1720]:
+                    - link "#시장조사" [ref=e1721] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1663
+                  - listitem [ref=e1722]:
+                    - link "#신사업기획" [ref=e1723] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1664
+                  - listitem [ref=e1724]:
+                    - link "#엑셀러레이팅" [ref=e1725] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1667
+                  - listitem [ref=e1726]:
+                    - link "#자료조사" [ref=e1727] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1670
+                  - listitem [ref=e1728]:
+                    - link "#타당성검토" [ref=e1729] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1674
+                  - listitem [ref=e1730]:
+                    - link "#투자전략" [ref=e1731] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1675
+                  - listitem [ref=e1732]:
+                    - link "#트렌드분석" [ref=e1733] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1676
+                  - listitem [ref=e1734]:
+                    - link "#RFP(제안요청서)" [ref=e1735] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1689
+                  - listitem [ref=e1736]:
+                    - link "#UI/UX" [ref=e1737] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1690
+                  - listitem [ref=e1738]:
+                    - link "#마케팅·홍보·조사" [ref=e1739] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=14
+                  - listitem [ref=e1740]:
+                    - link "#RFP(제안요청서)" [ref=e1741] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=1473
+                  - listitem [ref=e1742]:
+                    - link "#IT개발·데이터" [ref=e1743] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=2
+                  - listitem [ref=e1744]:
+                    - link "#개발PM" [ref=e1745] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2247
+                  - listitem [ref=e1746]:
+                    - link "#기술지원" [ref=e1747] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=81
+                  - listitem [ref=e1748]:
+                    - link "#데이터 사이언티스트" [ref=e1749] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2248
+                  - listitem [ref=e1750]:
+                    - link "#데이터분석가" [ref=e1751] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=82
+                  - listitem [ref=e1752]:
+                    - link "#데이터엔지니어" [ref=e1753] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=83
+                  - listitem [ref=e1754]:
+                    - link "#백엔드/서버개발" [ref=e1755] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=84
+                  - listitem [ref=e1756]:
+                    - link "#유지보수" [ref=e1757] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=89
+                  - listitem [ref=e1758]:
+                    - link "#프론트엔드" [ref=e1759] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=92
+                  - listitem [ref=e1760]:
+                    - link "#데이터시각화" [ref=e1761] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=107
+                  - listitem [ref=e1762]:
+                    - link "#솔루션" [ref=e1763] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=118
+                  - listitem [ref=e1764]:
+                    - link "#알고리즘" [ref=e1765] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=122
+                  - listitem [ref=e1766]:
+                    - link "#AI(인공지능)" [ref=e1767] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=181
+                  - listitem [ref=e1768]:
+                    - link "#API" [ref=e1769] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=142
+                  - listitem [ref=e1770]:
+                    - link "#풀스택" [ref=e1771] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=2232
+                  - listitem [ref=e1772]:
+                    - link "#AWS" [ref=e1773] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=201
+                  - listitem [ref=e1774]:
+                    - link "#C++" [ref=e1775] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=205
+                  - listitem [ref=e1776]:
+                    - link "#C언어" [ref=e1777] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=206
+                  - listitem [ref=e1778]:
+                    - link "#Docker" [ref=e1779] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=214
+                  - listitem [ref=e1780]:
+                    - link "#Git" [ref=e1781] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=222
+                  - listitem [ref=e1782]:
+                    - link "#Java" [ref=e1783] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=235
+                  - listitem [ref=e1784]:
+                    - link "#Linux" [ref=e1785] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=246
+                  - listitem [ref=e1786]:
+                    - link "#MySQL" [ref=e1787] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=257
+                  - listitem [ref=e1788]:
+                    - link "#Python" [ref=e1789] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=272
+                  - listitem [ref=e1790]:
+                    - link "#React" [ref=e1791] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=277
+                  - listitem [ref=e1792]:
+                    - link "#RestAPI" [ref=e1793] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=282
+                  - listitem [ref=e1794]:
+                    - link "#SaaS" [ref=e1795] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=284
+                  - listitem [ref=e1796]:
+                    - link "#SpringBoot" [ref=e1797] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=292
+                  - listitem [ref=e1798]:
+                    - link "#영업·판매·무역" [ref=e1799] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=8
+                  - listitem [ref=e1800]:
+                    - link "#기술영업" [ref=e1801] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=692
+                  - listitem [ref=e1802]:
+                    - link "#솔루션기술영업" [ref=e1803] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=719
+                  - listitem [ref=e1804]:
+                    - link "#영업관리" [ref=e1805] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=699
+                  - listitem [ref=e1806]:
+                    - link "#IT영업" [ref=e1807] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=751
+                  - listitem [ref=e1808]:
+                    - link "#연구·R&D" [ref=e1809] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_mcls=9
+                  - listitem [ref=e1810]:
+                    - link "#알고리즘개발" [ref=e1811] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=835
+                  - listitem [ref=e1812]:
+                    - link "#AI(인공지능)" [ref=e1813] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/job-category?cat_kewd=856
+                  - listitem [ref=e1814]:
+                    - link "#서울" [ref=e1815] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=101000
+                  - listitem [ref=e1816]:
+                    - link "#서초구" [ref=e1817] [cursor=pointer]:
+                      - /url: /zf_user/jobs/list/domestic?loc_cd=101150
+                - button "태그 더보기" [ref=e1818] [cursor=pointer]:
+                  - generic [ref=e1819]: 태그 더보기
+              - generic [ref=e1820]:
+                - paragraph [ref=e1821]:
+                  - img [ref=e1822]
+                  - text: 본 채용정보에 불법·허위·과장, 최저임금 위반 등 잘못된 내용이 있을 경우
+                  - link "신고" [ref=e1824] [cursor=pointer]:
+                    - /url: /zf_user/help/inquery/email-inquiry-write?rec_idx=52783795&view_type=list
+                  - text: 해주세요!
+                - link "신고하기" [ref=e1826] [cursor=pointer]:
+                  - /url: /zf_user/help/inquery/email-inquiry-write?rec_idx=52783795&view_type=list
+                  - img [ref=e1827]
+                  - text: 신고하기
+                - button "공유하기" [ref=e1830] [cursor=pointer]:
+                  - img [ref=e1831]
+                  - text: 공유하기
+                - button "인쇄하기" [ref=e1833] [cursor=pointer]:
+                  - img [ref=e1834]
+                  - text: 인쇄하기
+      - generic [ref=e1836]:
+        - generic [ref=e1837]:
+          - button "채용공고" [ref=e1838] [cursor=pointer]:
+            - generic [ref=e1839]: 채용공고
+          - button "접수방법" [ref=e1840] [cursor=pointer]:
+            - generic [ref=e1841]: 접수방법
+          - button "지원자통계" [ref=e1842] [cursor=pointer]:
+            - generic [ref=e1843]: 지원자통계
+          - button "기업정보" [ref=e1844] [cursor=pointer]:
+            - generic [ref=e1845]: 기업정보
+        - button "다음공고" [ref=e1847] [cursor=pointer]:
+          - generic [ref=e1848]: 다음공고
+      - generic [ref=e1851]:
+        - heading "이어보는 Ai매치 채용정보 도움말" [level=2] [ref=e1852]:
+          - text: 이어보는
+          - strong [ref=e1853]: Ai매치 채용정보
+          - button "도움말" [ref=e1855] [cursor=pointer]:
+            - generic [ref=e1856]: 도움말
+        - list [ref=e1857]:
+          - listitem [ref=e1858]:
+            - link "(주)코난테크놀로지 2026년 각부문 신입 및 경력 채용 서울전체 | 신입/경력 | 대졸↑" [ref=e1859] [cursor=pointer]:
+              - /url: /zf_user/jobs/relay/view?rec_idx=52783795&isMypage=no&recommend_ids=53171011_811%7C53272721_821%7C53045427_811%7C53262041_829%7C53127202_829%7C53149895_811%7C52864859_811%7C53306730_811%7C53220544_811%7C53213455_811%7C53201211_811%7C53231918_811%7C53139318_811%7C53159268_811&ref_dp=SRI_050_VIEW_MIX_RCT_NONMEM&view_type=list&dpId=SRI_050_VIEW_MIX_RCT_NONMEM&referNonce=b9e054ccca40a00465fa&relayNonce=b9e054ccca40a00465fa&refer=y&t_ref_scnid=821&rec_scn_id=821&inner_source=saramin&inner_medium=pattern&inner_campaign=non-logged_relay_view_0&inner_term=list
+              - generic [ref=e1860]: (주)코난테크놀로지
+              - generic [ref=e1861]: 2026년 각부문 신입 및 경력 채용
+              - generic [ref=e1862]:
+                - text: 서울전체
+                - generic [ref=e1863]: "|"
+                - text: 신입/경력
+                - generic [ref=e1864]: "|"
+                - text: 대졸↑
+            - button "스크랩" [ref=e1865] [cursor=pointer]:
+              - img [ref=e1866]
+            - generic [ref=e1868]:
+              - generic [ref=e1869]: ~ 4/11(토)
+              - link "홈페이지 지원" [ref=e1870] [cursor=pointer]:
+                - /url: /zf_user/jobs/relay/view?view_type=list&rec_idx=52783795&isMypage=no&recommend_ids=53171011_811%7C53272721_821%7C53045427_811%7C53262041_829%7C53127202_829%7C53149895_811%7C52864859_811%7C53306730_811%7C53220544_811%7C53213455_811%7C53201211_811%7C53231918_811%7C53139318_811%7C53159268_811&referNonce=b9e054ccca40a00465fa
+                - generic [ref=e1871]: 홈페이지 지원
+          - listitem [ref=e1872]:
+            - link "이에이트(주) [코스닥 상장사] 2026년 이에이트 부문별 채용 송파구 | 신입/경력 | 학력무관" [ref=e1873] [cursor=pointer]:
+              - /url: /zf_user/jobs/relay/view?rec_idx=53171011&isMypage=no&recommend_ids=53272721_821%7C53045427_811%7C53262041_829%7C53127202_829%7C53149895_811%7C52864859_811%7C53306730_811%7C53220544_811%7C53213455_811%7C53201211_811%7C53231918_811%7C53139318_811%7C53159268_811&ref_dp=SRI_050_VIEW_MIX_RCT_NONMEM&view_type=list&dpId=SRI_050_VIEW_MIX_RCT_NONMEM&referNonce=b9e054ccca40a00465fa&relayNonce=b9e054ccca40a00465fa&refer=y&t_ref_scnid=811&rec_scn_id=811&inner_source=saramin&inner_medium=pattern&inner_campaign=non-logged_relay_view_1&inner_term=list
+              - generic [ref=e1874]: 이에이트(주)
+              - generic [ref=e1875]: "[코스닥 상장사] 2026년 이에이트 부문별 채용"
+              - generic [ref=e1876]:
+                - text: 송파구
+                - generic [ref=e1877]: "|"
+                - text: 신입/경력
+                - generic [ref=e1878]: "|"
+                - text: 학력무관
+            - button "스크랩" [ref=e1879] [cursor=pointer]:
+              - img [ref=e1880]
+            - generic [ref=e1882]:
+              - generic [ref=e1883]: ~ 3/31(화)
+              - button "입사지원" [ref=e1884] [cursor=pointer]:
+                - generic [ref=e1885]: 입사지원
+          - listitem [ref=e1886]:
+            - link "(주)발렉스서비스 [이천SK하이닉스 근무] 산업보안요원 4조3교대 정규직 채용 경기전체 | 신입/경력 | 학력무관" [ref=e1887] [cursor=pointer]:
+              - /url: /zf_user/jobs/relay/view?rec_idx=53272721&isMypage=no&recommend_ids=53045427_811%7C53262041_829%7C53127202_829%7C53149895_811%7C52864859_811%7C53306730_811%7C53220544_811%7C53213455_811%7C53201211_811%7C53231918_811%7C53139318_811%7C53159268_811&ref_dp=SRI_050_VIEW_MIX_RCT_NONMEM&view_type=list&dpId=SRI_050_VIEW_MIX_RCT_NONMEM&referNonce=b9e054ccca40a00465fa&relayNonce=b9e054ccca40a00465fa&refer=y&t_ref_scnid=821&rec_scn_id=821&inner_source=saramin&inner_medium=pattern&inner_campaign=non-logged_relay_view_2&inner_term=list
+              - generic [ref=e1888]: (주)발렉스서비스
+              - generic [ref=e1889]: "[이천SK하이닉스 근무] 산업보안요원 4조3교대 정규직 채용"
+              - generic [ref=e1890]:
+                - text: 경기전체
+                - generic [ref=e1891]: "|"
+                - text: 신입/경력
+                - generic [ref=e1892]: "|"
+                - text: 학력무관
+            - button "스크랩" [ref=e1893] [cursor=pointer]:
+              - img [ref=e1894]
+            - generic [ref=e1896]:
+              - generic [ref=e1897]: ~ 4/7(화)
+              - button "입사지원" [ref=e1898] [cursor=pointer]:
+                - generic [ref=e1899]: 입사지원
+          - listitem [ref=e1900]:
+            - link "(주)위즈코리아 ㈜위즈코리아 '26년 상반기 정기 채용 신입/경력 사원 모집 서울전체 | 신입/경력 | 학력무관" [ref=e1901] [cursor=pointer]:
+              - /url: /zf_user/jobs/relay/view?rec_idx=53045427&isMypage=no&recommend_ids=53262041_829%7C53127202_829%7C53149895_811%7C52864859_811%7C53306730_811%7C53220544_811%7C53213455_811%7C53201211_811%7C53231918_811%7C53139318_811%7C53159268_811&ref_dp=SRI_050_VIEW_MIX_RCT_NONMEM&view_type=list&dpId=SRI_050_VIEW_MIX_RCT_NONMEM&referNonce=b9e054ccca40a00465fa&relayNonce=b9e054ccca40a00465fa&refer=y&t_ref_scnid=811&rec_scn_id=811&inner_source=saramin&inner_medium=pattern&inner_campaign=non-logged_relay_view_3&inner_term=list
+              - generic [ref=e1902]: (주)위즈코리아
+              - generic [ref=e1903]: ㈜위즈코리아 '26년 상반기 정기 채용 신입/경력 사원 모집
+              - generic [ref=e1904]:
+                - text: 서울전체
+                - generic [ref=e1905]: "|"
+                - text: 신입/경력
+                - generic [ref=e1906]: "|"
+                - text: 학력무관
+            - button "스크랩" [ref=e1907] [cursor=pointer]:
+              - img [ref=e1908]
+            - generic [ref=e1910]:
+              - generic [ref=e1911]: ~ 3/31(화)
+              - button "입사지원" [ref=e1912] [cursor=pointer]:
+                - generic [ref=e1913]: 입사지원
+        - iframe [ref=e1919]:
+          - img [ref=f6e5] [cursor=pointer]
+    - contentinfo [ref=e1920]:
+      - generic [ref=e1921]:
+        - navigation "사람인 서비스 정책 및 이용문의" [ref=e1922]:
+          - list [ref=e1923]:
+            - listitem [ref=e1924]:
+              - link "회사소개" [ref=e1925] [cursor=pointer]:
+                - /url: //www.saraminhr.co.kr/
+            - listitem [ref=e1926]:
+              - link "인재채용" [ref=e1927] [cursor=pointer]:
+                - /url: https://www.saramin-team.kr/
+            - listitem [ref=e1928]:
+              - link "회원약관" [ref=e1929] [cursor=pointer]:
+                - /url: /zf_user/help/terms-of-service
+            - listitem [ref=e1930]:
+              - link "개인정보처리방침" [ref=e1931] [cursor=pointer]:
+                - /url: /zf_user/help/privacy
+            - listitem [ref=e1932]:
+              - link "위치기반서비스이용약관" [ref=e1933] [cursor=pointer]:
+                - /url: /zf_user/help/terms-of-service/location-based
+            - listitem [ref=e1934]:
+              - link "채용정보 API" [ref=e1935] [cursor=pointer]:
+                - /url: https://oapi.saramin.co.kr/
+            - listitem [ref=e1936]:
+              - link "제휴문의" [ref=e1937] [cursor=pointer]:
+                - /url: /zf_user/help/inquery/partnership-inquiry-write
+            - listitem [ref=e1938]:
+              - link "고객센터" [ref=e1939] [cursor=pointer]:
+                - /url: http://www.saramin.co.kr/zf_user/help
+        - generic [ref=e1940]:
+          - generic [ref=e1941]:
+            - generic [ref=e1942]:
+              - term [ref=e1943]: 사람인 고객센터
+              - definition [ref=e1944]: 02-6226-5000 (평일 09:00~19:00, 주말공휴일 휴무)
+            - generic [ref=e1945]:
+              - term [ref=e1946]: 이메일
+              - definition [ref=e1947]:
+                - link "help@saramin.co.kr" [ref=e1948] [cursor=pointer]:
+                  - /url: mailto:help@saramin.co.kr
+            - generic [ref=e1949]:
+              - term [ref=e1950]: FAX
+              - definition [ref=e1951]: 02-6937-0039
+          - generic [ref=e1952]:
+            - link "커리어 답을 찾다, 커리어피드" [ref=e1953] [cursor=pointer]:
+              - /url: https://career.saramin.co.kr?t_ref=footer
+              - text: 커리어 답을 찾다,
+              - strong [ref=e1954]: 커리어피드
+            - generic [ref=e1955]:
+              - term [ref=e1956]: 사람인 공식채널
+              - definition [ref=e1957]:
+                - link "사람인 인스타그램" [ref=e1958] [cursor=pointer]:
+                  - /url: https://www.instagram.com/saramin_official/?hl=ko
+                  - generic [ref=e1959]: 사람인 인스타그램
+              - definition [ref=e1960]:
+                - link "사람인 네이버 블로그" [ref=e1961] [cursor=pointer]:
+                  - /url: https://blog.naver.com/saraminapp
+                  - generic [ref=e1962]: 사람인 네이버 블로그
+              - definition [ref=e1963]:
+                - link "사람인 페이스북" [ref=e1964] [cursor=pointer]:
+                  - /url: https://ko-kr.facebook.com/saramin.dream/
+                  - generic [ref=e1965]: 사람인 페이스북
+              - definition [ref=e1966]:
+                - link "사람인 유튜브" [ref=e1967] [cursor=pointer]:
+                  - /url: https://www.youtube.com/@ch_saramin
+                  - generic [ref=e1968]: 사람인 유튜브
+  - complementary
