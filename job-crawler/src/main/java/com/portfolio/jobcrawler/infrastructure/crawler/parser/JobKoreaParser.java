@@ -23,7 +23,7 @@ public class JobKoreaParser implements SiteParser {
     private static final String JOBKOREA_BASE_URL = "https://www.jobkorea.co.kr";
     // IT 직무 코드 (duty 필터)
     private static final String IT_DUTY_URL = JOBKOREA_BASE_URL
-            + "/recruit/joblist?menucode=duty&duession=2";
+            + "/recruit/joblist?menucode=duty&duession=2&orderby=RegDt";
 
     @Override
     public String getSiteName() {
@@ -83,19 +83,27 @@ public class JobKoreaParser implements SiteParser {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public CrawledJobData parseJobData(Page listPage, Locator item, String requestedJobCategory) {
-        // 리스트에서 기본 정보 추출
+    public boolean supportsTwoPhase() {
+        return true;
+    }
+
+    @Override
+    public String extractDetailUrl(Page listPage, Locator item) {
+        String href = safeAttr(item, ".titBx strong a.link", "href");
+        if (href != null && href.contains("/Recruit/GI_Read/")) {
+            return JOBKOREA_BASE_URL + href.split("\\?")[0];
+        }
+        return null;
+    }
+
+    @Override
+    public CrawledJobData parseListData(Page listPage, Locator item, String requestedJobCategory) {
         String title = safeText(item, ".titBx strong a.link");
         if (title.isEmpty()) return null;
 
-        String href = safeAttr(item, ".titBx strong a.link", "href");
-        if (href == null || !href.contains("/Recruit/GI_Read/")) return null;
+        String detailUrl = extractDetailUrl(listPage, item);
+        if (detailUrl == null) return null;
 
-        // URL 정규화 (쿼리 파라미터 제거하고 기본 URL만)
-        String detailUrl = JOBKOREA_BASE_URL + href.split("\\?")[0];
-
-        // 리스트에서 메타 정보 추출
         Locator cells = item.locator(".titBx .etc .cell");
         String career = cells.count() > 0 ? safeText(cells.nth(0)) : "";
         String education = cells.count() > 1 ? safeText(cells.nth(1)) : "";
@@ -103,42 +111,40 @@ public class JobKoreaParser implements SiteParser {
         String employType = cells.count() > 3 ? safeText(cells.nth(3)) : "";
         String salary = cells.count() > 4 ? safeText(cells.nth(4)) : "";
 
-        // 회사명
         String company = safeText(item, "td.tplCo a.link");
         if (company.isEmpty()) company = safeText(item, ".coName");
 
-        // 기술 태그
         String techTags = safeText(item, ".titBx .dsc");
-
         String finalCategory = (requestedJobCategory != null && !requestedJobCategory.isBlank())
                 ? requestedJobCategory : JobKoreaJobCategory.normalizeCategory(techTags);
 
-        // 경력 + 고용형태 합치기
         String careerFull = career;
         if (!employType.isEmpty()) careerFull += " · " + employType;
 
-        String companyImages = "";
+        return CrawledJobData.builder()
+                .title(title).company(company).companyLogoUrl("")
+                .location(location).url(detailUrl).sourceSite(getSiteName())
+                .applicationMethod("HOMEPAGE").education(education).career(careerFull)
+                .salary(salary).deadline("").jobCategory(finalCategory)
+                .techStack(techTags.length() > 200 ? techTags.substring(0, 200) : techTags)
+                .description("").requirements("").companyImages("")
+                .build();
+    }
 
-        // 상세 페이지 크롤링
-        Page detailPage = listPage.context().newPage();
+    @Override
+    @SuppressWarnings("unchecked")
+    public void enrichFromDetailPage(Page detailPage, CrawledJobData data) {
         try {
-            detailPage.setDefaultNavigationTimeout(15_000);
-            detailPage.navigate(detailUrl, new Page.NavigateOptions()
-                    .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.LOAD));
-
             try {
                 detailPage.waitForSelector("iframe[src*='GI_Read_Comt_Ifrm'], h2",
                         new Page.WaitForSelectorOptions().setTimeout(8_000));
             } catch (Exception ignored) {}
 
-            // 1단계: 메인 페이지에서 구조화된 정보 추출 (모집요강, 지원자격, 접수기간, 기업정보, 복리후생)
-            @SuppressWarnings("unchecked")
+            // 메인 페이지에서 구조화된 정보 추출
             Map<String, Object> detail = (Map<String, Object>) detailPage.evaluate("""
                 (() => {
                     const result = {};
                     result.company = document.querySelector('h2')?.innerText?.trim() || '';
-
-                    // 사이드바
                     const aside = document.querySelector('aside');
                     if (aside) {
                         const lines = aside.innerText.split('\\n').map(l => l.trim()).filter(l => l);
@@ -150,8 +156,6 @@ public class JobKoreaParser implements SiteParser {
                             if (lines[i] === '고용형태') result.employType = lines[i+1];
                         }
                     }
-
-                    // 접수기간 + 기업정보 + 복리후생만 (모집요강/지원자격은 iframe에서)
                     const keepComponents = ['ApplyBox', 'CorpInformation', 'BenefitCard'];
                     const removeTexts = ['기업정보 더보기', '복리후생 더보기', '지도보기', '스크랩', '즉시 지원', '홈페이지 지원'];
                     let structuredDesc = '';
@@ -164,58 +168,37 @@ public class JobKoreaParser implements SiteParser {
                         }
                     });
                     result.structuredDesc = structuredDesc.substring(0, 2000);
-
-                    // 접수방법
                     const bodyText = document.body.innerText || '';
                     if (bodyText.includes('잡코리아 즉시지원')) result.applyMethod = 'HOMEPAGE';
                     else if (bodyText.includes('홈페이지')) result.applyMethod = 'HOMEPAGE';
                     else result.applyMethod = 'UNKNOWN';
-
                     return result;
                 })()
             """);
 
-            // 2단계: iframe URL에 직접 접근해서 상세 설명 가져오기
+            // iframe 콘텐츠 추출
             String iframeContent = "";
+            String companyImages = "";
             try {
-                // iframe src에서 Gno 추출
                 String iframeSrc = (String) detailPage.evaluate(
                         "document.querySelector('iframe[src*=\"GI_Read_Comt_Ifrm\"]')?.src || ''");
                 if (iframeSrc != null && !iframeSrc.isEmpty()) {
-                    Page iframePage = listPage.context().newPage();
+                    Page iframePage = detailPage.context().newPage();
                     try {
-                        iframePage.setDefaultNavigationTimeout(10_000);
+                        iframePage.setDefaultNavigationTimeout(20_000);
                         iframePage.navigate(iframeSrc, new Page.NavigateOptions()
                                 .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.LOAD));
-                        // .secDetailWrap (전통 iframe) 또는 main/article (Next.js iframe)에서 텍스트 추출
-                        @SuppressWarnings("unchecked")
                         Map<String, Object> iframeData = (Map<String, Object>) iframePage.evaluate("""
                             (() => {
-                                const result = {};
-                                // 전통 iframe (.secDetailWrap 안에 테이블/리스트)
+                                const result = { text: '', images: [] };
                                 const detail = document.querySelector('.secDetailWrap');
-                                if (detail) {
-                                    result.text = detail.innerText.trim();
-                                    result.images = Array.from(detail.querySelectorAll('img'))
-                                        .filter(img => img.width > 300 && img.height > 200)
-                                        .map(img => img.src)
-                                        .filter(s => s && s.startsWith('http'))
-                                        .filter((v, i, a) => a.indexOf(v) === i)
-                                        .slice(0, 10);
-                                    return result;
-                                }
-                                // Next.js iframe
-                                const clone = document.body.cloneNode(true);
-                                clone.querySelectorAll('script, style, noscript').forEach(el => el.remove());
-                                let text = clone.innerText || '';
-                                text = text.split('\\n').filter(line => {
-                                    return !line.includes('self.__next_f') && !line.includes('$Sreact') && !line.includes('static/chunks');
-                                }).join('\\n');
-                                result.text = text.trim();
-                                result.images = Array.from(document.querySelectorAll('img'))
+                                if (!detail) return result;
+
+                                result.text = detail.innerText.trim();
+                                result.images = Array.from(detail.querySelectorAll('img'))
                                     .filter(img => img.width > 300 && img.height > 200)
                                     .map(img => img.src)
-                                    .filter(s => s && s.startsWith('http') && !s.includes('cdn.jobkorea.co.kr/recruit/web'))
+                                    .filter(s => s && s.startsWith('http'))
                                     .filter((v, i, a) => a.indexOf(v) === i)
                                     .slice(0, 10);
                                 return result;
@@ -223,9 +206,14 @@ public class JobKoreaParser implements SiteParser {
                         """);
                         if (iframeData != null) {
                             iframeContent = ((String) iframeData.getOrDefault("text", "")).trim();
+                            // HTML 들여쓰기 공백 정리: 각 줄 앞뒤 공백 제거 후 빈 줄 압축
+                            iframeContent = iframeContent.lines()
+                                    .map(String::strip)
+                                    .filter(line -> !line.isEmpty())
+                                    .reduce((a, b) -> a + "\n" + b)
+                                    .orElse("");
                             iframeContent = iframeContent.replaceAll("\\n{3,}", "\n\n");
                             if (iframeContent.length() > 5000) iframeContent = iframeContent.substring(0, 5000);
-                            @SuppressWarnings("unchecked")
                             List<String> iframeImages = (List<String>) iframeData.getOrDefault("images", List.of());
                             if (!iframeImages.isEmpty()) {
                                 companyImages = String.join(",", iframeImages);
@@ -236,61 +224,60 @@ public class JobKoreaParser implements SiteParser {
                     }
                 }
             } catch (Exception e) {
-                log.debug("[잡코리아-Parser] iframe 콘텐츠 추출 실패: {}", e.getMessage());
+                log.warn("[잡코리아-Parser] iframe 콘텐츠 추출 실패: {}", e.getMessage());
             }
 
-            // 결과 조합
-            String description = "";
-            String applyMethodStr = "HOMEPAGE";
+            // 결과 조합하여 data에 세팅
             if (detail != null) {
                 String structuredDesc = (String) detail.getOrDefault("structuredDesc", "");
-                // iframe 내용 + 구조화된 정보 합치기
-                description = iframeContent.isEmpty() ? structuredDesc : iframeContent + "\n\n" + structuredDesc;
+                String description = iframeContent.isEmpty() ? structuredDesc : iframeContent + "\n\n" + structuredDesc;
                 description = description.trim().replaceAll("\\n{3,}", "\n\n");
                 if (description.length() > 5000) description = description.substring(0, 5000) + "...";
+                data.setDescription(description);
 
                 String detailCompany = (String) detail.getOrDefault("company", "");
-                if (!detailCompany.isEmpty()) company = detailCompany;
+                if (!detailCompany.isEmpty() && !detailCompany.equals("검색") && detailCompany.length() > 1) {
+                    data.setCompany(detailCompany);
+                }
 
                 String dCareer = (String) detail.getOrDefault("career", "");
                 if (!dCareer.isEmpty()) {
                     String dEmployType = (String) detail.getOrDefault("employType", "");
-                    careerFull = dCareer + (!dEmployType.isEmpty() ? " · " + dEmployType : "");
+                    data.setCareer(dCareer + (!dEmployType.isEmpty() ? " · " + dEmployType : ""));
                 }
                 String dSalary = (String) detail.getOrDefault("salary", "");
-                if (!dSalary.isEmpty()) salary = dSalary;
+                if (!dSalary.isEmpty()) data.setSalary(dSalary);
                 String dLocation = (String) detail.getOrDefault("location", "");
-                if (!dLocation.isEmpty()) location = dLocation;
+                if (!dLocation.isEmpty()) data.setLocation(dLocation.replace(">", "").replace("&gt;", "").trim());
 
-                applyMethodStr = (String) detail.getOrDefault("applyMethod", "HOMEPAGE");
+                data.setApplicationMethod((String) detail.getOrDefault("applyMethod", "HOMEPAGE"));
             }
+            data.setCompanyImages(companyImages);
 
-            log.info("[잡코리아-Parser] 수집: {} - {}", company, title);
-
-            return CrawledJobData.builder()
-                    .title(title)
-                    .company(company)
-                    .companyLogoUrl("")
-                    .location(location.replace(">", "").replace("&gt;", "").trim())
-                    .url(detailUrl)
-                    .description(description)
-                    .sourceSite(getSiteName())
-                    .applicationMethod(applyMethodStr)
-                    .education(education)
-                    .career(careerFull)
-                    .salary(salary)
-                    .deadline("")
-                    .techStack(techTags.length() > 200 ? techTags.substring(0, 200) : techTags)
-                    .jobCategory(finalCategory)
-                    .requirements("")
-                    .companyImages(companyImages)
-                    .build();
+            log.info("[잡코리아-Parser] 수집: {} - {}", data.getCompany(), data.getTitle());
         } catch (Exception e) {
-            log.warn("[잡코리아-Parser] 상세 페이지 실패 ({}): {}", detailUrl, e.getMessage());
-            return null;
+            log.warn("[잡코리아-Parser] 상세 페이지 보강 실패: {}", e.getMessage());
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public CrawledJobData parseJobData(Page listPage, Locator item, String requestedJobCategory) {
+        CrawledJobData data = parseListData(listPage, item, requestedJobCategory);
+        if (data == null) return null;
+
+        Page detailPage = listPage.context().newPage();
+        try {
+            detailPage.setDefaultNavigationTimeout(15_000);
+            detailPage.navigate(data.getUrl(), new Page.NavigateOptions()
+                    .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.LOAD));
+            enrichFromDetailPage(detailPage, data);
+        } catch (Exception e) {
+            log.warn("[잡코리아-Parser] 상세 페이지 실패 ({}): {}", data.getUrl(), e.getMessage());
         } finally {
             detailPage.close();
         }
+        return data;
     }
 
     private String safeText(Locator parent, String selector) {

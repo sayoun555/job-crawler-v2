@@ -15,6 +15,8 @@ public interface UserService {
 
     User toggleNotification(Long userId, boolean enabled);
 
+    User updateNotificationHours(Long userId, String hours);
+
     UserProfile getProfile(Long userId);
 
     UserProfile updateProfile(Long userId, String education, String career,

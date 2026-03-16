@@ -15,6 +15,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,6 +32,10 @@ public class JobPostingServiceImpl implements JobPostingService {
     private final JobPostingRepository jobPostingRepository;
     private final JobApplicationRepository jobApplicationRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
+
+    private static final String STATS_CACHE_KEY = "cache:job:stats";
+    private static final Duration STATS_CACHE_TTL = Duration.ofMinutes(5);
 
     @Override
     public Page<JobPosting> searchJobs(SourceSite source, String keyword, String jobCategory,
@@ -47,11 +56,38 @@ public class JobPostingServiceImpl implements JobPostingService {
 
     @Override
     public Map<String, Long> getStats() {
+        // Redis 캐시 확인 (JSON 문자열로 저장/복원)
+        try {
+            Object cached = redisTemplate.opsForValue().get(STATS_CACHE_KEY);
+            if (cached instanceof String json) {
+                log.debug("[캐시 히트] 공고 통계");
+                return objectMapper.readValue(json, new TypeReference<Map<String, Long>>() {});
+            }
+        } catch (Exception e) {
+            log.debug("[캐시 미스] 역직렬화 실패, DB 조회: {}", e.getMessage());
+        }
+
+        // DB 조회 후 캐시 저장
         long saramin = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.SARAMIN);
         long jobplanet = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.JOBPLANET);
         long linkareer = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.LINKAREER);
         long jobkorea = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.JOBKOREA);
-        return Map.of("saramin", saramin, "jobplanet", jobplanet, "linkareer", linkareer, "jobkorea", jobkorea, "total", saramin + jobplanet + linkareer + jobkorea);
+
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("saramin", saramin);
+        stats.put("jobplanet", jobplanet);
+        stats.put("linkareer", linkareer);
+        stats.put("jobkorea", jobkorea);
+        stats.put("total", saramin + jobplanet + linkareer + jobkorea);
+
+        try {
+            String json = objectMapper.writeValueAsString(stats);
+            redisTemplate.opsForValue().set(STATS_CACHE_KEY, json, STATS_CACHE_TTL);
+            log.debug("[캐시 저장] 공고 통계 (5분 TTL)");
+        } catch (Exception e) {
+            log.warn("[캐시 저장 실패] {}", e.getMessage());
+        }
+        return stats;
     }
 
     @Override
@@ -59,6 +95,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     public void deleteJob(Long id) {
         jobApplicationRepository.deleteByJobPostingId(id);
         jobPostingRepository.deleteById(id);
+        evictJobCaches();
     }
 
     @Override
@@ -66,6 +103,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     public void deleteJobs(java.util.List<Long> ids) {
         jobApplicationRepository.deleteByJobPostingIdIn(ids);
         jobPostingRepository.deleteAllByIdInBatch(ids);
+        evictJobCaches();
     }
 
     @Override
@@ -74,21 +112,28 @@ public class JobPostingServiceImpl implements JobPostingService {
         jobApplicationRepository.deleteAllInBatch();
         jobPostingRepository.deleteAllInBatch();
         clearCrawledCache();
+        evictJobCaches();
     }
 
     @Override
     @Transactional
     public int deleteJobsBySite(String site) {
         SourceSite sourceSite = SourceSite.valueOf(site.toUpperCase());
-        java.util.List<com.portfolio.jobcrawler.domain.jobposting.entity.JobPosting> jobs = jobPostingRepository.findBySource(sourceSite);
+        java.util.List<JobPosting> jobs = jobPostingRepository.findBySource(sourceSite);
         if (jobs.isEmpty()) return 0;
-        java.util.List<Long> ids = jobs.stream().map(j -> j.getId()).toList();
-        // 연관된 지원 내역 먼저 삭제
+        java.util.List<Long> ids = jobs.stream().map(JobPosting::getId).toList();
         for (Long jobId : ids) {
             jobApplicationRepository.deleteByJobPostingId(jobId);
         }
         jobPostingRepository.deleteAllInBatch(jobs);
+        evictJobCaches();
         return ids.size();
+    }
+
+    /** 공고 변경 시 관련 캐시 무효화 */
+    public void evictJobCaches() {
+        redisTemplate.delete(STATS_CACHE_KEY);
+        log.debug("[캐시 무효화] 공고 통계 캐시 삭제");
     }
 
     private void clearCrawledCache() {

@@ -289,13 +289,24 @@ public class AiAutomationServiceImpl implements AiAutomationService {
     }
 
     private String buildJobString(JobPosting j) {
-        return "제목: " + j.getTitle() +
-                "\n회사: " + j.getCompany() +
-                "\n위치: " + nullSafe(j.getLocation()) +
-                "\n학력: " + nullSafe(j.getEducation()) +
-                "\n경력: " + nullSafe(j.getCareer()) +
-                "\n기술스택: " + (j.getTechStack() != null ? j.getTechStack().toString() : "") +
-                "\n내용: " + nullSafe(j.getDescription());
+        StringBuilder sb = new StringBuilder();
+        sb.append("제목: ").append(j.getTitle());
+        sb.append("\n회사: ").append(j.getCompany());
+        sb.append("\n위치: ").append(nullSafe(j.getLocation()));
+        sb.append("\n학력: ").append(nullSafe(j.getEducation()));
+        sb.append("\n경력: ").append(nullSafe(j.getCareer()));
+        sb.append("\n급여: ").append(nullSafe(j.getSalary()));
+        sb.append("\n직무: ").append(nullSafe(j.getJobCategory()));
+        sb.append("\n기술스택: ").append(j.getTechStack() != null ? j.getTechStack().toString() : "");
+        if (j.getRequirements() != null && !j.getRequirements().isBlank()) {
+            sb.append("\n자격요건/우대사항:\n").append(j.getRequirements());
+        }
+        if (j.getDescription() != null && !j.getDescription().isBlank()) {
+            String desc = j.getDescription();
+            if (desc.length() > 3000) desc = desc.substring(0, 3000) + "...";
+            sb.append("\n상세내용:\n").append(desc);
+        }
+        return sb.toString();
     }
 
     private Set<String> parseSkills(String techStack) {

@@ -34,6 +34,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean notificationEnabled = true;
 
+    @Column(length = 50)
+    private String notificationHours = "9,18";
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Role role = Role.USER;
@@ -74,5 +77,21 @@ public class User extends BaseTimeEntity {
 
     public boolean hasDiscordWebhook() {
         return this.discordWebhookUrl != null && !this.discordWebhookUrl.isBlank();
+    }
+
+    public void updateNotificationHours(String hours) {
+        this.notificationHours = hours;
+    }
+
+    public boolean shouldNotifyAt(int hour) {
+        if (!this.notificationEnabled || this.notificationHours == null || this.notificationHours.isBlank()) {
+            return false;
+        }
+        for (String h : this.notificationHours.split(",")) {
+            try {
+                if (Integer.parseInt(h.trim()) == hour) return true;
+            } catch (NumberFormatException ignored) {}
+        }
+        return false;
     }
 }

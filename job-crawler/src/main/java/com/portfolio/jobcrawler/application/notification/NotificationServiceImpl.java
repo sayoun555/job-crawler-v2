@@ -40,22 +40,36 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void notifyNewJobPostings() {
         List<User> users = userRepository.findByNotificationEnabledTrue();
+        sendMatchingNotifications(users);
+    }
+
+    @Override
+    public void notifyScheduledUsers(int currentHour) {
+        List<User> users = userRepository.findByNotificationEnabledTrue().stream()
+                .filter(u -> u.shouldNotifyAt(currentHour))
+                .toList();
+
+        if (users.isEmpty()) {
+            log.debug("[알림] {}시에 알림 대상 유저 없음", currentHour);
+            return;
+        }
+
+        log.info("[알림] {}시 알림 발송 - 대상 유저 {} 명", currentHour, users.size());
+        sendMatchingNotifications(users);
+    }
+
+    private void sendMatchingNotifications(List<User> users) {
+        var recentJobs = jobPostingRepository.searchJobs(null, null, null,
+                null, null, null, null,
+                PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "createdAt")));
 
         for (User user : users) {
-            if (!user.hasDiscordWebhook())
-                continue;
+            if (!user.hasDiscordWebhook()) continue;
 
             List<JobPreference> prefs = jobPreferenceRepository.findByUserIdAndEnabledTrue(user.getId());
-            if (prefs.isEmpty())
-                continue;
-
-            // 최근 크롤링된 공고 중 매칭 확인 (최신 50개)
-            var recentJobs = jobPostingRepository.searchJobs(null, null, null,
-                    null, null, null, null,
-                    PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "createdAt")));
+            if (prefs.isEmpty()) continue;
 
             for (var job : recentJobs.getContent()) {
-                // 중복 알림 방지 (유저별)
                 String redisKey = NOTIFIED_PREFIX + user.getId() + ":" + job.getId();
                 if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) continue;
 
@@ -66,7 +80,6 @@ public class NotificationServiceImpl implements NotificationService {
                             job.getCompany() + " | " + nullSafe(job.getLocation())
                                     + "\n기술: " + (job.getTechStack() != null ? job.getTechStack().toString() : ""),
                             deepLink);
-                    // 알림 보낸 공고 기록
                     redisTemplate.opsForValue().set(redisKey, "1", NOTIFIED_TTL);
                 }
             }

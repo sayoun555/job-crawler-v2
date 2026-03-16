@@ -49,6 +49,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public User updateNotificationHours(Long userId, String hours) {
+        User user = getUser(userId);
+        user.updateNotificationHours(hours);
+        return user;
+    }
+
+    @Override
     public UserProfile getProfile(Long userId) {
         return userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.PROFILE_NOT_FOUND));

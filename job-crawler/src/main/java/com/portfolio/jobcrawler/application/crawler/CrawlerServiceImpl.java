@@ -16,37 +16,43 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CrawlerServiceImpl implements CrawlerService {
 
-    private final List<JobScraper> scrapers; // Strategy Pattern - 모든 크롤러 자동 주입
+    private final List<JobScraper> scrapers;
     private final JobPostingRepository jobPostingRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
+    private static final String STATS_CACHE_KEY = "cache:job:stats";
+
     private static final String CRAWLED_PREFIX = "crawled:job:";
     private static final Duration CRAWLED_TTL = Duration.ofDays(30);
+    private static final int BATCH_SIZE = 50;
 
     @Override
     @Transactional
     public int crawlAll(String keyword, String jobCategory, int maxPages) {
-        AtomicInteger total = new AtomicInteger(0);
+        int total = 0;
         for (JobScraper scraper : scrapers) {
             try {
                 log.info("[{}] 크롤링 시작 - keyword: {}, category: {}, maxPages: {}", scraper.getSiteName(), keyword, jobCategory, maxPages);
                 List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages);
                 log.info("[{}] {} 건 수집", scraper.getSiteName(), data.size());
-                data.forEach(d -> total.addAndGet(saveIfNew(d)));
+                total += saveNewPostingsInBatch(data);
             } catch (Exception e) {
                 log.error("[{}] 크롤링 실패: {}", scraper.getSiteName(), e.getMessage());
             }
         }
-        log.info("전체 크롤링 완료 - 신규 저장: {} 건", total.get());
-        return total.get();
+        log.info("전체 크롤링 완료 - 신규 저장: {} 건", total);
+        if (total > 0) {
+            redisTemplate.delete(STATS_CACHE_KEY);
+        }
+        return total;
     }
 
     @Override
@@ -57,40 +63,88 @@ public class CrawlerServiceImpl implements CrawlerService {
                 .findFirst()
                 .map(scraper -> {
                     List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages);
-                    int count = 0;
-                    for (CrawledJobData d : data)
-                        count += saveIfNew(d);
-                    return count;
+                    return saveNewPostingsInBatch(data);
                 }).orElse(0);
     }
 
-    private int saveIfNew(CrawledJobData data) {
-        if (data.getUrl() == null)
-            return 0;
+    @Override
+    @Transactional
+    public int crawlBySites(List<String> siteNames, String keyword, String jobCategory, int maxPages) {
+        int total = 0;
+        for (JobScraper scraper : scrapers) {
+            boolean matched = siteNames.stream()
+                    .anyMatch(name -> name.equalsIgnoreCase(scraper.getSiteName()));
+            if (!matched) continue;
 
-        String redisKey = CRAWLED_PREFIX + data.getSourceSite() + ":" + data.getUrl().hashCode();
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey)))
-            return 0;
-        if (jobPostingRepository.existsByUrl(data.getUrl())) {
+            try {
+                log.info("[{}] 크롤링 시작 - keyword: {}, category: {}, maxPages: {}", scraper.getSiteName(), keyword, jobCategory, maxPages);
+                List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages);
+                log.info("[{}] {} 건 수집", scraper.getSiteName(), data.size());
+                total += saveNewPostingsInBatch(data);
+            } catch (Exception e) {
+                log.error("[{}] 크롤링 실패: {}", scraper.getSiteName(), e.getMessage());
+            }
+        }
+        log.info("선택 사이트 크롤링 완료 - 신규 저장: {} 건", total);
+        if (total > 0) {
+            redisTemplate.delete(STATS_CACHE_KEY);
+        }
+        return total;
+    }
+
+    /**
+     * 중복 사전 필터링 후 배치 저장.
+     * Redis 캐시 → DB existsByUrl 순서로 중복 체크하고,
+     * 신규 공고만 모아서 saveAll()로 한 번에 저장한다.
+     */
+    private int saveNewPostingsInBatch(List<CrawledJobData> dataList) {
+        List<JobPosting> newPostings = new ArrayList<>();
+
+        for (CrawledJobData data : dataList) {
+            if (data.getUrl() == null) continue;
+
+            String redisKey = CRAWLED_PREFIX + data.getSourceSite() + ":" + data.getUrl().hashCode();
+
+            // Redis 캐시 히트 → 이미 처리된 URL
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) continue;
+
+            // DB 중복 체크
+            if (jobPostingRepository.existsByUrl(data.getUrl())) {
+                redisTemplate.opsForValue().set(redisKey, "1", CRAWLED_TTL);
+                continue;
+            }
+
+            JobPosting posting = toEntity(data);
+            newPostings.add(posting);
             redisTemplate.opsForValue().set(redisKey, "1", CRAWLED_TTL);
-            return 0;
         }
 
-        JobPosting posting = JobPosting.builder()
+        // 배치 단위로 저장 (메모리 부담 분산)
+        int saved = 0;
+        for (int i = 0; i < newPostings.size(); i += BATCH_SIZE) {
+            int end = Math.min(i + BATCH_SIZE, newPostings.size());
+            List<JobPosting> batch = newPostings.subList(i, end);
+            jobPostingRepository.saveAll(batch);
+            saved += batch.size();
+            log.info("배치 저장 완료: {}/{} 건", saved, newPostings.size());
+        }
+
+        return saved;
+    }
+
+    private JobPosting toEntity(CrawledJobData data) {
+        return JobPosting.builder()
                 .title(data.getTitle()).company(data.getCompany())
                 .companyLogoUrl(data.getCompanyLogoUrl()).location(data.getLocation())
                 .url(data.getUrl()).description(data.getDescription())
                 .source(parseSource(data.getSourceSite()))
                 .applicationMethod(parseMethod(data.getApplicationMethod()))
                 .education(data.getEducation()).career(data.getCareer())
-                .salary(data.getSalary()).jobCategory(data.getJobCategory()).deadline(parseDeadline(data.getDeadline()))
+                .salary(data.getSalary()).jobCategory(data.getJobCategory())
+                .deadline(parseDeadline(data.getDeadline()))
                 .techStack(TechStack.of(data.getTechStack())).requirements(data.getRequirements())
                 .companyImages(data.getCompanyImages())
                 .build();
-
-        jobPostingRepository.save(posting);
-        redisTemplate.opsForValue().set(redisKey, "1", CRAWLED_TTL);
-        return 1;
     }
 
     private SourceSite parseSource(String s) {
@@ -115,28 +169,23 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         String trimmed = d.trim();
 
-        // 상시채용, 채용시 → 마감일 없음
         if (trimmed.contains("채용시") || trimmed.contains("상시"))
             return null;
 
         try {
             String clean = trimmed.replaceAll("[~\\s]", "").replaceAll("\\(.*\\)", "");
 
-            // YYYY.MM.DD 형식
             if (clean.matches("\\d{4}\\.\\d{2}\\.\\d{2}"))
                 return LocalDate.parse(clean, DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
-            // MM.DD 형식 (사람인 기본)
             if (clean.matches("\\d{2}\\.\\d{2}")) {
                 LocalDate date = LocalDate.parse(LocalDate.now().getYear() + "." + clean,
                         DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-                // 6개월 이상 과거면 내년으로 간주
                 if (date.isBefore(LocalDate.now().minusMonths(6)))
                     date = date.plusYears(1);
                 return date;
             }
 
-            // MM/DD 형식
             if (clean.matches("\\d{2}/\\d{2}"))
                 return LocalDate.parse(LocalDate.now().getYear() + "/" + clean,
                         DateTimeFormatter.ofPattern("yyyy/MM/dd"));

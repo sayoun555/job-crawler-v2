@@ -4,6 +4,7 @@ import com.portfolio.jobcrawler.domain.common.entity.BaseTimeEntity;
 import com.portfolio.jobcrawler.domain.account.vo.AuthType;
 import com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite;
 import com.portfolio.jobcrawler.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,8 +32,10 @@ public class ExternalAccount extends BaseTimeEntity {
 
     private String accountId;
 
+    @JsonIgnore
     private String encryptedPassword;
 
+    @JsonIgnore
     @Column(columnDefinition = "TEXT")
     private String sessionCookies;
 

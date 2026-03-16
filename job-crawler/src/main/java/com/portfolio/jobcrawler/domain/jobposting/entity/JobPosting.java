@@ -14,7 +14,10 @@ import java.time.LocalDate;
 @Table(name = "job_postings", indexes = {
         @Index(name = "idx_job_source", columnList = "source"),
         @Index(name = "idx_job_deadline", columnList = "deadline"),
-        @Index(name = "idx_job_company", columnList = "company")
+        @Index(name = "idx_job_company", columnList = "company"),
+        @Index(name = "idx_job_url", columnList = "url"),
+        @Index(name = "idx_job_source_closed", columnList = "source, closed"),
+        @Index(name = "idx_job_closed_deadline", columnList = "closed, deadline")
 })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

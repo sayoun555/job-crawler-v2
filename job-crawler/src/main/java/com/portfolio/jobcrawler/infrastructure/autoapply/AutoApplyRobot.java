@@ -85,6 +85,10 @@ public class AutoApplyRobot {
             loginUrl = "https://www.saramin.co.kr/zf_user/auth";
         } else if ("JOBPLANET".equalsIgnoreCase(site)) {
             loginUrl = "https://www.jobplanet.co.kr/users/sign_in";
+        } else if ("JOBKOREA".equalsIgnoreCase(site)) {
+            loginUrl = "https://www.jobkorea.co.kr/Login/Login_Tot.asp";
+        } else if ("LINKAREER".equalsIgnoreCase(site)) {
+            loginUrl = "https://linkareer.com/login";
         } else {
             return null;
         }
@@ -103,7 +107,11 @@ public class AutoApplyRobot {
 
             log.info("[AutoApplyRobot] 유저 로그인 대기 중... (최대 120초)");
             page.waitForURL(
-                    url -> !url.contains("/auth") && !url.contains("/sign_in") && !url.contains("/login"),
+                    url -> {
+                        String lower = url.toLowerCase();
+                        return !lower.contains("/auth") && !lower.contains("/sign_in")
+                                && !lower.contains("/login");
+                    },
                     new Page.WaitForURLOptions().setTimeout(120_000));
 
             log.info("[AutoApplyRobot] 로그인 감지! URL: {}", page.url());

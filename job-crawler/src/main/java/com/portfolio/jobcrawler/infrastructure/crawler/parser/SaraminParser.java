@@ -107,11 +107,20 @@ public class SaraminParser implements SiteParser {
     }
 
     @Override
-    public CrawledJobData parseJobData(Page listPage, Locator item, String requestedJobCategory) {
+    public boolean supportsTwoPhase() {
+        return true;
+    }
+
+    @Override
+    public String extractDetailUrl(Page listPage, Locator item) {
+        return extractJobUrl(item);
+    }
+
+    @Override
+    public CrawledJobData parseListData(Page listPage, Locator item, String requestedJobCategory) {
         String title = extractTitle(item);
         if (title.isEmpty()) return null;
 
-        // 마감일 추출 및 만료 체크
         String deadline = safeText(item, ".support_detail .date");
         if (deadline.isEmpty()) deadline = safeText(item, ".support_info .date");
         if (isDeadlineExpired(deadline)) {
@@ -135,25 +144,60 @@ public class SaraminParser implements SiteParser {
             finalCategory = normalizeCategory(parsedCategory);
         }
 
-        CrawledJobData.CrawledJobDataBuilder builder = CrawledJobData.builder()
-                .title(title)
-                .company(company)
-                .companyLogoUrl(companyLogoUrl)
-                .location(location)
-                .url(url)
-                .sourceSite(getSiteName())
-                .applicationMethod("UNKNOWN")
-                .education(education)
-                .career(career)
-                .salary("")
-                .deadline(deadline)
-                .techStack(techStack)
-                .jobCategory(finalCategory);
+        return CrawledJobData.builder()
+                .title(title).company(company).companyLogoUrl(companyLogoUrl)
+                .location(location).url(url).sourceSite(getSiteName())
+                .applicationMethod("UNKNOWN").education(education).career(career)
+                .salary("").deadline(deadline).techStack(techStack)
+                .jobCategory(finalCategory)
+                .description("").requirements("").companyImages("")
+                .build();
+    }
 
-        // 상세 데이터 보강 (급여, 지원방법, 이미지 등)
-        enrichWithDetailData(listPage, url, builder);
+    @Override
+    public void enrichFromDetailPage(Page detailPage, CrawledJobData data) {
+        try {
+            // iframe 로딩 대기
+            try {
+                detailPage.waitForSelector("iframe#iframe_content_0",
+                        new Page.WaitForSelectorOptions().setTimeout(5_000));
+                detailPage.waitForTimeout(500);
+            } catch (Exception e) {
+                log.warn("[사람인-Parser] iframe 로딩 지연: {}", e.getMessage());
+            }
 
-        return builder.build();
+            StringBuilder descriptionBuilder = new StringBuilder();
+            StringBuilder requirementsBuilder = new StringBuilder();
+            List<String> imageUrls = new ArrayList<>();
+
+            extractKeyInfoForData(detailPage, data, descriptionBuilder, requirementsBuilder);
+            extractFromIframeIfExists(detailPage, descriptionBuilder, requirementsBuilder, imageUrls);
+            extractOuterImages(detailPage, imageUrls);
+            extractMainContentFallback(detailPage, descriptionBuilder);
+            extractApplicationMethodForData(detailPage, data);
+            applyFormattedResultToData(data, descriptionBuilder.toString(), requirementsBuilder.toString(), imageUrls);
+        } catch (Exception e) {
+            log.warn("[사람인-Parser] 상세 페이지 보강 실패: {}", e.getMessage());
+        }
+    }
+
+    @Override
+    public CrawledJobData parseJobData(Page listPage, Locator item, String requestedJobCategory) {
+        CrawledJobData data = parseListData(listPage, item, requestedJobCategory);
+        if (data == null || data.getUrl() == null || data.getUrl().isBlank()) return data;
+
+        Page detailPage = listPage.context().newPage();
+        try {
+            detailPage.setDefaultNavigationTimeout(15_000);
+            detailPage.navigate(data.getUrl(), new Page.NavigateOptions()
+                    .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.DOMCONTENTLOADED));
+            enrichFromDetailPage(detailPage, data);
+        } catch (Exception e) {
+            log.warn("[사람인-Parser] 상세 페이지 크롤링 실패 ({}): {}", data.getUrl(), e.getMessage());
+        } finally {
+            detailPage.close();
+        }
+        return data;
     }
 
     // ========== 리스트 페이지 파싱 ==========
@@ -295,65 +339,12 @@ public class SaraminParser implements SiteParser {
 
     // ========== 상세 페이지 보강 ==========
 
-    private void enrichWithDetailData(Page listPage, String jobUrl, CrawledJobData.CrawledJobDataBuilder builder) {
-        if (jobUrl == null || jobUrl.isBlank()) {
-            builder.description("").requirements("").companyImages("");
-            return;
-        }
-
-        try {
-            scrapeDetailAndApply(listPage, jobUrl, builder);
-        } catch (Exception e) {
-            log.warn("[사람인-Parser] 상세 페이지 크롤링 실패 ({}): {}", jobUrl, e.getMessage());
-            builder.description("상세 페이지를 불러올 수 없습니다.")
-                   .requirements("")
-                   .companyImages("");
-        }
-    }
-
-    private void scrapeDetailAndApply(Page listPage, String detailUrl, CrawledJobData.CrawledJobDataBuilder builder) {
-        Page detailPage = listPage.context().newPage();
-        try {
-            detailPage.setDefaultNavigationTimeout(15_000);
-            Page.NavigateOptions options = new Page.NavigateOptions().setWaitUntil(com.microsoft.playwright.options.WaitUntilState.DOMCONTENTLOADED);
-            detailPage.navigate(detailUrl, options);
-
-            // iframe 로딩 대기 (최대 5초)
-            try {
-                detailPage.waitForSelector("iframe#iframe_content_0", new Page.WaitForSelectorOptions().setTimeout(5_000));
-                detailPage.waitForTimeout(500);
-            } catch (Exception e) {
-                log.debug("[사람인-Parser] iframe 로딩 지연: {}", e.getMessage());
-            }
-
-            StringBuilder descriptionBuilder = new StringBuilder();
-            StringBuilder requirementsBuilder = new StringBuilder();
-            List<String> imageUrls = new ArrayList<>();
-
-            // 핵심 정보에서 급여 등 추출
-            extractKeyInfo(detailPage, builder, descriptionBuilder, requirementsBuilder);
-
-            // iframe 내 상세 설명, 자격요건, 이미지 추출
-            extractFromIframeIfExists(detailPage, descriptionBuilder, requirementsBuilder, imageUrls);
-            extractOuterImages(detailPage, imageUrls);
-            extractMainContentFallback(detailPage, descriptionBuilder);
-
-            // 지원방법 추출
-            extractApplicationMethod(detailPage, builder);
-
-            applyFormattedResult(builder, descriptionBuilder.toString(), requirementsBuilder.toString(), imageUrls);
-        } finally {
-            detailPage.close();
-        }
-    }
-
     /**
      * 상세 페이지 핵심 정보 (경력, 학력, 급여, 근무지 등) 추출.
-     * 실제 DOM: .jv_summary .cont dl (dt/dd 쌍)
-     * 우대사항: dd.preferred 내 .toolTipTxt li에서 실제 내용 추출
+     * CrawledJobData에 직접 값을 세팅한다.
      */
-    private void extractKeyInfo(Page detailPage, CrawledJobData.CrawledJobDataBuilder builder,
-                                StringBuilder descBuilder, StringBuilder reqBuilder) {
+    private void extractKeyInfoForData(Page detailPage, CrawledJobData data,
+                                       StringBuilder descBuilder, StringBuilder reqBuilder) {
         Locator summaryDls = detailPage.locator(".jv_summary .cont dl");
         if (summaryDls.count() == 0) {
             summaryDls = detailPage.locator(".jv_header .col dl");
@@ -366,7 +357,6 @@ public class SaraminParser implements SiteParser {
             String dt = safeText(summaryDls.nth(i).locator("dt"));
             if (dt.isEmpty()) continue;
 
-            // 우대사항: 숨겨진 툴팁에서 실제 내용 추출
             if (dt.contains("우대사항")) {
                 String preferred = extractPreferredQualifications(summaryDls.nth(i));
                 if (!preferred.isEmpty()) {
@@ -382,7 +372,7 @@ public class SaraminParser implements SiteParser {
             headerBuilder.append("- ").append(dt).append(": ").append(dd).append("\n");
 
             if (dt.contains("급여") || dt.contains("연봉")) {
-                builder.salary(dd);
+                data.setSalary(dd);
             }
             if (dt.contains("자격요건") || dt.contains("지원자격")) {
                 reqBuilder.append(dd).append("\n");
@@ -424,14 +414,8 @@ public class SaraminParser implements SiteParser {
         return sb.toString();
     }
 
-    /**
-     * 접수기간 및 방법 섹션에서 지원방법 추출.
-     * 실제 DOM: .jv_howto dl.guide dd.method
-     */
-    private void extractApplicationMethod(Page detailPage, CrawledJobData.CrawledJobDataBuilder builder) {
-        // 1차: 정확한 셀렉터
+    private void extractApplicationMethodForData(Page detailPage, CrawledJobData data) {
         String method = safePageText(detailPage, ".jv_howto dl.guide dd.method");
-        // 2차: 폴백
         if (method.isEmpty()) {
             method = safePageText(detailPage, ".jv_howto .cont");
         }
@@ -440,11 +424,11 @@ public class SaraminParser implements SiteParser {
         }
 
         if (method.contains("사람인 입사지원") || method.contains("온라인 입사지원")) {
-            builder.applicationMethod("SARAMIN_APPLY");
+            data.setApplicationMethod("SARAMIN_APPLY");
         } else if (method.contains("홈페이지 지원") || method.contains("홈페이지")) {
-            builder.applicationMethod("HOMEPAGE");
+            data.setApplicationMethod("HOMEPAGE");
         } else if (method.contains("이메일")) {
-            builder.applicationMethod("EMAIL");
+            data.setApplicationMethod("EMAIL");
         }
     }
 
@@ -461,7 +445,7 @@ public class SaraminParser implements SiteParser {
                 frameLoc.locator(".user_content, body").first().waitFor(
                         new Locator.WaitForOptions().setTimeout(5_000));
             } catch (Exception e) {
-                log.debug("[사람인-Parser] iframe 내부 콘텐츠 대기 초과");
+                log.warn("[사람인-Parser] iframe 내부 콘텐츠 대기 초과");
             }
 
             Locator reqTitle = frameLoc.locator("h3:has-text('자격요건'), h4:has-text('자격요건'), dt:has-text('자격요건')");
@@ -495,10 +479,16 @@ public class SaraminParser implements SiteParser {
 
     private void extractImagesFromLocator(Locator images, List<String> imageUrls) {
         for (int i = 0; i < images.count(); i++) {
-            String src = images.nth(i).getAttribute("src");
-            if (src != null && src.startsWith("http") && !isAdImage(src)) {
-                imageUrls.add(src);
-            }
+            Locator img = images.nth(i);
+            String src = img.getAttribute("src");
+            if (src == null || !src.startsWith("http") || isAdImage(src)) continue;
+
+            try {
+                var box = img.boundingBox();
+                if (box != null && (box.width < 200 || box.height < 100)) continue;
+            } catch (Exception ignored) {}
+
+            imageUrls.add(src);
         }
     }
 
@@ -517,13 +507,12 @@ public class SaraminParser implements SiteParser {
         }
     }
 
-    private void applyFormattedResult(
-            CrawledJobData.CrawledJobDataBuilder builder,
+    private void applyFormattedResultToData(
+            CrawledJobData data,
             String rawDescription,
             String rawRequirements,
             List<String> imageUrls) {
 
-        // 연속 빈 줄 정리 (br 태그 남발로 인한 수십 개 빈 줄 → 최대 1줄)
         String description = rawDescription.trim().replaceAll("\\n{3,}", "\n\n");
         if (description.length() > 5000) {
             description = description.substring(0, 5000) + "...";
@@ -540,9 +529,9 @@ public class SaraminParser implements SiteParser {
 
         String companyImages = String.join(",", imageUrls.stream().distinct().limit(10).toList());
 
-        builder.description(description)
-               .requirements(requirements)
-               .companyImages(companyImages);
+        data.setDescription(description);
+        data.setRequirements(requirements);
+        data.setCompanyImages(companyImages);
     }
 
     private String extractRequirementsFromDescription(String description) {

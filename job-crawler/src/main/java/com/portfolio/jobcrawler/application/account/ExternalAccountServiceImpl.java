@@ -7,12 +7,12 @@ import com.portfolio.jobcrawler.domain.user.entity.User;
 import com.portfolio.jobcrawler.domain.user.repository.UserRepository;
 import com.portfolio.jobcrawler.global.error.CustomException;
 import com.portfolio.jobcrawler.global.error.ErrorCode;
+import com.portfolio.jobcrawler.global.util.AesEncryptor;
 import com.portfolio.jobcrawler.infrastructure.autoapply.AutoApplyRobot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -23,6 +23,7 @@ public class ExternalAccountServiceImpl implements ExternalAccountService {
     private final ExternalAccountRepository externalAccountRepository;
     private final UserRepository userRepository;
     private final AutoApplyRobot autoApplyRobot;
+    private final AesEncryptor aesEncryptor;
 
     @Override
     public List<ExternalAccount> getMyAccounts(Long userId) {
@@ -36,17 +37,16 @@ public class ExternalAccountServiceImpl implements ExternalAccountService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        // 이미 등록된 계정이면 업데이트
         return externalAccountRepository.findByUserIdAndSite(userId, site)
                 .map(existing -> {
-                    existing.updateCredentials(accountId, encryptPassword(password));
+                    existing.updateCredentials(accountId, aesEncryptor.encrypt(password));
                     return existing;
                 })
                 .orElseGet(() -> externalAccountRepository.save(
                         ExternalAccount.builder()
                                 .user(user).site(site)
                                 .accountId(accountId)
-                                .encryptedPassword(encryptPassword(password))
+                                .encryptedPassword(aesEncryptor.encrypt(password))
                                 .build()));
     }
 
@@ -59,7 +59,7 @@ public class ExternalAccountServiceImpl implements ExternalAccountService {
         if (!account.isOwnedBy(userId)) {
             throw new CustomException(ErrorCode.ACCESS_DENIED);
         }
-        account.updateCredentials(newAccountId, encryptPassword(newPassword));
+        account.updateCredentials(newAccountId, aesEncryptor.encrypt(newPassword));
         return account;
     }
 
@@ -74,11 +74,6 @@ public class ExternalAccountServiceImpl implements ExternalAccountService {
         externalAccountRepository.delete(account);
     }
 
-    // TODO: 실제로는 AES-256 등 양방향 암호화 사용 (복호화 필요하므로)
-    private String encryptPassword(String plainPassword) {
-        return Base64.getEncoder().encodeToString(plainPassword.getBytes());
-    }
-
     @Override
     @Transactional
     public boolean openLoginPopup(Long userId, SourceSite site) {
@@ -86,11 +81,10 @@ public class ExternalAccountServiceImpl implements ExternalAccountService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         String cookies = autoApplyRobot.openLoginPopup(userId, site.name());
-        if (cookies == null) {
+        if (cookies == null || cookies.isBlank() || cookies.equals("[]")) {
             return false;
         }
 
-        // 기존 계정이 있으면 쿠키 업데이트, 없으면 신규 생성
         externalAccountRepository.findByUserIdAndSite(userId, site)
                 .ifPresentOrElse(
                         existing -> existing.updateSessionCookies(cookies),

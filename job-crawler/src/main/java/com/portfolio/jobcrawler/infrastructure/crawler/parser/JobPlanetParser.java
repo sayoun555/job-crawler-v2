@@ -59,7 +59,9 @@ public class JobPlanetParser implements SiteParser {
             }
         }
         
-        if (!hasQuery) {
+        if (hasQuery) {
+            urlBuilder.append("&order_by=recent");
+        } else {
             urlBuilder.append("order_by=recent");
         }
         
@@ -97,7 +99,17 @@ public class JobPlanetParser implements SiteParser {
     }
 
     @Override
-    public CrawledJobData parseJobData(Page listPage, Locator item, String requestedJobCategory) {
+    public boolean supportsTwoPhase() {
+        return true;
+    }
+
+    @Override
+    public String extractDetailUrl(Page listPage, Locator item) {
+        return extractJobUrl(item);
+    }
+
+    @Override
+    public CrawledJobData parseListData(Page listPage, Locator item, String requestedJobCategory) {
         String title = safeText(item, "h4");
         String company = safeText(item, "em");
         String companyLogoUrl = extractCompanyLogo(item);
@@ -109,34 +121,61 @@ public class JobPlanetParser implements SiteParser {
         String jobUrl = extractJobUrl(item);
         List<String> techList = new ArrayList<>();
         String career = extractCareerAndTechStack(item, techList);
-        
+
         String finalCategory;
         if (requestedJobCategory != null && !requestedJobCategory.isBlank() && !requestedJobCategory.equals("전체") && !requestedJobCategory.equals("all")) {
             finalCategory = requestedJobCategory;
         } else {
-            // JobPlanet 목록에는 직무 카테고리가 텍스트로 잘 안나오므로 요청된 값이 없으면 기타로 처리.
             finalCategory = "기타";
         }
 
-        CrawledJobData.CrawledJobDataBuilder builder = CrawledJobData.builder()
-                .title(title)
-                .company(company)
-                .companyLogoUrl(companyLogoUrl)
-                .location("")
-                .url(jobUrl)
-                .sourceSite(getSiteName())
-                .applicationMethod("UNKNOWN")
-                .education("")
-                .career(career)
-                .salary("")
-                .jobCategory(finalCategory)
-                .deadline("")
-                .techStack(String.join(",", techList));
+        return CrawledJobData.builder()
+                .title(title).company(company).companyLogoUrl(companyLogoUrl)
+                .location("").url(jobUrl).sourceSite(getSiteName())
+                .applicationMethod("UNKNOWN").education("").career(career)
+                .salary("").jobCategory(finalCategory).deadline("")
+                .techStack(String.join(",", techList))
+                .description("").requirements("").companyImages("")
+                .build();
+    }
 
-        // 상세 데이터 보강
-        enrichWithDetailData(listPage, jobUrl, builder);
+    @Override
+    public void enrichFromDetailPage(Page detailPage, CrawledJobData data) {
+        try {
+            // 잡플래닛 상세 페이지 렌더링 대기
+            try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
 
-        return builder.build();
+            StringBuilder descBuilder = new StringBuilder();
+            extractSummaryFromJsonBoxForData(detailPage, descBuilder, data);
+            extractDetailSections(detailPage, descBuilder);
+
+            String description = descBuilder.toString().trim();
+            if (description.length() > 5000) {
+                description = description.substring(0, 5000) + "...";
+            }
+            data.setDescription(description);
+            data.setCompanyImages("");
+        } catch (Exception e) {
+            log.warn("[잡플래닛-Parser] 상세 페이지 보강 실패: {}", e.getMessage());
+        }
+    }
+
+    @Override
+    public CrawledJobData parseJobData(Page listPage, Locator item, String requestedJobCategory) {
+        CrawledJobData data = parseListData(listPage, item, requestedJobCategory);
+        if (data == null || data.getUrl() == null || data.getUrl().isBlank()) return data;
+
+        Page detailPage = listPage.context().newPage();
+        try {
+            detailPage.setDefaultNavigationTimeout(60_000);
+            detailPage.navigate(data.getUrl());
+            enrichFromDetailPage(detailPage, data);
+        } catch (Exception e) {
+            log.warn("[잡플래닛-Parser] 상세 페이지 크롤링 실패 ({}): {}", data.getUrl(), e.getMessage());
+        } finally {
+            detailPage.close();
+        }
+        return data;
     }
 
     // normalizeCategory replaced by inline Enum calls where applicable
@@ -175,41 +214,7 @@ public class JobPlanetParser implements SiteParser {
         return career;
     }
 
-    private void enrichWithDetailData(Page listPage, String jobUrl, CrawledJobData.CrawledJobDataBuilder builder) {
-        if (jobUrl == null || jobUrl.isBlank()) {
-            builder.description("");
-            return;
-        }
-
-        try {
-            scrapeDetailAndApply(listPage, jobUrl, builder);
-        } catch (Exception e) {
-            log.warn("[잡플래닛-Parser] 상세 페이지 크롤링 실패 ({}): {}", jobUrl, e.getMessage());
-            builder.description("");
-        }
-    }
-
-    private void scrapeDetailAndApply(Page listPage, String detailUrl, CrawledJobData.CrawledJobDataBuilder builder) {
-        Page detailPage = listPage.context().newPage();
-        try {
-            detailPage.setDefaultNavigationTimeout(60_000);
-            detailPage.navigate(detailUrl);
-            
-            // 잡플래닛 상세 페이지 렌더링 지연 방지용
-            try { Thread.sleep(1500); } catch (InterruptedException ignored) {} 
-
-            StringBuilder descBuilder = new StringBuilder();
-
-            extractSummaryFromJsonBox(detailPage, descBuilder, builder);
-            extractDetailSections(detailPage, descBuilder);
-
-            applyFormattedResult(builder, descBuilder.toString());
-        } finally {
-            detailPage.close();
-        }
-    }
-
-    private void extractSummaryFromJsonBox(Page detailPage, StringBuilder descBuilder, CrawledJobData.CrawledJobDataBuilder builder) {
+    private void extractSummaryFromJsonBoxForData(Page detailPage, StringBuilder descBuilder, CrawledJobData data) {
         String summaryJs = """
                 (() => {
                     const box = document.querySelector('[class*=recruitment-detail__box]')
@@ -231,14 +236,14 @@ public class JobPlanetParser implements SiteParser {
         try {
             JsonNode node = OBJECT_MAPPER.readTree(jsonStr);
             
-            applySummaryField(node, "마감일", builder::deadline);
-            applySummaryField(node, "경력", builder::career);
-            applySummaryField(node, "근무지역", builder::location);
-            applySummaryField(node, "스킬", builder::techStack);
-            
+            applySummaryField(node, "마감일", data::setDeadline);
+            applySummaryField(node, "경력", data::setCareer);
+            applySummaryField(node, "근무지역", data::setLocation);
+            applySummaryField(node, "스킬", data::setTechStack);
+
             if (node.has("직무")) {
                 String jobCategory = node.get("직무").asText();
-                builder.jobCategory(jobCategory);
+                data.setJobCategory(jobCategory);
                 descBuilder.append("- 직무: ").append(jobCategory).append("\n");
             }
             if (node.has("고용형태")) {
@@ -283,16 +288,6 @@ public class JobPlanetParser implements SiteParser {
         if (mainBox.count() > 0) {
             descBuilder.append("\n").append(mainBox.first().innerText());
         }
-    }
-
-    private void applyFormattedResult(CrawledJobData.CrawledJobDataBuilder builder, String rawDescription) {
-        String description = rawDescription.trim();
-        if (description.length() > 5000) {
-            description = description.substring(0, 5000) + "...";
-        }
-        
-        builder.description(description)
-               .companyImages("");
     }
 
     private String safeText(Locator parent, String selector) {

@@ -43,4 +43,36 @@ public interface SiteParser {
      * @return 다음 페이지 이동 성공 여부 (더 이상 없으면 false)
      */
     boolean goToNextPage(Page page, int currentPageNum);
+
+    // === 2단계 크롤링 지원 (리스트 파싱 → 병렬 상세 페이지 보강) ===
+
+    /**
+     * 2단계 크롤링 지원 여부.
+     * true를 반환하면 엔진이 parseListData → enrichFromDetailPage 순서로 호출한다.
+     */
+    default boolean supportsTwoPhase() {
+        return false;
+    }
+
+    /**
+     * 리스트 아이템에서 상세 페이지 URL 추출 (상세 페이지를 열지 않음)
+     */
+    default String extractDetailUrl(Page listPage, Locator item) {
+        return null;
+    }
+
+    /**
+     * 리스트 아이템에서 기본 데이터만 파싱 (상세 페이지를 열지 않음)
+     */
+    default CrawledJobData parseListData(Page listPage, Locator item, String requestedJobCategory) {
+        return parseJobData(listPage, item, requestedJobCategory);
+    }
+
+    /**
+     * 이미 열려있는 상세 페이지로부터 CrawledJobData를 보강한다.
+     * 엔진이 페이지의 생성·소멸을 관리하므로 파서는 파싱에만 집중한다.
+     */
+    default void enrichFromDetailPage(Page detailPage, CrawledJobData data) {
+        // no-op
+    }
 }

@@ -88,4 +88,57 @@ public class PlaywrightManager {
         if (playwright != null)
             playwright.close();
     }
+
+    /**
+     * 독립 Playwright 인스턴스를 가진 워커를 생성한다.
+     * Playwright는 thread-safe하지 않으므로, 멀티스레드 병렬 처리 시
+     * 각 스레드가 자신만의 Playwright+Browser를 소유해야 한다.
+     * 반드시 사용 후 close()를 호출할 것.
+     */
+    public PlaywrightWorker createIsolatedWorker() {
+        return new PlaywrightWorker();
+    }
+
+    /**
+     * 독립적인 Playwright+Browser를 캡슐화한 워커.
+     * 각 스레드에서 하나씩 생성하여 사용한다.
+     */
+    public class PlaywrightWorker implements AutoCloseable {
+        private final Playwright workerPlaywright;
+        private final Browser workerBrowser;
+
+        PlaywrightWorker() {
+            this.workerPlaywright = Playwright.create();
+            this.workerBrowser = workerPlaywright.chromium().launch(
+                    new BrowserType.LaunchOptions()
+                            .setHeadless(false)
+                            .setArgs(List.of(
+                                    "--disable-blink-features=AutomationControlled",
+                                    "--no-sandbox", "--disable-dev-shm-usage",
+                                    "--disable-infobars", "--disable-extensions", "--disable-gpu")));
+        }
+
+        public BrowserContext createStealthContext() {
+            String ua = USER_AGENTS.get(random.nextInt(USER_AGENTS.size()));
+            BrowserContext ctx = workerBrowser.newContext(
+                    new Browser.NewContextOptions()
+                            .setUserAgent(ua)
+                            .setViewportSize(1280 + random.nextInt(640), 720 + random.nextInt(360))
+                            .setLocale("ko-KR")
+                            .setTimezoneId("Asia/Seoul"));
+            ctx.addInitScript("""
+                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+                    Object.defineProperty(navigator, 'plugins', { get: () => [1,2,3,4,5] });
+                    Object.defineProperty(navigator, 'languages', { get: () => ['ko-KR','ko','en-US','en'] });
+                    window.chrome = { runtime: {} };
+                    """);
+            return ctx;
+        }
+
+        @Override
+        public void close() {
+            try { workerBrowser.close(); } catch (Exception ignored) {}
+            try { workerPlaywright.close(); } catch (Exception ignored) {}
+        }
+    }
 }

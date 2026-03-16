@@ -32,9 +32,24 @@ public class CrawlerController {
                 Map.of("keyword", keyword != null ? keyword : "전체", "savedCount", saved), "크롤링 완료"));
     }
 
+    @PostMapping("/crawl/sites")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> crawlBySites(
+            @RequestBody Map<String, Object> body) {
+        @SuppressWarnings("unchecked")
+        List<String> sites = (List<String>) body.get("sites");
+        String keyword = (String) body.get("keyword");
+        String jobCategory = (String) body.get("jobCategory");
+        int maxPages = body.get("maxPages") != null ? Integer.parseInt(body.get("maxPages").toString()) : 50;
+
+        int saved = crawlerService.crawlBySites(sites, keyword, jobCategory, maxPages);
+        return ResponseEntity.ok(ApiResponse.ok(
+                Map.of("sites", sites, "keyword", keyword != null ? keyword : "전체", "savedCount", saved),
+                sites.size() + "개 사이트 크롤링 완료"));
+    }
+
     @PostMapping("/crawl/{site}")
     public ResponseEntity<ApiResponse<Map<String, Object>>> crawlBySite(
-            @PathVariable String site, 
+            @PathVariable String site,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String jobCategory,
             @RequestParam(required = false, defaultValue = "50") int maxPages) {
@@ -63,6 +78,14 @@ public class CrawlerController {
             maxPages
         );
         return ResponseEntity.ok(ApiResponse.ok(crawlerScheduler.getCurrentSchedule(), "스케줄 변경 완료"));
+    }
+
+    @PatchMapping("/schedule/toggle")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> toggleSchedule() {
+        boolean newState = crawlerScheduler.toggleEnabled();
+        return ResponseEntity.ok(ApiResponse.ok(
+                crawlerScheduler.getCurrentSchedule(),
+                "자동 크롤링 " + (newState ? "활성화" : "비활성화")));
     }
 
     @DeleteMapping("/jobs/{id}")

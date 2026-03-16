@@ -59,4 +59,11 @@ public class UserController {
         userService.toggleNotification((Long) auth.getPrincipal(), body.getOrDefault("enabled", true));
         return ResponseEntity.ok(ApiResponse.ok());
     }
+
+    @PutMapping("/settings/notification-hours")
+    public ResponseEntity<ApiResponse<Void>> updateNotificationHours(
+            Authentication auth, @RequestBody Map<String, String> body) {
+        userService.updateNotificationHours((Long) auth.getPrincipal(), body.get("hours"));
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
 }
