@@ -1,0 +1,8 @@
+[   13007ms] [WARNING] Notifications permission has been blocked as the user has ignored the permission prompt several times. This can be reset in Page Info which can be accessed by clicking the tune icon next to the URL. See https://www.chromestatus.com/feature/6443143280984064 for more information. @ https://linkareer.com/my-career/spec-management?section=introduce:0
+[   20928ms] Identifier 'serviceWorkerVersion' has already been declared
+[   23796ms] [WARNING] [Elastic APM] Failed sending events! AbortError: signal is aborted without reason
+    at https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:714:128643 @ https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:713
+[   24303ms] [WARNING] [Elastic APM] Failed sending events! AbortError: signal is aborted without reason
+    at https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:714:128643 @ https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:713
+[   24844ms] [WARNING] [Elastic APM] Failed sending events! AbortError: signal is aborted without reason
+    at https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:714:128643 @ https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:713

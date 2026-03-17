@@ -95,66 +95,9 @@ public class OpenClawAiGenerator implements AiTextGenerator {
 
     private String buildPrompt(AiGenerationRequest request) {
         return switch (request.getType()) {
-            case COVER_LETTER -> String.format("""
-                    당신은 한국 IT 업계 채용 전문가입니다. 백엔드 개발자 직무에 최적화된 자기소개서를 작성해주세요.
+            case COVER_LETTER -> buildCoverLetterPrompt(request);
 
-                    [작성 원칙]
-                    - 반드시 순수 텍스트로만 작성. 마크다운(*, #, ` 등), HTML 태그 절대 금지.
-                    - STAR 기법(상황-과제-행동-결과)을 활용하여 경험을 구체적으로 서술.
-                    - 채용 공고의 자격요건/우대사항에 명시된 기술과 역량에 맞춰 내 경험을 연결.
-                    - "열심히 하겠습니다" 같은 추상적 표현 대신 정량적 성과(퍼센트, 수치)를 포함.
-                    - 채용 공고에 전형 절차나 지원 양식 요구사항이 있으면 그 형식에 맞춰 작성.
-                    - AI가 쓴 티가 나지 않도록 자연스럽고 진정성 있는 톤으로 작성.
-                    - 후속 제안 문구("원하시면", "버전", "이어서" 등) 절대 넣지 마세요.
-
-                    [자소서 구성]
-                    1. 지원동기 - 이 회사의 기술/서비스/비전과 내 경험의 접점을 구체적으로
-                    2. 직무 역량 - 채용 공고의 자격요건에 대응하는 내 기술 경험 (STAR 기법 적용)
-                    3. 프로젝트 경험 - 문제 정의 → 기술적 선택 → 구현 과정 → 성과 수치
-                    4. 성장 계획 - 입사 후 단기/중기 목표와 팀 기여 방향
-
-                    [내 프로필]
-                    %s
-
-                    [채용 공고]
-                    %s
-
-                    [기업 정보]
-                    %s
-
-                    [관련 프로젝트]
-                    %s
-                    """, request.getUserProfile(), request.getJobDescription(),
-                    request.getCompanyInfo(), request.getMatchedProjects());
-
-            case PORTFOLIO -> String.format("""
-                    당신은 한국 IT 업계 채용 전문가입니다. 백엔드 개발자 포트폴리오 텍스트를 작성해주세요.
-
-                    [작성 원칙]
-                    - 반드시 순수 텍스트로만 작성. 마크다운, HTML 태그 절대 금지.
-                    - 줄바꿈은 빈 줄로만 구분.
-                    - 채용 공고의 자격요건/기술스택에 맞춰 프로젝트 경험을 연결.
-                    - 단순 기능 나열이 아니라 "왜 이 기술을 선택했고, 어떤 문제를 해결했는지" 중심으로 서술.
-                    - 성과는 수치로 표현 (응답속도 개선율, 처리량 등).
-                    - 후속 제안 문구 절대 넣지 마세요.
-
-                    [포트폴리오 구성 - 프로젝트별]
-                    1. 프로젝트 개요 (한 줄 요약)
-                    2. 기술적 의사결정 (왜 이 기술/아키텍처를 선택했는지)
-                    3. 핵심 구현 내용 (본인이 직접 한 것)
-                    4. 문제 해결 과정 (마주한 기술적 문제 → 분석 → 해결)
-                    5. 성과 및 수치
-
-                    [내 프로필]
-                    %s
-
-                    [채용 공고]
-                    %s
-
-                    [관련 프로젝트]
-                    %s
-                    """, request.getUserProfile(), request.getJobDescription(),
-                    request.getMatchedProjects());
+            case PORTFOLIO -> buildPortfolioPrompt(request);
 
             case COMPANY_ANALYSIS -> String.format("""
                     당신은 기업 리서치 전문가입니다.
@@ -207,6 +150,119 @@ public class OpenClawAiGenerator implements AiTextGenerator {
                     ## 특이사항 및 강점
                     """, request.getMatchedProjects());
         };
+    }
+
+    private String buildCoverLetterPrompt(AiGenerationRequest request) {
+        String site = request.getSourceSite() != null ? request.getSourceSite() : "";
+        String siteGuide = switch (site) {
+            case "SARAMIN" -> """
+                    [사람인 자소서 양식 가이드]
+                    - 사람인 입사지원은 자유 양식 자기소개서를 텍스트로 입력하는 방식.
+                    - 글자 수 제한이 있을 수 있으므로 핵심 위주로 1500~2000자 내외로 작성.
+                    - 소제목을 활용하여 가독성을 높일 것 (예: [지원동기], [직무역량], [프로젝트 경험]).
+                    """;
+            case "JOBKOREA" -> """
+                    [잡코리아 자소서 양식 가이드]
+                    - 잡코리아 즉시지원은 텍스트 입력 필드에 자기소개서를 작성하는 방식.
+                    - 채용 공고에 별도 문항이 있으면 해당 문항에 맞춰 작성 (상세내용에서 확인).
+                    - 간결하고 핵심 위주로 1500~2000자 내외로 작성.
+                    """;
+            case "JOBPLANET" -> """
+                    [잡플래닛 자소서 양식 가이드]
+                    - 잡플래닛은 합격보상 제도가 있어 기업 문화/비전과의 연결을 강조할 것.
+                    - 자유 양식 텍스트 입력. 잡플래닛 기업 리뷰 정보를 활용하여 기업 이해도를 보여줄 것.
+                    - 1500~2000자 내외.
+                    """;
+            case "LINKAREER" -> """
+                    [링커리어 자소서 양식 가이드]
+                    - 링커리어는 대학생/신입 대상 플랫폼으로, 인턴/신입 지원에 특화.
+                    - 학교 활동, 동아리, 공모전, 프로젝트 경험을 적극 활용.
+                    - 성장 가능성과 학습 의지를 강조할 것.
+                    - 1000~1500자 내외로 간결하게.
+                    """;
+            default -> "";
+        };
+
+        return String.format("""
+                당신은 한국 IT 업계 채용 전문가입니다. 백엔드 개발자 직무에 최적화된 자기소개서를 작성해주세요.
+
+                [작성 원칙]
+                - 반드시 순수 텍스트로만 작성. 마크다운(*, #, ` 등), HTML 태그 절대 금지.
+                - STAR 기법(상황-과제-행동-결과)을 활용하여 경험을 구체적으로 서술.
+                - 채용 공고의 자격요건/우대사항에 명시된 기술과 역량에 맞춰 내 경험을 연결.
+                - "열심히 하겠습니다" 같은 추상적 표현 대신 정량적 성과(퍼센트, 수치)를 포함.
+                - 채용 공고에 전형 절차나 지원 양식 요구사항이 있으면 그 형식에 맞춰 작성.
+                - AI가 쓴 티가 나지 않도록 자연스럽고 진정성 있는 톤으로 작성.
+                - 후속 제안 문구("원하시면", "버전", "이어서" 등) 절대 넣지 마세요.
+
+                %s
+
+                [자소서 구성]
+                1. 지원동기 - 이 회사의 기술/서비스/비전과 내 경험의 접점을 구체적으로
+                2. 직무 역량 - 채용 공고의 자격요건에 대응하는 내 기술 경험 (STAR 기법 적용)
+                3. 프로젝트 경험 - 문제 정의 → 기술적 선택 → 구현 과정 → 성과 수치
+                4. 성장 계획 - 입사 후 단기/중기 목표와 팀 기여 방향
+
+                [내 프로필]
+                %s
+
+                [채용 공고]
+                %s
+
+                [기업 정보]
+                %s
+
+                [관련 프로젝트]
+                %s
+                """, siteGuide, request.getUserProfile(), request.getJobDescription(),
+                request.getCompanyInfo(), request.getMatchedProjects());
+    }
+
+    private String buildPortfolioPrompt(AiGenerationRequest request) {
+        String site = request.getSourceSite() != null ? request.getSourceSite() : "";
+        String siteGuide = switch (site) {
+            case "SARAMIN", "JOBKOREA" -> """
+                    [포트폴리오 특이사항]
+                    - 이 사이트는 텍스트 기반 포트폴리오 입력. GitHub 링크와 핵심 내용 위주로 작성.
+                    """;
+            case "LINKAREER" -> """
+                    [포트폴리오 특이사항]
+                    - 링커리어는 대학생/신입 대상. 학습 과정과 성장 스토리를 강조.
+                    - 프로젝트 규모보다 문제 해결 과정과 배운 점에 집중.
+                    """;
+            default -> "";
+        };
+
+        return String.format("""
+                당신은 한국 IT 업계 채용 전문가입니다. 백엔드 개발자 포트폴리오 텍스트를 작성해주세요.
+
+                [작성 원칙]
+                - 반드시 순수 텍스트로만 작성. 마크다운, HTML 태그 절대 금지.
+                - 줄바꿈은 빈 줄로만 구분.
+                - 채용 공고의 자격요건/기술스택에 맞춰 프로젝트 경험을 연결.
+                - 단순 기능 나열이 아니라 "왜 이 기술을 선택했고, 어떤 문제를 해결했는지" 중심으로 서술.
+                - 성과는 수치로 표현 (응답속도 개선율, 처리량 등).
+                - 후속 제안 문구 절대 넣지 마세요.
+
+                %s
+
+                [포트폴리오 구성 - 프로젝트별]
+                1. 프로젝트 개요 (한 줄 요약)
+                2. 기술적 의사결정 (왜 이 기술/아키텍처를 선택했는지)
+                3. 핵심 구현 내용 (본인이 직접 한 것)
+                4. 문제 해결 과정 (마주한 기술적 문제 → 분석 → 해결)
+                5. 성과 및 수치
+
+                [내 프로필]
+                %s
+
+                [채용 공고]
+                %s
+
+                [관련 프로젝트]
+                %s
+                """, siteGuide, request.getUserProfile(), request.getJobDescription(),
+                request.getMatchedProjects());
     }
 
     private String callHttpApi(String prompt) throws Exception {

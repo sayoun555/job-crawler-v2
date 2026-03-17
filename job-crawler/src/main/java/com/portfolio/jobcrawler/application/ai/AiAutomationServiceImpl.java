@@ -108,6 +108,7 @@ public class AiAutomationServiceImpl implements AiAutomationService {
                         .jobDescription(buildJobString(job))
                         .companyInfo(job.getCompany())
                         .matchedProjects(projectsStr)
+                        .sourceSite(job.getSource().name())
                         .build());
 
         if (!result.isSuccess())
@@ -144,6 +145,7 @@ public class AiAutomationServiceImpl implements AiAutomationService {
                         .userProfile(buildProfileString(profile))
                         .jobDescription(buildJobString(job))
                         .matchedProjects(projectsStr)
+                        .sourceSite(job.getSource().name())
                         .build());
 
         if (!result.isSuccess())

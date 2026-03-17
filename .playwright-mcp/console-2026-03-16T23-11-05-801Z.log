@@ -1,0 +1,2 @@
+[  700763ms] [ERROR] Access to fetch at 'http://localhost:8080/api/v1/resume' from origin 'https://www.saramin.co.kr' has been blocked by CORS policy: Permission was denied for this request to access the `loopback` address space. @ https://www.saramin.co.kr/zf_user/member/persons/main:0
+[  700763ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://localhost:8080/api/v1/resume:0

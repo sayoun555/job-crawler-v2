@@ -1,0 +1,100 @@
+[  123632ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6311
+[  123720ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/member/persons/main:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  123722ms] TypeError: Cannot read properties of null (reading 'push')
+    at Object.logCustomEvent (eval at <anonymous> (https://www.saramin.co.kr/zf_user/member/persons/main:2:2882), <anonymous>:3:52)
+    at <anonymous>:1:416
+    at https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:942:429
+    at lR (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:944:31)
+    at Od.kR (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:941:92)
+    at Od.<anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:352:187)
+    at k.apply (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:280:466)
+    at kb (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:243:209)
+    at jb (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:242:527)
+    at Od.<anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:304:473)
+[  123723ms] Uncaught [object Object]
+    at error (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:203:503)
+    at c.l.onerror (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:212:160)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:941:428)
+    at lR (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:943:30)
+    at kR (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:940:91)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:351:186)
+    at k.apply (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:279:465)
+    at kb (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:242:208)
+    at jb (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:241:526)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:303:472)
+    at k.apply (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:279:465)
+    at kb (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:242:208)
+    at k.tq (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:244:116)
+    at xf (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:314:959)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:799:314)
+    at Cg (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:336:12)
+    at e (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:737:229)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:248:124)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:738:413)
+    at <anonymous> (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:738:153)
+    at fB (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:738:873)
+    at jB (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:743:116)
+    at CC (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:771:326)
+    at EC (https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:773:74)
+[ 1871563ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/jquery/ui/jquery-ui-1.11.4/jquery-ui.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/write?template_cd=1:8874
+[ 1871563ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/cropper/cropper.js?v=20260313173123, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/write?template_cd=1:8874
+[ 1871563ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/swiper_4.4.6/swiper.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/write?template_cd=1:8874
+[ 2695046ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/jquery/ui/jquery-ui-1.11.4/jquery-ui.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/write?template_cd=1:8874
+[ 2695046ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/cropper/cropper.js?v=20260313173123, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/write?template_cd=1:8874
+[ 2695046ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/swiper_4.4.6/swiper.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/write?template_cd=1:8874
+[ 2702137ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 2707320ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6441
+[ 2707390ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 3091875ms] [ERROR] TypeError: Failed to fetch
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:24:3123
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435129
+    at new Promise (<anonymous>)
+    at Object.getNewNotification [as queryFn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435063)
+    at Object.fetchFn [as fn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:42384)
+    at v (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:51949)
+    at Object.start (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:52433)
+    at a.fetch (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:43488)
+    at k.fetchQuery (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:254450)
+    at t (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:381262) @ https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:23
+[ 3423513ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 3447469ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 3449230ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/jquery/ui/jquery-ui-1.11.4/jquery-ui.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37211609:9059
+[ 3449230ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/cropper/cropper.js?v=20260313173123, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37211609:9059
+[ 3449230ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/swiper_4.4.6/swiper.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37211609:9059
+[ 3462134ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6505
+[ 3462210ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 3516756ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/jquery/ui/jquery-ui-1.11.4/jquery-ui.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37211784:9265
+[ 3516756ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/cropper/cropper.js?v=20260313173123, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37211784:9265
+[ 3516756ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/swiper_4.4.6/swiper.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37211784:9265
+[ 3518783ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 4614018ms] [WARNING] Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://www.google.com') does not match the recipient window's origin ('https://www.saramin.co.kr'). @ https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:886
+[ 4614018ms] [WARNING] Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://www.youtube.com') does not match the recipient window's origin ('https://www.saramin.co.kr'). @ https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:886
+[ 4614018ms] [WARNING] Failed to execute 'postMessage' on 'DOMWindow': The target origin provided ('https://m.youtube.com') does not match the recipient window's origin ('https://www.saramin.co.kr'). @ https://www.googletagmanager.com/gtm.js?id=GTM-MK2GBBH:886
+[ 5657625ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[ 5663504ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/jquery/ui/jquery-ui-1.11.4/jquery-ui.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37212662:9469
+[ 5663504ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/cropper/cropper.js?v=20260313173123, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37212662:9469
+[ 5663504ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/swiper_4.4.6/swiper.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37212662:9469

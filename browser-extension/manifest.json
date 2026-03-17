@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Job Crawler 사이트 연동",
+  "version": "1.0.0",
+  "description": "채용 사이트 로그인 세션을 Job Crawler 서버에 안전하게 연동합니다.",
+  "permissions": [
+    "cookies",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.saramin.co.kr/*",
+    "https://www.jobkorea.co.kr/*",
+    "https://www.jobplanet.co.kr/*",
+    "https://linkareer.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

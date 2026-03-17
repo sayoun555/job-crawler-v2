@@ -1,0 +1,8 @@
+[     358ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/icon-192.png:0
+[     360ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:3000/login:0
+[  143042ms] [WARNING] The specified value "2013-03" does not conform to the required format, "yyyy-MM-dd". @ :6937
+[  182464ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ http://localhost:8080/api/v1/resume/educations:0
+[  182465ms] [ERROR] [API Error] POST /resume/educations -> IllegalArgumentException: No enum constant com.portfolio.jobcrawler.domain.resume.vo.SchoolType.대학교(4년) @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_77a734fe._.js:3127
+[  182465ms] [ERROR] Error: IllegalArgumentException: No enum constant com.portfolio.jobcrawler.domain.resume.vo.SchoolType.대학교(4년)
+    at api (http://localhost:3000/_next/static/chunks/src_d4cd87b4._.js:105:15)
+    at async handleAdd (http://localhost:3000/_next/static/chunks/src_f7194c8f._.js:1871:13) @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_77a734fe._.js:3127

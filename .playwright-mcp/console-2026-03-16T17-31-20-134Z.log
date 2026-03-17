@@ -1,0 +1,29 @@
+[   67560ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/jquery/ui/jquery-ui-1.11.4/jquery-ui.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37213056:9439
+[   67560ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/cropper/cropper.js?v=20260313173123, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37213056:9439
+[   67560ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/swiper_4.4.6/swiper.min.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/member/resume-manage/edit?res_idx=37213056:9439
+[ 1616380ms] [ERROR] TypeError: Failed to fetch
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:24:3123
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435129
+    at new Promise (<anonymous>)
+    at Object.getNewNotification [as queryFn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435063)
+    at Object.fetchFn [as fn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:42384)
+    at v (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:51949)
+    at Object.start (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:52433)
+    at a.fetch (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:43488)
+    at k.fetchQuery (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:254450)
+    at t (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:381262) @ https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:23
+[ 1634030ms] [ERROR] TypeError: Failed to fetch
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:24:3123
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435129
+    at new Promise (<anonymous>)
+    at Object.getNewNotification [as queryFn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435063)
+    at Object.fetchFn [as fn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:42384)
+    at v (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:51949)
+    at Object.start (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:52433)
+    at a.fetch (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:43488)
+    at k.fetchQuery (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:254450)
+    at t (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:381262) @ https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:23
+[ 1634159ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/:1:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4

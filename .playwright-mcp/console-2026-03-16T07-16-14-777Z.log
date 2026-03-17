@@ -1,0 +1,2 @@
+[    2371ms] [ERROR] Attestation check for Attribution Reporting on https://www.facebook.com failed. @ https://www.jobkorea.co.kr/User/Resume/Write:0
+[    2413ms] [ERROR] Failed to load resource: net::ERR_CERT_DATE_INVALID @ https://sas.nsm-corp.com/sa-w.js?gc=TR10148105490&rd=1773645376930:0

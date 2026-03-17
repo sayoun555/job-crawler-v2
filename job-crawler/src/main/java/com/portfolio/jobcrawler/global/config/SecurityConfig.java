@@ -72,7 +72,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "https://job.eekky.com"));
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:3000", "http://localhost:5173", "https://job.eekky.com",
+                "https://www.saramin.co.kr", "https://www.jobkorea.co.kr",
+                "https://www.jobplanet.co.kr", "https://linkareer.com",
+                "chrome-extension://*"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

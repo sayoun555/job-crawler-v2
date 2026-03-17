@@ -1,0 +1,331 @@
+- generic [ref=e1]:
+  - link "본문 바로가기" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - banner [ref=e3]:
+    - link [ref=e4] [cursor=pointer]:
+      - /url: /
+      - img [ref=e5]
+    - generic [ref=e7]:
+      - link "MY홈" [ref=e8] [cursor=pointer]:
+        - /url: /zf_user/member/persons/main
+        - img [ref=e9]
+        - generic [ref=e10]: MY홈
+      - link "0" [ref=e12] [cursor=pointer]:
+        - /url: /zf_user/member/career-mileage
+        - img [ref=e13]
+        - generic [ref=e15]: "0"
+      - button "메신저" [ref=e17] [cursor=pointer]
+      - button "내저장 레이어 버튼" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: 내저장 레이어 버튼
+        - img [ref=e21]
+      - button "내알림 레이어 버튼" [ref=e24] [cursor=pointer]:
+        - generic [ref=e264]: 내알림 레이어 버튼
+        - img [ref=e265]
+    - button "윤상현" [ref=e29] [cursor=pointer]:
+      - img [ref=e31]
+      - generic [ref=e33]: 윤상현
+      - img [ref=e34]
+      - img [ref=e36]
+  - generic [ref=e41]:
+    - generic [ref=e42]:
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - heading "이력서 완성도" [level=3] [ref=e47]
+            - strong [ref=e48]: 100%
+          - generic [ref=e50]: 진행률
+          - paragraph [ref=e267]:
+            - emphasis [ref=e268]: 윤상현
+            - text: 회원님의
+            - text: 이력서가 완성됐어요!
+          - list [ref=e51]:
+            - listitem [ref=e52]:
+              - link "My Career" [ref=e53] [cursor=pointer]:
+                - /url: "#mycareer"
+            - listitem [ref=e54]:
+              - link "학력" [ref=e55] [cursor=pointer]:
+                - /url: "#school"
+              - text: 필수
+            - listitem [ref=e56]:
+              - link "경력" [ref=e57] [cursor=pointer]:
+                - /url: "#career"
+            - listitem [ref=e58]:
+              - link "스킬" [ref=e59] [cursor=pointer]:
+                - /url: "#skill"
+            - listitem [ref=e60]:
+              - link "경험/활동/교육" [ref=e61] [cursor=pointer]:
+                - /url: "#activity"
+              - button "제거하기" [ref=e62] [cursor=pointer]:
+                - generic [ref=e63]: 제거하기
+            - listitem [ref=e64]:
+              - link "자격/어학/수상" [ref=e65] [cursor=pointer]:
+                - /url: "#license"
+              - button "제거하기" [ref=e66] [cursor=pointer]:
+                - generic [ref=e67]: 제거하기
+            - listitem [ref=e68]:
+              - link "포트폴리오 및 기타문서" [ref=e69] [cursor=pointer]:
+                - /url: "#attach_files"
+              - button "제거하기" [ref=e70] [cursor=pointer]:
+                - generic [ref=e71]: 제거하기
+            - listitem [ref=e72]:
+              - link "경력기술서" [ref=e73] [cursor=pointer]:
+                - /url: "#career_profile"
+              - button "제거하기" [ref=e74] [cursor=pointer]:
+                - generic [ref=e75]: 제거하기
+            - listitem [ref=e76]:
+              - link "자기소개서" [ref=e77] [cursor=pointer]:
+                - /url: "#introduce"
+              - button "제거하기" [ref=e78] [cursor=pointer]:
+                - generic [ref=e79]: 제거하기
+            - listitem [ref=e80]:
+              - link "사람인 인·적성검사" [ref=e81] [cursor=pointer]:
+                - /url: "#svq"
+              - button "제거하기" [ref=e82] [cursor=pointer]:
+                - generic [ref=e83]: 제거하기
+            - listitem [ref=e84]:
+              - link "취업우대사항" [ref=e85] [cursor=pointer]:
+                - /url: "#personal"
+              - button "제거하기" [ref=e86] [cursor=pointer]:
+                - generic [ref=e87]: 제거하기
+          - button "항목 순서 변경" [ref=e88] [cursor=pointer]
+        - button "이력서 이용 방법을 알려드릴게요!" [ref=e89] [cursor=pointer]
+      - generic [ref=e90]:
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - heading "윤상현" [level=1] [ref=e94]
+            - generic [ref=e95]:
+              - generic [ref=e96] [cursor=pointer]: 경력구분
+              - combobox "경력구분" [ref=e97] [cursor=pointer]:
+                - option "신입" [selected]
+                - option "경력"
+          - paragraph [ref=e98]: 1994 (31세)
+          - paragraph [ref=e99]:
+            - generic [ref=e100] [cursor=pointer]: 가려진 정보 보기
+            - text: 기업이 이력서 열람/제안시 개인정보는 정상 노출됩니다.
+          - list [ref=e101]:
+            - listitem [ref=e102]: san*********@naver.com
+            - listitem [ref=e103]: 010-****-9730
+            - listitem [ref=e104]: 경남 진주시 동진로119번길 11
+          - generic [ref=e107]: 이미지없음
+          - button "수정하기" [ref=e108] [cursor=pointer]:
+            - generic [ref=e109]: 수정하기
+        - generic [ref=e110]:
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - heading "MY Career" [level=2] [ref=e113]
+              - paragraph [ref=e114]: 마이커리어란?
+              - img [ref=e116] [cursor=pointer]
+            - button "추가" [ref=e118] [cursor=pointer]:
+              - img [ref=e119]
+              - text: 추가
+          - generic [ref=e121]: ChatGPT API 기반으로 커리어소개 생성하고 나의 이력서를 어필해보세요 !
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - generic [ref=e124]:
+              - heading "학력 필수" [level=2] [ref=e125]:
+                - text: 학력
+                - generic [ref=e126]: 필수
+              - paragraph [ref=e127]:
+                - generic [ref=e128]: 대학교(4년) 졸업
+                - button [ref=e129] [cursor=pointer]:
+                  - img [ref=e130]
+            - button "추가" [ref=e132] [cursor=pointer]:
+              - img [ref=e133]
+              - text: 추가
+          - list [ref=e135]:
+            - listitem [ref=e136]:
+              - generic [ref=e137]:
+                - generic [ref=e138]: 최종학력
+                - heading "한국국제대학교 (4년제) (졸업)" [level=3] [ref=e139]:
+                  - text: 한국국제대학교 (4년제)
+                  - generic [ref=e140]: (졸업)
+                - paragraph [ref=e141]: 초등특수교육학과
+              - button "수정하기" [ref=e143] [cursor=pointer]:
+                - img [ref=e144]
+                - generic [ref=e146]: 수정하기
+            - listitem [ref=e147]:
+              - generic [ref=e148]:
+                - heading "한국국제대학교 (4년제) 2013.03 ~ 2020.02 (졸업)" [level=3] [ref=e149]:
+                  - text: 한국국제대학교 (4년제)
+                  - generic [ref=e150]: 2013.03 ~ 2020.02 (졸업)
+                - paragraph [ref=e151]: 컴퓨터공학과
+                - generic [ref=e152]:
+                  - term [ref=e153]: 학점
+                  - definition [ref=e154]: 3.8/4.5
+              - generic [ref=e155]:
+                - button "수정하기" [ref=e156] [cursor=pointer]:
+                  - img [ref=e157]
+                  - generic [ref=e159]: 수정하기
+                - button "삭제하기" [ref=e160] [cursor=pointer]:
+                  - img [ref=e161]
+                  - generic [ref=e163]: 삭제하기
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - generic [ref=e166]:
+              - heading "경력" [level=2] [ref=e167]
+              - paragraph [ref=e168]:
+                - emphasis [ref=e170]: 총 경력 1년 10개월
+                - button [ref=e171] [cursor=pointer]:
+                  - img [ref=e172]
+            - button "빠르게 경력 불러오기" [ref=e175] [cursor=pointer]:
+              - img [ref=e176]
+              - text: 빠르게 경력 불러오기
+            - button "추가" [ref=e178] [cursor=pointer]:
+              - img [ref=e179]
+              - text: 추가
+          - list [ref=e181]:
+            - listitem [ref=e182]:
+              - generic [ref=e183]:
+                - heading "(주)테크스타트 2023.03 ~ 2024.12 1년 10개월" [level=3] [ref=e184]:
+                  - text: (주)테크스타트
+                  - paragraph [ref=e185]: 2023.03 ~ 2024.12 1년 10개월
+                - generic [ref=e186]:
+                  - generic [ref=e187]: 백엔드/서버개발
+                  - generic [ref=e188]: 개발팀
+                - paragraph [ref=e190]:
+                  - text: Spring Boot 기반 REST API 개발 및 운영
+                  - text: JPA/QueryDSL을 활용한 데이터 접근 계층 설계
+                  - text: Redis 캐싱 적용으로 API 응답 속도 40% 개선
+                  - text: Jenkins CI/CD 파이프라인 구축
+              - generic [ref=e191]:
+                - button "수정하기" [ref=e192] [cursor=pointer]:
+                  - img [ref=e193]
+                  - generic [ref=e195]: 수정하기
+                - button "삭제하기" [ref=e196] [cursor=pointer]:
+                  - img [ref=e197]
+                  - generic [ref=e199]: 삭제하기
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - heading "스킬" [level=2] [ref=e203]
+              - img [ref=e270]
+            - button "인성검사 소프트스킬 불러오기" [ref=e205] [cursor=pointer]:
+              - img [ref=e206]
+              - text: 인성검사 소프트스킬 불러오기
+          - text: 서류합격률 UP
+          - generic [ref=e272]:
+            - generic [ref=e274]:
+              - generic [ref=e275]: 툴/직무역량/소프트스킬을 입력해주세요
+              - textbox "툴/직무역량/소프트스킬을 입력해주세요" [active] [ref=e276]
+              - button [disabled] [ref=e277] [cursor=pointer]:
+                - img [ref=e278]
+            - generic [ref=e280]:
+              - heading "윤상현 님의 이력서를 분석한 추천 스킬 새로고침" [level=5] [ref=e281]:
+                - strong [ref=e282]: 윤상현
+                - text: 님의 이력서를 분석한 추천 스킬
+                - button "새로고침" [ref=e283] [cursor=pointer]:
+                  - generic [ref=e284]: 새로고침
+              - generic [ref=e285]:
+                - generic [ref=e286]:
+                  - checkbox "API"
+                  - generic [ref=e287] [cursor=pointer]: API
+                - generic [ref=e288]:
+                  - checkbox "백엔드/서버개발"
+                  - generic [ref=e289] [cursor=pointer]: 백엔드/서버개발
+                - generic [ref=e290]:
+                  - checkbox "Node.js"
+                  - generic [ref=e291] [cursor=pointer]: Node.js
+                - generic [ref=e292]:
+                  - checkbox "Vue.js"
+                  - generic [ref=e293] [cursor=pointer]: Vue.js
+                - generic [ref=e294]:
+                  - checkbox "Git"
+                  - generic [ref=e295] [cursor=pointer]: Git
+                - generic [ref=e296]:
+                  - checkbox "JavaScript"
+                  - generic [ref=e297] [cursor=pointer]: JavaScript
+                - generic [ref=e298]:
+                  - checkbox "ReactJS"
+                  - generic [ref=e299] [cursor=pointer]: ReactJS
+                - generic [ref=e300]:
+                  - checkbox "MariaDB"
+                  - generic [ref=e301] [cursor=pointer]: MariaDB
+                - generic [ref=e302]:
+                  - checkbox "풀스택"
+                  - generic [ref=e303] [cursor=pointer]: 풀스택
+                - generic [ref=e304]:
+                  - checkbox "RestAPI"
+                  - generic [ref=e305] [cursor=pointer]: RestAPI
+                - generic [ref=e306]:
+                  - checkbox "MyBatis"
+                  - generic [ref=e307] [cursor=pointer]: MyBatis
+                - generic [ref=e308]:
+                  - checkbox "MongoDB"
+                  - generic [ref=e309] [cursor=pointer]: MongoDB
+                - generic [ref=e310]:
+                  - checkbox "Flutter"
+                  - generic [ref=e311] [cursor=pointer]: Flutter
+            - button "소프트스킬 불러오기" [ref=e313] [cursor=pointer]:
+              - img [ref=e314]
+              - text: 소프트스킬 불러오기
+            - generic [ref=e316]:
+              - heading "나의 스킬" [level=5] [ref=e317]
+              - img [ref=e319]
+              - generic [ref=e323]:
+                - emphasis [ref=e324]: "1"
+                - text: 개 스킬을 더 선택하면
+                - strong [ref=e325]: 제안받을 확률
+                - text: 이 높아져요
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - button "Java" [ref=e328] [cursor=pointer]:
+                  - emphasis [ref=e329]: Java
+                  - img [ref=e330]
+                - button [ref=e332] [cursor=pointer]:
+                  - img [ref=e333]
+              - generic [ref=e335]:
+                - button "Redis" [ref=e336] [cursor=pointer]:
+                  - emphasis [ref=e337]: Redis
+                  - img [ref=e338]
+                - button [ref=e340] [cursor=pointer]:
+                  - img [ref=e341]
+              - generic [ref=e343]:
+                - button "MySQL" [ref=e344] [cursor=pointer]:
+                  - emphasis [ref=e345]: MySQL
+                  - img [ref=e346]
+                - button [ref=e348] [cursor=pointer]:
+                  - img [ref=e349]
+              - generic [ref=e351]:
+                - button "PostgreSQL" [ref=e352] [cursor=pointer]:
+                  - emphasis [ref=e353]: PostgreSQL
+                  - img [ref=e354]
+                - button [ref=e356] [cursor=pointer]:
+                  - img [ref=e357]
+            - generic [ref=e359]:
+              - button "취소" [ref=e360] [cursor=pointer]
+              - button "저장" [ref=e361] [cursor=pointer]
+        - generic [ref=e228]:
+          - generic [ref=e229]:
+            - heading "자기소개서" [level=2] [ref=e231]
+            - button "추가" [ref=e232] [cursor=pointer]:
+              - img [ref=e233]
+              - text: 추가
+          - list [ref=e235]:
+            - listitem [ref=e236]:
+              - generic [ref=e237]:
+                - heading "자기소개서" [level=3] [ref=e238]
+                - paragraph [ref=e239]:
+                  - text: 저는 Java와 Spring Boot 기반의 백엔드 개발자입니다. 대학 시절부터 웹 개발에 관심을 갖고, 졸업 후에는 개인 프로젝트와 오픈소스 기여를 통해 실무 역량을 쌓아왔습니다.
+                  - text: 특히 클린 코드와 객체지향 설계 원칙(SOLID)을 중요시하며, 테스트 주도 개발을 통해 안정적인 소프트웨어를 만드는 것을 목표로 합니다.
+                  - text: 현재는 취업 자동화 플랫폼을 개인 프로젝트로 개발 중이며, Playwright 기반 크롤링, Redis 캐싱, AI 연동 등 다양한 기술을 활용하고 있습니다.
+              - generic [ref=e240]:
+                - button "수정하기" [ref=e241] [cursor=pointer]:
+                  - img [ref=e242]
+                  - generic [ref=e244]: 수정하기
+                - button "삭제하기" [ref=e245] [cursor=pointer]:
+                  - img [ref=e246]
+                  - generic [ref=e248]: 삭제하기
+          - generic [ref=e249]:
+            - paragraph [ref=e250]: 자기소개서를 작성하셨나요? 사람인 자소서 코칭으로 완성도를 높여보세요!
+            - link "AI 자소서 코칭" [ref=e251] [cursor=pointer]:
+              - /url: https://cover-letter.saramin.co.kr/list/1?ref=resume
+    - generic [ref=e254]:
+      - generic [ref=e257] [cursor=pointer]: 이력서 제목 추천
+      - strong [ref=e258]: 이력서 제목
+      - generic [ref=e259] [cursor=pointer]: 이력서 제목
+      - textbox "이력서 제목" [ref=e260]:
+        - /placeholder: 이력서 제목 (미입력 시 기본 제목으로 자동 저장됩니다.)
+        - text: 윤상현의 이력서 입니다
+      - button "이력서 미리보기" [ref=e261] [cursor=pointer]
+      - button "작성완료" [ref=e262] [cursor=pointer]
+  - complementary

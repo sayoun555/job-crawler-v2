@@ -1,0 +1,4 @@
+[      39ms] [WARNING] [Elastic APM] Failed sending events! AbortError: signal is aborted without reason
+    at https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:714:128643 @ https://linkareer.com/_next/static/chunks/pages/_app-30012bd681fab86f.js:713
+[     801ms] [WARNING] [Meta Pixel] - Duplicate Pixel ID: 1467820393452439. @ https://www.jobplanet.co.kr/profile/resumes:13
+[    1311ms] [ERROR] Attestation check for Shared Storage on https://www.googleadservices.com failed. @ https://www.googleadservices.com/pagead/managed/js/activeview/current/reach_worklet.html:0

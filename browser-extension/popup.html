@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 320px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 16px; }
+    h1 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #f8fafc; }
+    .server-section { margin-bottom: 14px; }
+    .server-section label { font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px; }
+    .server-section input { width: 100%; padding: 6px 10px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #e2e8f0; font-size: 13px; outline: none; }
+    .server-section input:focus { border-color: #3b82f6; }
+    .token-section { margin-bottom: 14px; }
+    .token-section label { font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px; }
+    .token-section input { width: 100%; padding: 6px 10px; border: 1px solid #334155; border-radius: 6px; background: #1e293b; color: #e2e8f0; font-size: 13px; outline: none; }
+    .token-section input:focus { border-color: #3b82f6; }
+    .save-btn { width: 100%; padding: 6px; border: none; border-radius: 6px; background: #334155; color: #e2e8f0; font-size: 12px; cursor: pointer; margin-bottom: 14px; }
+    .save-btn:hover { background: #475569; }
+    .divider { border-top: 1px solid #1e293b; margin: 14px 0; }
+    .site-list { display: flex; flex-direction: column; gap: 8px; }
+    .site-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #1e293b; border-radius: 8px; }
+    .site-name { font-size: 13px; font-weight: 500; }
+    .site-status { font-size: 11px; color: #94a3b8; }
+    .site-status.connected { color: #34d399; }
+    .sync-btn { padding: 5px 12px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; }
+    .sync-btn.connect { background: #3b82f6; color: #fff; }
+    .sync-btn.connect:hover { background: #2563eb; }
+    .sync-btn.connected { background: #1e293b; color: #34d399; border: 1px solid #334155; }
+    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .message { font-size: 12px; padding: 8px; border-radius: 6px; margin-top: 10px; display: none; }
+    .message.success { background: #064e3b; color: #34d399; display: block; }
+    .message.error { background: #7f1d1d; color: #fca5a5; display: block; }
+    .message.info { background: #1e3a5f; color: #93c5fd; display: block; }
+    .footer { margin-top: 12px; font-size: 11px; color: #64748b; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Job Crawler 사이트 연동</h1>
+
+  <div class="server-section">
+    <label>서버 주소</label>
+    <input type="text" id="serverUrl" placeholder="https://job.eekky.com">
+  </div>
+  <div class="token-section">
+    <label>JWT 토큰 (설정 페이지에서 복사)</label>
+    <input type="password" id="jwtToken" placeholder="eyJhbGciOiJIUzI1NiIs...">
+  </div>
+  <button class="save-btn" id="saveConfigBtn">설정 저장</button>
+
+  <div class="divider"></div>
+
+  <div class="site-list" id="siteList"></div>
+  <div class="message" id="message"></div>
+
+  <div class="footer">로그인한 사이트의 쿠키만 전송됩니다</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

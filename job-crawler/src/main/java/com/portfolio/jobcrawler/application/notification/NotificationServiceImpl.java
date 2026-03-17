@@ -6,17 +6,17 @@ import com.portfolio.jobcrawler.domain.jobpreference.entity.JobPreference;
 import com.portfolio.jobcrawler.domain.jobpreference.repository.JobPreferenceRepository;
 import com.portfolio.jobcrawler.domain.user.entity.User;
 import com.portfolio.jobcrawler.domain.user.repository.UserRepository;
+import com.portfolio.jobcrawler.domain.notification.entity.NotificationHistory;
+import com.portfolio.jobcrawler.domain.notification.repository.NotificationHistoryRepository;
 import com.portfolio.jobcrawler.infrastructure.notification.NotificationSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.util.List;
 
 @Slf4j
@@ -28,11 +28,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final UserRepository userRepository;
     private final JobPreferenceRepository jobPreferenceRepository;
     private final JobPostingRepository jobPostingRepository;
+    private final NotificationHistoryRepository notificationHistoryRepository;
     private final List<NotificationSender> senders;
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    private static final String NOTIFIED_PREFIX = "notified:job:";
-    private static final Duration NOTIFIED_TTL = Duration.ofDays(7);
 
     @Value("${app.base-url:https://job.eekky.com}")
     private String baseUrl;
@@ -70,8 +67,7 @@ public class NotificationServiceImpl implements NotificationService {
             if (prefs.isEmpty()) continue;
 
             for (var job : recentJobs.getContent()) {
-                String redisKey = NOTIFIED_PREFIX + user.getId() + ":" + job.getId();
-                if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) continue;
+                if (notificationHistoryRepository.existsByUserIdAndJobPostingId(user.getId(), job.getId())) continue;
 
                 if (matchesPreference(job, prefs)) {
                     String deepLink = baseUrl + "/jobs/" + job.getId();
@@ -80,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
                             job.getCompany() + " | " + nullSafe(job.getLocation())
                                     + "\n기술: " + (job.getTechStack() != null ? job.getTechStack().toString() : ""),
                             deepLink);
-                    redisTemplate.opsForValue().set(redisKey, "1", NOTIFIED_TTL);
+                    notificationHistoryRepository.save(NotificationHistory.of(user.getId(), job.getId()));
                 }
             }
         }

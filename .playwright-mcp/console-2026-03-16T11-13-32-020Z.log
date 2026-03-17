@@ -1,0 +1,100 @@
+[    6063ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[   11757ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6761
+[   11849ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[   15635ms] [ERROR] TypeError: Failed to fetch
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:24:3123
+    at https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435129
+    at new Promise (<anonymous>)
+    at Object.getNewNotification [as queryFn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:435063)
+    at Object.fetchFn [as fn] (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:42384)
+    at v (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:51949)
+    at Object.start (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:52433)
+    at a.fetch (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:27:43488)
+    at k.fetchQuery (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:254450)
+    at t (https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:1:381262) @ https://cover-letter.saramin.co.kr/_next/static/chunks/pages/_app-baf52517bccdd580.js:23
+[   15716ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6761
+[   15775ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[   32294ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6729
+[   32294ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6729
+[   38309ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6697
+[   38309ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6697
+[   42732ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6665
+[   42732ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6665
+[   42816ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[   47308ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6633
+[   47308ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6633
+[   47448ms] Uncaught SecurityError: Failed to read a named property 'document' from 'Window': Blocked a frame with origin "https://www.saramin.co.kr" from accessing a frame with origin "https://t1.daumcdn.net". Protocols, domains, and ports must match.
+    at map (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:1:3713)
+    at m.fn.<computed> (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:1:26776)
+    at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:6917:58)
+    at dispatch (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:2:8435)
+    at r.handle (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:2:5138)
+[  127421ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6601
+[  127421ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6601
+[  127506ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  138998ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6569
+[  138999ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6569
+[  139082ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  142963ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6537
+[  143048ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  147557ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6505
+[  147643ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  151449ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6473
+[  151450ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6473
+[  151537ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  154878ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6441
+[  158139ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6409
+[  158226ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  161490ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6377
+[  161580ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  161614ms] Uncaught SecurityError: Failed to read a named property 'document' from 'Window': Blocked a frame with origin "https://www.saramin.co.kr" from accessing a frame with origin "https://t1.daumcdn.net". Protocols, domains, and ports must match.
+    at map (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:1:3713)
+    at m.fn.<computed> (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:1:26776)
+    at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:6661:58)
+    at dispatch (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:2:8435)
+    at r.handle (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:2:5138)
+[  167421ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4
+[  167453ms] Uncaught SecurityError: Failed to read a named property 'document' from 'Window': Blocked a frame with origin "https://www.saramin.co.kr" from accessing a frame with origin "https://t1.daumcdn.net". Protocols, domains, and ports must match.
+    at map (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:1:3713)
+    at m.fn.<computed> (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:1:26776)
+    at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:6629:58)
+    at dispatch (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:2:8435)
+    at r.handle (https://www.saraminimage.co.kr/js/libs/jquery-1.11.1.min.js:2:5138)
+[  172494ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://www.saraminimage.co.kr/js/libs/bxslider-4-4.2.12/sri_jquery.bxslider.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6311
+[  172494ms] [WARNING] A parser-blocking, cross site (i.e. different eTLD+1) script, https://t1.daumcdn.net/kas/static/kp.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details. @ https://www.saramin.co.kr/zf_user/resume/resume-manage:6311

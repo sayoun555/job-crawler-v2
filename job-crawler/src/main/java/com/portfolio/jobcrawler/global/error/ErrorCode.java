@@ -44,7 +44,21 @@ public enum ErrorCode {
     APPLICATION_ACCESS_DENIED(HttpStatus.FORBIDDEN, "AP003", "지원 이력 접근 권한이 없습니다."),
 
     // External Account
-    EXTERNAL_ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "E001", "외부 계정을 찾을 수 없습니다.");
+    EXTERNAL_ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "E001", "외부 계정을 찾을 수 없습니다."),
+
+    // Resume
+    RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "R001", "이력서를 찾을 수 없습니다."),
+    RESUME_ACCESS_DENIED(HttpStatus.FORBIDDEN, "R002", "이력서 접근 권한이 없습니다."),
+    RESUME_SECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "R003", "이력서 항목을 찾을 수 없습니다."),
+    RESUME_SYNC_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R004", "이력서 연동에 실패했습니다."),
+    RESUME_SESSION_REQUIRED(HttpStatus.BAD_REQUEST, "R005", "해당 사이트 로그인이 필요합니다."),
+    RESUME_EDUCATION_NOT_FOUND(HttpStatus.NOT_FOUND, "R006", "학력 정보를 찾을 수 없습니다."),
+    RESUME_CAREER_NOT_FOUND(HttpStatus.NOT_FOUND, "R007", "경력 정보를 찾을 수 없습니다."),
+    RESUME_SKILL_NOT_FOUND(HttpStatus.NOT_FOUND, "R008", "스킬 정보를 찾을 수 없습니다."),
+    RESUME_CERTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "R009", "자격증 정보를 찾을 수 없습니다."),
+    RESUME_LANGUAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "R010", "어학 정보를 찾을 수 없습니다."),
+    RESUME_ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "R011", "활동/수상 정보를 찾을 수 없습니다."),
+    RESUME_PORTFOLIO_LINK_NOT_FOUND(HttpStatus.NOT_FOUND, "R012", "포트폴리오 링크를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;

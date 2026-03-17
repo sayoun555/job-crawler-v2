@@ -30,19 +30,24 @@ public class SaraminApplyProvider implements AutoApplyProvider {
 
         Locator idInput = page.locator("#id");
         Locator pwdInput = page.locator("#password");
-        
+
         if (idInput.count() == 0 || pwdInput.count() == 0) {
             log.warn("[SaraminApplyProvider] 로그인 폼을 찾을 수 없습니다.");
             return false;
         }
 
-        idInput.fill(loginId);
-        pwdInput.fill(password);
-        page.locator("button[type='submit'], .btn_login").first().click();
-        
+        // 사람인은 jQuery 이벤트로 유효성 검사 → fill() 대신 click+type으로 실제 키 입력
+        idInput.click();
+        idInput.type(loginId, new Locator.TypeOptions().setDelay(50));
+        pwdInput.click();
+        pwdInput.type(password, new Locator.TypeOptions().setDelay(50));
+
+        playwrightManager.shortDelay();
+        page.locator("button.btn_login").click();
+
         playwrightManager.longDelay();
 
-        if (page.url().contains("auth") || page.locator(".error_message").count() > 0) {
+        if (page.url().contains("/auth") || page.locator(".error_message:visible").count() > 0) {
             log.warn("[SaraminApplyProvider] 사람인 로그인 실패 (에러 메시지 발생 또는 리다이렉트 안됨)");
             return false;
         }

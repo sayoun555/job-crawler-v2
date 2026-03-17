@@ -1,0 +1,4 @@
+[     678ms] TypeError: Cannot read properties of null (reading 'push')
+    at initialize (eval at <anonymous> (https://www.saramin.co.kr/zf_user/resume/resume-manage:2:2882), <anonymous>:3:48)
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:275:102
+    at https://js.appboycdn.com/web-sdk/4.0/braze.no-amd.min.js:276:4

@@ -5,6 +5,7 @@ import com.portfolio.jobcrawler.domain.account.vo.AuthType;
 import com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite;
 import com.portfolio.jobcrawler.domain.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -64,11 +65,16 @@ public class ExternalAccount extends BaseTimeEntity {
         this.sessionCookies = cookies;
     }
 
+    public void invalidateSession() {
+        this.sessionCookies = null;
+    }
+
     public void updateCredentials(String accountId, String encryptedPassword) {
         this.accountId = accountId;
         this.encryptedPassword = encryptedPassword;
     }
 
+    @JsonProperty("sessionValid")
     public boolean hasValidSession() {
         return this.sessionCookies != null && !this.sessionCookies.isBlank();
     }

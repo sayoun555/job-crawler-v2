@@ -1,0 +1,2 @@
+[    2569ms] Identifier 'serviceWorkerVersion' has already been declared
+[    6370ms] [ERROR] Blocked attempt to show a 'beforeunload' confirmation panel for a frame that never had a user gesture since its load. https://www.chromestatus.com/feature/5082396709879808 @ https://linkareer.com/self-introduction?id=162344:0

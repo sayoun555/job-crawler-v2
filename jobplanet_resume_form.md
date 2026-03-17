@@ -1,0 +1,1185 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - text: 
+      - banner [ref=e4]:
+        - link "JOBPLANET" [ref=e5] [cursor=pointer]:
+          - /url: /welcome/index
+        - navigation [ref=e6]:
+          - list [ref=e7]:
+            - listitem [ref=e8]:
+              - link "기업 랭킹" [ref=e9] [cursor=pointer]:
+                - /url: /companies/cover
+            - listitem [ref=e10]:
+              - link "커뮤니티" [ref=e11] [cursor=pointer]:
+                - /url: https://www.jobplanet.co.kr/community/home
+            - listitem [ref=e12]:
+              - link "채용" [ref=e13] [cursor=pointer]:
+                - /url: https://www.jobplanet.co.kr/job
+            - listitem [ref=e14]:
+              - link "뉴스" [ref=e15] [cursor=pointer]:
+                - /url: https://www.jobplanet.co.kr/contents
+            - listitem [ref=e16]:
+              - link "연봉" [ref=e17] [cursor=pointer]:
+                - /url: https://www.jobplanet.co.kr/buildup/salary
+            - listitem [ref=e18]:
+              - link "멤버십" [ref=e19] [cursor=pointer]:
+                - /url: /events/membership?after_order_path_for=%2Fevents%2Fmembership&jtm_key=membership_landing.desktop.gnb_membership
+                - img "멤버십" [ref=e21]
+        - generic [ref=e22]:
+          - generic:
+            - generic [ref=e23]:
+              - heading "기업 랭킹 홈" [level=3] [ref=e24]
+              - link "바로가기 " [ref=e26] [cursor=pointer]:
+                - /url: /companies/cover?_rs_act=gnb_sub_home&_rs_con=gnb
+                - generic [ref=e27]: 바로가기
+                - generic [ref=e28]: 
+            - generic [ref=e30]:
+              - generic [ref=e31]:
+                - heading "실시간 급상승 검색 기업" [level=4] [ref=e32]
+                - generic [ref=e33]: 2026.03.16 16:30 기준
+              - generic [ref=e34]:
+                - generic [ref=e35]:
+                  - generic [ref=e36]: 추천
+                  - link "(주)장스푸드" [ref=e38] [cursor=pointer]:
+                    - /url: /companies/368801/info/(%EC%A3%BC)%EC%9E%A5%EC%8A%A4%ED%91%B8%EB%93%9C?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=recommend
+                - generic [ref=e39]:
+                  - generic [ref=e40]: 추천
+                  - link "에이프레임(주)" [ref=e42] [cursor=pointer]:
+                    - /url: /companies/21539/info/%EC%97%90%EC%9D%B4%ED%94%84%EB%A0%88%EC%9E%84(%EC%A3%BC)?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=recommend
+                - list [ref=e43]:
+                  - listitem [ref=e44]:
+                    - generic [ref=e45]: "1"
+                    - generic [ref=e46]:
+                      - link "키노톤코리아(주)" [ref=e47] [cursor=pointer]:
+                        - /url: /companies/139088/info/%ED%82%A4%EB%85%B8%ED%86%A4%EC%BD%94%EB%A6%AC%EC%95%84(%EC%A3%BC)?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e48]: "-"
+                  - listitem [ref=e49]:
+                    - generic [ref=e50]: "2"
+                    - generic [ref=e51]:
+                      - link "(주)다스카손해사정화재해상" [ref=e52] [cursor=pointer]:
+                        - /url: /companies/82839/info/(%EC%A3%BC)%EB%8B%A4%EC%8A%A4%EC%B9%B4%EC%86%90%ED%95%B4%EC%82%AC%EC%A0%95%ED%99%94%EC%9E%AC%ED%95%B4%EC%83%81?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e53]: New
+                  - listitem [ref=e54]:
+                    - generic [ref=e55]: "3"
+                    - generic [ref=e56]:
+                      - link "팀스파르타(주)" [ref=e57] [cursor=pointer]:
+                        - /url: /companies/390031/info/%ED%8C%80%EC%8A%A4%ED%8C%8C%EB%A5%B4%ED%83%80(%EC%A3%BC)?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e59]: 채용
+                      - generic [ref=e60]:
+                        - generic [ref=e61]: 
+                        - text: "3"
+                  - listitem [ref=e62]:
+                    - generic [ref=e63]: "4"
+                    - generic [ref=e64]:
+                      - link "(주)텐북" [ref=e65] [cursor=pointer]:
+                        - /url: /companies/405386/info/(%EC%A3%BC)%ED%85%90%EB%B6%81?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e66]:
+                        - generic [ref=e67]: 
+                        - text: "1"
+                  - listitem [ref=e68]:
+                    - generic [ref=e69]: "5"
+                    - generic [ref=e70]:
+                      - link "어플라이드머티어리얼즈코리아(주)" [ref=e71] [cursor=pointer]:
+                        - /url: /companies/186505/info/%EC%96%B4%ED%94%8C%EB%9D%BC%EC%9D%B4%EB%93%9C%EB%A8%B8%ED%8B%B0%EC%96%B4%EB%A6%AC%EC%96%BC%EC%A6%88%EC%BD%94%EB%A6%AC%EC%95%84(%EC%A3%BC)?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e74] [cursor=pointer]: 
+                      - generic [ref=e75]:
+                        - generic [ref=e76]: 
+                        - text: "1"
+                  - listitem [ref=e77]:
+                    - generic [ref=e78]: "6"
+                    - generic [ref=e79]:
+                      - link "(주)비바리퍼블리카" [ref=e80] [cursor=pointer]:
+                        - /url: /companies/309507/info/(%EC%A3%BC)%EB%B9%84%EB%B0%94%EB%A6%AC%ED%8D%BC%EB%B8%94%EB%A6%AC%EC%B9%B4?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e82]: 채용
+                      - generic [ref=e83]:
+                        - generic [ref=e84]: 
+                        - text: "1"
+                  - listitem [ref=e85]:
+                    - generic [ref=e86]: "7"
+                    - generic [ref=e87]:
+                      - link "세광음악출판사" [ref=e88] [cursor=pointer]:
+                        - /url: /companies/313998/info/%EC%84%B8%EA%B4%91%EC%9D%8C%EC%95%85%EC%B6%9C%ED%8C%90%EC%82%AC?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e89]:
+                        - generic [ref=e90]: 
+                        - text: "4"
+                  - listitem [ref=e91]:
+                    - generic [ref=e92]: "8"
+                    - generic [ref=e93]:
+                      - link "(주)큐엘파마" [ref=e94] [cursor=pointer]:
+                        - /url: /companies/288182/info/(%EC%A3%BC)%ED%81%90%EC%97%98%ED%8C%8C%EB%A7%88?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e95]:
+                        - generic [ref=e96]: 
+                        - text: "3"
+                  - listitem [ref=e97]:
+                    - generic [ref=e98]: "9"
+                    - generic [ref=e99]:
+                      - link "(주)프랜푸드" [ref=e100] [cursor=pointer]:
+                        - /url: /companies/49764/info/(%EC%A3%BC)%ED%94%84%EB%9E%9C%ED%91%B8%EB%93%9C?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e101]:
+                        - generic [ref=e102]: 
+                        - text: "1"
+                  - listitem [ref=e103]:
+                    - generic [ref=e104]: "10"
+                    - generic [ref=e105]:
+                      - link "(주)컬리" [ref=e106] [cursor=pointer]:
+                        - /url: /companies/318635/info/(%EC%A3%BC)%EC%BB%AC%EB%A6%AC?_rs_act=real_time_ranking&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e108]: 채용
+                      - generic [ref=e109]:
+                        - generic [ref=e110]: 
+                        - text: "7"
+          - generic:
+            - generic [ref=e111]:
+              - link "IT/웹/통신 " [ref=e113] [cursor=pointer]:
+                - /url: /companies?industry_id=700&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e114]: IT/웹/통신
+                - generic [ref=e115]: 
+              - generic [ref=e116]:
+                - generic [ref=e117]:
+                  - generic [ref=e118]: 추천
+                  - generic [ref=e119]:
+                    - link "(주)락플레이스" [ref=e120] [cursor=pointer]:
+                      - /url: /companies/79089/info/(%EC%A3%BC)%EB%9D%BD%ED%94%8C%EB%A0%88%EC%9D%B4%EC%8A%A4?_rs_act=industries&_rs_con=gnb&_rs_element=recommend
+                    - generic [ref=e123] [cursor=pointer]: 
+                - list [ref=e124]:
+                  - listitem [ref=e125]:
+                    - generic [ref=e126]:
+                      - link "(주)티몬" [ref=e127] [cursor=pointer]:
+                        - /url: /companies/50695/info/(%EC%A3%BC)%ED%8B%B0%EB%AA%AC?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e128]: 2,930 리뷰
+                  - listitem [ref=e129]:
+                    - generic [ref=e130]:
+                      - link "(주)위메프" [ref=e131] [cursor=pointer]:
+                        - /url: /companies/60632/info/(%EC%A3%BC)%EC%9C%84%EB%A9%94%ED%94%84?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e132]: 2,760 리뷰
+                  - listitem [ref=e133]:
+                    - generic [ref=e134]:
+                      - link "(주)엘지유플러스" [ref=e135] [cursor=pointer]:
+                        - /url: /companies/63857/info/(%EC%A3%BC)%EC%97%98%EC%A7%80%EC%9C%A0%ED%94%8C%EB%9F%AC%EC%8A%A4?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e136]: 2,581 리뷰
+            - generic [ref=e137]:
+              - link "서비스업 " [ref=e139] [cursor=pointer]:
+                - /url: /companies?industry_id=100&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e140]: 서비스업
+                - generic [ref=e141]: 
+              - generic [ref=e142]:
+                - generic [ref=e143]:
+                  - generic [ref=e144]: 추천
+                  - generic [ref=e145]:
+                    - link "(주)킨텍스" [ref=e146] [cursor=pointer]:
+                      - /url: /companies/52133/info/(%EC%A3%BC)%ED%82%A8%ED%85%8D%EC%8A%A4?_rs_act=industries&_rs_con=gnb&_rs_element=recommend
+                    - generic [ref=e149] [cursor=pointer]: 
+                - list [ref=e150]:
+                  - listitem [ref=e151]:
+                    - generic [ref=e152]:
+                      - link "(주)에스씨케이컴퍼니" [ref=e153] [cursor=pointer]:
+                        - /url: /companies/70749/info/(%EC%A3%BC)%EC%97%90%EC%8A%A4%EC%94%A8%EC%BC%80%EC%9D%B4%EC%BB%B4%ED%8D%BC%EB%8B%88?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e154]: 7,325 리뷰
+                  - listitem [ref=e155]:
+                    - generic [ref=e156]:
+                      - link "(주)트랜스코스모스코리아" [ref=e157] [cursor=pointer]:
+                        - /url: /companies/51105/info/(%EC%A3%BC)%ED%8A%B8%EB%9E%9C%EC%8A%A4%EC%BD%94%EC%8A%A4%EB%AA%A8%EC%8A%A4%EC%BD%94%EB%A6%AC%EC%95%84?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e158]: 3,828 리뷰
+                  - listitem [ref=e159]:
+                    - generic [ref=e160]:
+                      - link "(주)비케이알" [ref=e161] [cursor=pointer]:
+                        - /url: /companies/308150/info/(%EC%A3%BC)%EB%B9%84%EC%BC%80%EC%9D%B4%EC%95%8C?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e162]: 3,549 리뷰
+            - generic [ref=e163]:
+              - link "제조/화학 " [ref=e165] [cursor=pointer]:
+                - /url: /companies?industry_id=200&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e166]: 제조/화학
+                - generic [ref=e167]: 
+              - list [ref=e169]:
+                - listitem [ref=e170]:
+                  - generic [ref=e171]:
+                    - link "삼성전자(주)" [ref=e172] [cursor=pointer]:
+                      - /url: /companies/30139/info/%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e173]: 9,999+ 리뷰
+                - listitem [ref=e174]:
+                  - generic [ref=e175]:
+                    - link "LG전자(주)" [ref=e176] [cursor=pointer]:
+                      - /url: /companies/19514/info/LG%EC%A0%84%EC%9E%90(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e177]: 7,478 리뷰
+                - listitem [ref=e178]:
+                  - generic [ref=e179]:
+                    - link "엘지이노텍(주)" [ref=e180] [cursor=pointer]:
+                      - /url: /companies/19516/info/%EC%97%98%EC%A7%80%EC%9D%B4%EB%85%B8%ED%85%8D(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e181]: 4,904 리뷰
+            - generic [ref=e182]:
+              - link "의료/제약/복지 " [ref=e184] [cursor=pointer]:
+                - /url: /companies?industry_id=300&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e185]: 의료/제약/복지
+                - generic [ref=e186]: 
+              - generic [ref=e187]:
+                - generic [ref=e188]:
+                  - generic [ref=e189]: 추천
+                  - generic [ref=e190]:
+                    - link "(주)헥토헬스케어" [ref=e191] [cursor=pointer]:
+                      - /url: /companies/318039/info/(%EC%A3%BC)%ED%97%A5%ED%86%A0%ED%97%AC%EC%8A%A4%EC%BC%80%EC%96%B4?_rs_act=industries&_rs_con=gnb&_rs_element=recommend
+                    - generic [ref=e194] [cursor=pointer]: 
+                - list [ref=e195]:
+                  - listitem [ref=e196]:
+                    - generic [ref=e197]:
+                      - link "오스템임플란트(주)" [ref=e198] [cursor=pointer]:
+                        - /url: /companies/17668/info/%EC%98%A4%EC%8A%A4%ED%85%9C%EC%9E%84%ED%94%8C%EB%9E%80%ED%8A%B8(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e199]: 1,754 리뷰
+                  - listitem [ref=e200]:
+                    - generic [ref=e201]:
+                      - link "한미약품(주)" [ref=e202] [cursor=pointer]:
+                        - /url: /companies/2669/info/%ED%95%9C%EB%AF%B8%EC%95%BD%ED%92%88(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e203]: 1,619 리뷰
+                  - listitem [ref=e204]:
+                    - generic [ref=e205]:
+                      - link "(주)대웅제약" [ref=e206] [cursor=pointer]:
+                        - /url: /companies/81945/info/(%EC%A3%BC)%EB%8C%80%EC%9B%85%EC%A0%9C%EC%95%BD?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e207]: 1,588 리뷰
+            - generic [ref=e208]:
+              - link "유통/무역/운송 " [ref=e210] [cursor=pointer]:
+                - /url: /companies?industry_id=400&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e211]: 유통/무역/운송
+                - generic [ref=e212]: 
+              - list [ref=e214]:
+                - listitem [ref=e215]:
+                  - generic [ref=e216]:
+                    - link "쿠팡(주)" [ref=e217] [cursor=pointer]:
+                      - /url: /companies/87444/info/%EC%BF%A0%ED%8C%A1(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e218]: 8,534 리뷰
+                - listitem [ref=e219]:
+                  - generic [ref=e220]:
+                    - link "쿠팡풀필먼트서비스(유)" [ref=e221] [cursor=pointer]:
+                      - /url: /companies/329630/info/%EC%BF%A0%ED%8C%A1%ED%92%80%ED%95%84%EB%A8%BC%ED%8A%B8%EC%84%9C%EB%B9%84%EC%8A%A4(%EC%9C%A0)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e222]: 6,181 리뷰
+                - listitem [ref=e223]:
+                  - generic [ref=e224]:
+                    - link "씨제이올리브영(주)" [ref=e225] [cursor=pointer]:
+                      - /url: /companies/23194/info/%EC%94%A8%EC%A0%9C%EC%9D%B4%EC%98%AC%EB%A6%AC%EB%B8%8C%EC%98%81(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e226]: 5,602 리뷰
+            - generic [ref=e227]:
+              - link "교육업 " [ref=e229] [cursor=pointer]:
+                - /url: /companies?industry_id=500&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e230]: 교육업
+                - generic [ref=e231]: 
+              - generic [ref=e232]:
+                - generic [ref=e233]:
+                  - generic [ref=e234]: 추천
+                  - generic [ref=e235]:
+                    - link "(주)캠퍼스멘토" [ref=e236] [cursor=pointer]:
+                      - /url: /companies/307705/info/(%EC%A3%BC)%EC%BA%A0%ED%8D%BC%EC%8A%A4%EB%A9%98%ED%86%A0?_rs_act=industries&_rs_con=gnb&_rs_element=recommend
+                    - generic [ref=e239] [cursor=pointer]: 
+                - list [ref=e240]:
+                  - listitem [ref=e241]:
+                    - generic [ref=e242]:
+                      - link "해커스 교육그룹" [ref=e243] [cursor=pointer]:
+                        - /url: /companies/87523/info/%ED%95%B4%EC%BB%A4%EC%8A%A4%20%EA%B5%90%EC%9C%A1%EA%B7%B8%EB%A3%B9?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e244]: 3,179 리뷰
+                  - listitem [ref=e245]:
+                    - generic [ref=e246]:
+                      - link "(주)동화세상에듀코" [ref=e247] [cursor=pointer]:
+                        - /url: /companies/86740/info/(%EC%A3%BC)%EB%8F%99%ED%99%94%EC%84%B8%EC%83%81%EC%97%90%EB%93%80%EC%BD%94?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e248]: 2,118 리뷰
+                  - listitem [ref=e249]:
+                    - generic [ref=e250]:
+                      - link "(주)에스티유니타스" [ref=e251] [cursor=pointer]:
+                        - /url: /companies/88435/info/(%EC%A3%BC)%EC%97%90%EC%8A%A4%ED%8B%B0%EC%9C%A0%EB%8B%88%ED%83%80%EC%8A%A4?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e252]: 1,580 리뷰
+            - generic [ref=e253]:
+              - link "건설업 " [ref=e255] [cursor=pointer]:
+                - /url: /companies?industry_id=600&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e256]: 건설업
+                - generic [ref=e257]: 
+              - list [ref=e259]:
+                - listitem [ref=e260]:
+                  - generic [ref=e261]:
+                    - link "한국토지주택공사" [ref=e262] [cursor=pointer]:
+                      - /url: /companies/86768/info/%ED%95%9C%EA%B5%AD%ED%86%A0%EC%A7%80%EC%A3%BC%ED%83%9D%EA%B3%B5%EC%82%AC?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e263]: 2,375 리뷰
+                - listitem [ref=e264]:
+                  - generic [ref=e265]:
+                    - link "한전KPS(주)" [ref=e266] [cursor=pointer]:
+                      - /url: /companies/2064/info/%ED%95%9C%EC%A0%84KPS(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e267]: 1,494 리뷰
+                - listitem [ref=e268]:
+                  - generic [ref=e269]:
+                    - link "현대엔지니어링(주)" [ref=e270] [cursor=pointer]:
+                      - /url: /companies/1322/info/%ED%98%84%EB%8C%80%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e271]: 1,456 리뷰
+            - generic [ref=e272]:
+              - link "미디어/디자인 " [ref=e274] [cursor=pointer]:
+                - /url: /companies?industry_id=800&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e275]: 미디어/디자인
+                - generic [ref=e276]: 
+              - generic [ref=e277]:
+                - generic [ref=e278]:
+                  - generic [ref=e279]: 추천
+                  - link "에이프레임(주)" [ref=e281] [cursor=pointer]:
+                    - /url: /companies/21539/info/%EC%97%90%EC%9D%B4%ED%94%84%EB%A0%88%EC%9E%84(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=recommend
+                - list [ref=e282]:
+                  - listitem [ref=e283]:
+                    - generic [ref=e284]:
+                      - link "씨제이씨지브이(주)" [ref=e285] [cursor=pointer]:
+                        - /url: /companies/23197/info/%EC%94%A8%EC%A0%9C%EC%9D%B4%EC%94%A8%EC%A7%80%EB%B8%8C%EC%9D%B4(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e286]: 2,349 리뷰
+                  - listitem [ref=e287]:
+                    - generic [ref=e288]:
+                      - link "(주)웅진씽크빅" [ref=e289] [cursor=pointer]:
+                        - /url: /companies/61213/info/(%EC%A3%BC)%EC%9B%85%EC%A7%84%EC%94%BD%ED%81%AC%EB%B9%85?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e290]: 1,482 리뷰
+                  - listitem [ref=e291]:
+                    - generic [ref=e292]:
+                      - link "(주)교원" [ref=e293] [cursor=pointer]:
+                        - /url: /companies/85230/info/(%EC%A3%BC)%EA%B5%90%EC%9B%90?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                      - generic [ref=e294]: 1,425 리뷰
+            - generic [ref=e295]:
+              - link "은행/금융업 " [ref=e297] [cursor=pointer]:
+                - /url: /companies?industry_id=900&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e298]: 은행/금융업
+                - generic [ref=e299]: 
+              - list [ref=e301]:
+                - listitem [ref=e302]:
+                  - generic [ref=e303]:
+                    - link "국민건강보험공단" [ref=e304] [cursor=pointer]:
+                      - /url: /companies/44440/info/%EA%B5%AD%EB%AF%BC%EA%B1%B4%EA%B0%95%EB%B3%B4%ED%97%98%EA%B3%B5%EB%8B%A8?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e305]: 3,010 리뷰
+                - listitem [ref=e306]:
+                  - generic [ref=e307]:
+                    - link "농협은행(주)" [ref=e308] [cursor=pointer]:
+                      - /url: /companies/41466/info/%EB%86%8D%ED%98%91%EC%9D%80%ED%96%89(%EC%A3%BC)?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e309]: 1,994 리뷰
+                - listitem [ref=e310]:
+                  - generic [ref=e311]:
+                    - link "새마을금고" [ref=e312] [cursor=pointer]:
+                      - /url: /companies/89935/info/%EC%83%88%EB%A7%88%EC%9D%84%EA%B8%88%EA%B3%A0?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e313]: 1,910 리뷰
+            - generic [ref=e314]:
+              - link "기관/협회 " [ref=e316] [cursor=pointer]:
+                - /url: /companies?industry_id=1000&_rs_act=industries&_rs_con=gnb&_rs_element=category
+                - generic [ref=e317]: 기관/협회
+                - generic [ref=e318]: 
+              - list [ref=e320]:
+                - listitem [ref=e321]:
+                  - generic [ref=e322]:
+                    - link "근로복지공단" [ref=e323] [cursor=pointer]:
+                      - /url: /companies/43917/info/%EA%B7%BC%EB%A1%9C%EB%B3%B5%EC%A7%80%EA%B3%B5%EB%8B%A8?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e324]: 2,202 리뷰
+                - listitem [ref=e325]:
+                  - generic [ref=e326]:
+                    - link "삼일회계법인" [ref=e327] [cursor=pointer]:
+                      - /url: /companies/86770/info/%EC%82%BC%EC%9D%BC%ED%9A%8C%EA%B3%84%EB%B2%95%EC%9D%B8?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e328]: 1,820 리뷰
+                - listitem [ref=e329]:
+                  - generic [ref=e330]:
+                    - link "대한무역투자진흥공사" [ref=e331] [cursor=pointer]:
+                      - /url: /companies/87825/info/%EB%8C%80%ED%95%9C%EB%AC%B4%EC%97%AD%ED%88%AC%EC%9E%90%EC%A7%84%ED%9D%A5%EA%B3%B5%EC%82%AC?_rs_act=industries&_rs_con=gnb&_rs_element=company_list
+                    - generic [ref=e332]: 1,768 리뷰
+          - iframe [ref=e337]:
+            - link [ref=f69e2] [cursor=pointer]:
+              - /url: https://googleads.g.doubleclick.net/pcs/click?xai=AKAOjsuHeadMwcdCtnGnea0WHX_hP7M6HVuroT-slMQmdQwoWsFJHW99iuaUac1V5y83DrOYwITnjoKn7ehuiJyFyfg4VfxJx7fYQ_Iw74R5DeUEQX1J7c2m_UGS5kDSAxEZsT4UcHhgYKfHcewnOg3ZGdu95i2z_yBTU4jMZDAtFtNZdxxjDllaw9IkFfU7NTygE2wD3aF2oZg5wdbjsiBYbv99UlkLbuSAf09OiQGDa0lNauH5FjdOhoKhTOeeWjWoQf-K8ZFLLp2kH7YBYA3njjoUxKqo4tGoAUNlGbt56awBVX4TqdkDpmJGRykeAyHlg-zTCrI0mTgky3e3CCy74kyx_pRcRgzZzpuS7SE8luVXjKHGE1O0NSM2Sa8LFywL0n9QpMkZcn_T5Uclkj_16DdLjWdJew-fL3L90oLodP2EjHPl&sai=AMfl-YTzcLlQriSEqIqEyEu1E6MO2wPZn47UXvZDkctyDhoaoWPR3IQDTyaCsRLlgtS7Y3STiTsNgDj4vG1KqHOlL55KWBMqiwpcsLpX5gW6fOM7AvPspixVgC63e9tRcHYvbyHvuTJdTEjVso0nQZLpq4Ah19cpY2X_DOr-G6hx3VsDFjfEavMqan8fiXbHkFNnXyExuUWvzSIT_NMGJyazPaDfEteuL7Df_stDbQYZzZRaHldlN-LNZzzg-gQQwopDFNuv4e_8OYAjN15qB7e3ZXnQCnoCKD6z1xHHwTtb8TtHZSMb7CVAFrjqFXNQN_Tjnj9R_2hI&sig=Cg0ArKJSzKtb6sh1WEM7&fbs_aeid=%5Bgw_fbsaeid%5D&adurl=https://www.jobplanet.co.kr/companies/86783/premium_reviews/%25EC%259E%25A1%25ED%2594%258C%25EB%259E%2598%25EB%258B%259B%3Futm_source%3Dpr_native%26utm_medium%3Dbanner%26utm_campaign%3Dpr_long_de_a_20210609
+        - generic [ref=e339]:
+          - generic [ref=e340]:
+            - link "" [ref=e341] [cursor=pointer]:
+              - /url: javascript:void(0)
+              - generic [ref=e342]: 
+            - generic: 알림
+            - generic [ref=e344]:
+              - generic [ref=e345]:
+                - strong [ref=e346]:
+                  - generic [ref=e347]: 
+                  - text: 새로운 알림이 없습니다.
+                - paragraph [ref=e348]: 최근 30일 동안의 알림만 확인 가능합니다.
+              - link "알림 내역 보기" [ref=e351] [cursor=pointer]:
+                - /url: /notifications
+          - generic [ref=e352]:
+            - link "" [ref=e353] [cursor=pointer]:
+              - /url: javascript:void(0)
+              - generic [ref=e354]: 
+            - generic: 리뷰작성
+            - list [ref=e357]:
+              - listitem [ref=e358]:
+                - link "프리미엄 리뷰 작성" [ref=e359] [cursor=pointer]:
+                  - /url: /premium_review/wizard/mount?by=premium_review_wizard&on=gnb
+              - listitem [ref=e360]:
+                - link "기업리뷰 작성" [ref=e361] [cursor=pointer]:
+                  - /url: "javascript:desktop_review_form_generator_v1({from: 'gnb', _fun: 'write@aside', after_order_path_on_wizard: 'https://www.jobplanet.co.kr/profile/resumes/5566461'})"
+              - listitem [ref=e362]:
+                - link "연봉정보 작성" [ref=e363] [cursor=pointer]:
+                  - /url: /salaries/wizard/mount?by=salaries_review_wizard&on=gnb
+              - listitem [ref=e364]:
+                - link "면접후기 작성" [ref=e365] [cursor=pointer]:
+                  - /url: "javascript:desktop_interview_form_generator_v1({}, {from: 'gnb', _fun: 'write@aside', after_order_path_on_wizard: 'https://www.jobplanet.co.kr/profile/resumes/5566461', company_id: ''})"
+              - listitem [ref=e366]:
+                - link "복지리뷰 작성" [ref=e367] [cursor=pointer]:
+                  - /url: /benefit/wizard/mount?by=welfare_review_wizard&on=gnb
+          - generic [ref=e369]:
+            - link "프로필사진 " [ref=e370] [cursor=pointer]:
+              - /url: /my_career
+              - generic [ref=e371]: 프로필사진
+              - generic [ref=e372]: 
+            - list [ref=e375]:
+              - listitem [ref=e376]:
+                - link "MY" [ref=e377] [cursor=pointer]:
+                  - /url: /my_career
+              - listitem [ref=e378]:
+                - link "계정" [ref=e379] [cursor=pointer]:
+                  - /url: /profile/settings
+              - listitem [ref=e380]:
+                - link "리뷰" [ref=e381] [cursor=pointer]:
+                  - /url: /profile/reviews
+              - listitem [ref=e382]:
+                - link "이력서" [ref=e383] [cursor=pointer]:
+                  - /url: /profile/resumes
+              - listitem [ref=e384]:
+                - link "멤버십/결제" [ref=e385] [cursor=pointer]:
+                  - /url: /profile/membership
+              - listitem [ref=e386]:
+                - link "로그아웃" [ref=e387] [cursor=pointer]:
+                  - /url: /users/sign_out
+          - generic [ref=e389]:
+            - generic [ref=e390]: 이직 뽐뿌 오는 날 5분 완성, 6개월간 기업정보가 무료!
+            - button "툴팁 닫기" [ref=e391] [cursor=pointer]:
+              - generic [ref=e392]: 
+              - text: 툴팁 닫기
+          - generic [ref=e393]:
+            - link "제휴 대학 서비스" [ref=e394] [cursor=pointer]:
+              - /url: javascript:void(0)
+              - generic [ref=e395]: 제휴 대학 서비스
+            - list [ref=e398]:
+              - listitem [ref=e399]:
+                - link "제휴 대학생 특권" [ref=e400] [cursor=pointer]:
+                  - /url: /career_center/welcome/cover
+              - listitem [ref=e401]:
+                - link "취업 리포트 센터" [ref=e402] [cursor=pointer]:
+                  - /url: /career_center/welcome/index
+              - listitem [ref=e403]:
+                - link "기업 분석 리포트" [ref=e404] [cursor=pointer]:
+                  - /url: /career_center/report/index?company_type=all&report_type=company&suggest_type=all
+              - listitem [ref=e405]:
+                - link "직무 분석 리포트" [ref=e406] [cursor=pointer]:
+                  - /url: /career_center/report/index?company_type=all&report_type=occupation&suggest_type=all
+              - listitem [ref=e407]:
+                - link "산업 분석 리포트" [ref=e408] [cursor=pointer]:
+                  - /url: /career_center/report/index?company_type=all&report_type=industry&suggest_type=all
+      - generic [ref=e412]:
+        - generic [ref=e413]:
+          - generic [ref=e416]:
+            - textbox "기업, 공고, 콘텐츠 검색" [ref=e417]
+            - button "" [ref=e418] [cursor=pointer]:
+              - generic [ref=e419]: 
+          - list [ref=e422]:
+            - listitem [ref=e423]:
+              - generic [ref=e424]:
+                - generic [ref=e425]: "10"
+                - link "(주)컬리" [ref=e426] [cursor=pointer]:
+                  - /url: /companies/318635/info/%EC%BB%AC%EB%A6%AC?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%EC%BB%AC%EB%A6%AC
+              - generic [ref=e427]:
+                - text: "7"
+                - generic [ref=e429]: 
+            - listitem [ref=e430]:
+              - generic [ref=e431]:
+                - generic [ref=e432]: "1"
+                - link "키노톤코리아(주)" [ref=e433] [cursor=pointer]:
+                  - /url: /companies/139088/info/%ED%82%A4%EB%85%B8%ED%86%A4%EC%BD%94%EB%A6%AC%EC%95%84?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%ED%82%A4%EB%85%B8%ED%86%A4%EC%BD%94%EB%A6%AC%EC%95%84%28%EC%A3%BC%29
+              - generic [ref=e436]: 
+            - listitem [ref=e437]:
+              - generic [ref=e438]:
+                - generic [ref=e439]: "2"
+                - link "(주)다스카손해사정화재해상" [ref=e440] [cursor=pointer]:
+                  - /url: /companies/82839/info/%EB%8B%A4%EC%8A%A4%EC%B9%B4%EC%86%90%ED%95%B4%EC%82%AC%EC%A0%95%ED%99%94%EC%9E%AC%ED%95%B4%EC%83%81?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%EB%8B%A4%EC%8A%A4%EC%B9%B4%EC%86%90%ED%95%B4%EC%82%AC%EC%A0%95%ED%99%94%EC%9E%AC%ED%95%B4%EC%83%81
+              - generic [ref=e441]: NEW
+            - listitem [ref=e442]:
+              - generic [ref=e443]:
+                - generic [ref=e444]: "3"
+                - link "팀스파르타(주)" [ref=e445] [cursor=pointer]:
+                  - /url: /companies/390031/info/%ED%8C%80%EC%8A%A4%ED%8C%8C%EB%A5%B4%ED%83%80?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%ED%8C%80%EC%8A%A4%ED%8C%8C%EB%A5%B4%ED%83%80%28%EC%A3%BC%29
+              - generic [ref=e446]:
+                - text: "3"
+                - generic [ref=e448]: 
+            - listitem [ref=e449]:
+              - generic [ref=e450]:
+                - generic [ref=e451]: "4"
+                - link "(주)텐북" [ref=e452] [cursor=pointer]:
+                  - /url: /companies/405386/info/%ED%85%90%EB%B6%81?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%ED%85%90%EB%B6%81
+              - generic [ref=e453]:
+                - text: "1"
+                - generic [ref=e455]: 
+            - listitem [ref=e456]:
+              - generic [ref=e457]:
+                - generic [ref=e458]: "5"
+                - link "어플라이드머티어리얼즈코리아(주)" [ref=e459] [cursor=pointer]:
+                  - /url: /companies/186505/info/%EC%96%B4%ED%94%8C%EB%9D%BC%EC%9D%B4%EB%93%9C%EB%A8%B8%ED%8B%B0%EC%96%B4%EB%A6%AC%EC%96%BC%EC%A6%88%EC%BD%94%EB%A6%AC%EC%95%84?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%EC%96%B4%ED%94%8C%EB%9D%BC%EC%9D%B4%EB%93%9C%EB%A8%B8%ED%8B%B0%EC%96%B4%EB%A6%AC%EC%96%BC%EC%A6%88%EC%BD%94%EB%A6%AC%EC%95%84%28%EC%A3%BC%29
+              - generic [ref=e460]:
+                - text: "1"
+                - generic [ref=e462]: 
+            - listitem [ref=e463]:
+              - generic [ref=e464]:
+                - generic [ref=e465]: "6"
+                - link "(주)비바리퍼블리카" [ref=e466] [cursor=pointer]:
+                  - /url: /companies/309507/info/%EB%B9%84%EB%B0%94%EB%A6%AC%ED%8D%BC%EB%B8%94%EB%A6%AC%EC%B9%B4?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%EB%B9%84%EB%B0%94%EB%A6%AC%ED%8D%BC%EB%B8%94%EB%A6%AC%EC%B9%B4
+              - generic [ref=e467]:
+                - text: "1"
+                - generic [ref=e469]: 
+            - listitem [ref=e470]:
+              - generic [ref=e471]:
+                - generic [ref=e472]: "7"
+                - link "세광음악출판사" [ref=e473] [cursor=pointer]:
+                  - /url: /companies/313998/info/%EC%84%B8%EA%B4%91%EC%9D%8C%EC%95%85%EC%B6%9C%ED%8C%90%EC%82%AC?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%EC%84%B8%EA%B4%91%EC%9D%8C%EC%95%85%EC%B6%9C%ED%8C%90%EC%82%AC
+              - generic [ref=e474]:
+                - text: "4"
+                - generic [ref=e476]: 
+            - listitem [ref=e477]:
+              - generic [ref=e478]:
+                - generic [ref=e479]: "8"
+                - link "(주)큐엘파마" [ref=e480] [cursor=pointer]:
+                  - /url: /companies/288182/info/%ED%81%90%EC%97%98%ED%8C%8C%EB%A7%88?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%ED%81%90%EC%97%98%ED%8C%8C%EB%A7%88
+              - generic [ref=e481]:
+                - text: "3"
+                - generic [ref=e483]: 
+            - listitem [ref=e484]:
+              - generic [ref=e485]:
+                - generic [ref=e486]: "9"
+                - link "(주)프랜푸드" [ref=e487] [cursor=pointer]:
+                  - /url: /companies/49764/info/%ED%94%84%EB%9E%9C%ED%91%B8%EB%93%9C?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%ED%94%84%EB%9E%9C%ED%91%B8%EB%93%9C
+              - generic [ref=e488]:
+                - text: "1"
+                - generic [ref=e490]: 
+            - listitem [ref=e491]:
+              - generic [ref=e492]:
+                - generic [ref=e493]: "10"
+                - link "(주)컬리" [ref=e494] [cursor=pointer]:
+                  - /url: /companies/318635/info/%EC%BB%AC%EB%A6%AC?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%28%EC%A3%BC%29%EC%BB%AC%EB%A6%AC
+              - generic [ref=e495]:
+                - text: "7"
+                - generic [ref=e497]: 
+            - listitem [ref=e498]:
+              - generic [ref=e499]:
+                - generic [ref=e500]: "1"
+                - link "키노톤코리아(주)" [ref=e501] [cursor=pointer]:
+                  - /url: /companies/139088/info/%ED%82%A4%EB%85%B8%ED%86%A4%EC%BD%94%EB%A6%AC%EC%95%84?_rs_act=real_time_ranking_mini&_rs_con=seach&query=%ED%82%A4%EB%85%B8%ED%86%A4%EC%BD%94%EB%A6%AC%EC%95%84%28%EC%A3%BC%29
+              - generic [ref=e504]: 
+        - text:            
+    - generic [ref=e506]:
+      - generic [ref=e508]: 나의 현재(관심) 직종에서 인기있는 채용 공고를 이메일로 받아보세요!
+      - generic [ref=e509]:
+        - link "이메일 받기" [ref=e510] [cursor=pointer]:
+          - /url: javascript:void(0);
+        - link "닫기" [ref=e511] [cursor=pointer]:
+          - /url: javascript:void(0);
+    - generic [ref=e515]:
+      - link "MY" [ref=e516] [cursor=pointer]:
+        - /url: /my_career
+      - link "계정" [ref=e517] [cursor=pointer]:
+        - /url: /profile/settings
+      - link "리뷰" [ref=e518] [cursor=pointer]:
+        - /url: /profile/reviews
+      - link "이력서" [ref=e519] [cursor=pointer]:
+        - /url: /profile/resumes
+      - link "멤버십/결제" [ref=e520] [cursor=pointer]:
+        - /url: /profile/membership
+    - generic [ref=e524]:
+      - generic [ref=e526]:
+        - generic [ref=e527]:
+          - paragraph [ref=e528]: "* 제목"
+          - generic [ref=e531]: 
+        - textbox "이력서 제목을 입력해 주세요" [ref=e533]
+      - generic [ref=e535]:
+        - generic [ref=e536]:
+          - generic [ref=e537]:
+            - generic [ref=e538]: 
+            - text: 프로필을 수정하면
+            - link "내 프로필" [ref=e539] [cursor=pointer]:
+              - /url: /profile/user_profile
+            - text: 에 수정한 내용이 반영돼요
+          - generic [ref=e540]:
+            - heading "* 기본 정보" [level=3] [ref=e541]:
+              - generic [ref=e542]: "*"
+              - text: 기본 정보
+            - generic [ref=e544]: 작성률 +30%
+          - generic [ref=e547]:
+            - textbox "이름" [ref=e549]: 윤상현
+            - generic [ref=e551]:
+              - generic [ref=e552]: 
+              - textbox "이메일" [ref=e553]: sangzzang523@naver.com
+            - generic [ref=e555]:
+              - generic [ref=e556]: 
+              - textbox "전화번호" [ref=e557]: "01089669730"
+            - generic [ref=e558]:
+              - generic [ref=e559]:
+                - term [ref=e560]:
+                  - generic [ref=e561]: 
+                - definition [ref=e562]:
+                  - generic [ref=e563]:
+                    - generic [ref=e564] [cursor=pointer]: 남자
+                    - generic [ref=e565]: 
+                    - combobox "남자 " [ref=e566] [cursor=pointer]:
+                      - option "남자" [selected]
+                      - option "여자"
+              - generic [ref=e567]:
+                - term [ref=e568]:
+                  - generic [ref=e569]: 
+                - definition [ref=e570]:
+                  - generic [ref=e571]:
+                    - generic [ref=e572] [cursor=pointer]: 1994년
+                    - generic [ref=e573]: 
+                    - combobox "1994년 " [ref=e574] [cursor=pointer]:
+                      - option "2011년"
+                      - option "2010년"
+                      - option "2009년"
+                      - option "2008년"
+                      - option "2007년"
+                      - option "2006년"
+                      - option "2005년"
+                      - option "2004년"
+                      - option "2003년"
+                      - option "2002년"
+                      - option "2001년"
+                      - option "2000년"
+                      - option "1999년"
+                      - option "1998년"
+                      - option "1997년"
+                      - option "1996년"
+                      - option "1995년"
+                      - option "1994년" [selected]
+                      - option "1993년"
+                      - option "1992년"
+                      - option "1991년"
+                      - option "1990년"
+                      - option "1989년"
+                      - option "1988년"
+                      - option "1987년"
+                      - option "1986년"
+                      - option "1985년"
+                      - option "1984년"
+                      - option "1983년"
+                      - option "1982년"
+                      - option "1981년"
+                      - option "1980년"
+                      - option "1979년"
+                      - option "1978년"
+                      - option "1977년"
+                      - option "1976년"
+                      - option "1975년"
+                      - option "1974년"
+                      - option "1973년"
+                      - option "1972년"
+                      - option "1971년"
+                      - option "1970년"
+                      - option "1969년"
+                      - option "1968년"
+                      - option "1967년"
+                      - option "1966년"
+                      - option "1965년"
+                      - option "1964년"
+                      - option "1963년"
+                      - option "1962년"
+                      - option "1961년"
+                      - option "1960년"
+                      - option "1959년"
+                      - option "1958년"
+                      - option "1957년"
+                      - option "1956년"
+                      - option "1955년"
+                      - option "1954년"
+                      - option "1953년"
+                      - option "1952년"
+                      - option "1951년"
+                      - option "1950년"
+                      - option "1949년"
+                      - option "1948년"
+                      - option "1947년"
+                      - option "1946년"
+                      - option "1945년"
+                      - option "1944년"
+                      - option "1943년"
+                      - option "1942년"
+                      - option "1941년"
+                      - option "1940년"
+                      - option "1939년"
+                      - option "1938년"
+                      - option "1937년"
+                      - option "1936년"
+                      - option "1935년"
+                      - option "1934년"
+                      - option "1933년"
+                      - option "1932년"
+                      - option "1931년"
+                      - option "1930년"
+                      - option "1929년"
+                      - option "1928년"
+                      - option "1927년"
+                      - option "1926년"
+              - generic [ref=e576]:
+                - term [ref=e577]:
+                  - generic [ref=e578]: 
+                - definition [ref=e579]: 1년차
+            - generic [ref=e580] [cursor=pointer]:
+              - button "Choose File"
+              - generic [ref=e581]:
+                - generic [ref=e582]: 
+                - text: 사진 업로드
+                - text: (선택)
+        - generic [ref=e585]:
+          - generic [ref=e586]:
+            - heading "* 주소" [level=3] [ref=e589]:
+              - generic [ref=e590]: "*"
+              - text: 주소
+            - generic [ref=e591]:
+              - generic [ref=e594]:
+                - generic [ref=e595] [cursor=pointer]: 시/도 선택
+                - generic [ref=e596]: 
+                - combobox "시/도 선택 " [ref=e597] [cursor=pointer]:
+                  - option "시/도 선택" [selected]
+                  - option "서울"
+                  - option "경기"
+                  - option "인천"
+                  - option "부산"
+                  - option "대구"
+                  - option "대전"
+                  - option "광주"
+                  - option "울산"
+                  - option "세종"
+                  - option "강원"
+                  - option "경남"
+                  - option "경북"
+                  - option "전남"
+                  - option "전북"
+                  - option "충남"
+                  - option "충북"
+                  - option "제주"
+                  - option "해외"
+              - generic [ref=e600]:
+                - generic [ref=e601] [cursor=pointer]: 시/군/구 선택
+                - generic [ref=e602]: 
+                - combobox "시/군/구 선택 " [disabled] [ref=e603] [cursor=pointer]:
+                  - option "시/군/구 선택" [selected]
+          - generic [ref=e605]:
+            - heading "* 구직 의향" [level=3] [ref=e607]:
+              - generic [ref=e608]: "*"
+              - text: 구직 의향
+            - generic [ref=e610]:
+              - generic [ref=e611] [cursor=pointer]: 현재 구직 중이에요
+              - generic [ref=e612]: 
+              - combobox "현재 구직 중이에요 " [ref=e613] [cursor=pointer]:
+                - option "구직 의향 선택"
+                - option "현재 구직 중이에요" [selected]
+                - option "구직 생각은 없지만 제안만 받을게요"
+                - option "구직 생각도 없고 제안도 안 받을래요"
+      - generic [ref=e615]:
+        - generic [ref=e616]:
+          - generic [ref=e617]:
+            - heading "* 직종" [level=3] [ref=e620]:
+              - generic [ref=e621]: "*"
+              - text: 직종
+            - generic [ref=e622]:
+              - generic [ref=e625]:
+                - generic [ref=e626] [cursor=pointer]: 개발
+                - generic [ref=e627]: 
+                - combobox "개발 " [ref=e628] [cursor=pointer]:
+                  - option "1차 직종 선택"
+                  - option "개발" [selected]
+                  - option "공채"
+                  - option "교육"
+                  - option "금융/재무"
+                  - option "기획/경영"
+                  - option "데이터"
+                  - option "디자인"
+                  - option "마케팅/시장조사"
+                  - option "미디어/홍보"
+                  - option "법률/법무"
+                  - option "생산/제조"
+                  - option "생산관리/품질관리"
+                  - option "서비스/고객지원"
+                  - option "엔지니어링"
+                  - option "연구개발"
+                  - option "영업/제휴"
+                  - option "유통/무역"
+                  - option "의약"
+                  - option "인사/총무"
+                  - option "전문직"
+                  - option "특수계층/공공"
+              - generic [ref=e631]:
+                - generic [ref=e632] [cursor=pointer]: 웹개발
+                - generic [ref=e633]: 
+                - combobox "웹개발 " [ref=e634] [cursor=pointer]:
+                  - option "2차 직종 선택"
+                  - option "CTO (Chief Technology Officer)"
+                  - option "DBA(Database Admin.)"
+                  - option "ERP"
+                  - option "iOS 개발"
+                  - option "QA(Quality Assurance)"
+                  - option "VR 엔지니어"
+                  - option "게임개발"
+                  - option "기술지원"
+                  - option "네트워크/보안/운영"
+                  - option "백엔드 개발"
+                  - option "소프트웨어 개발"
+                  - option "소프트웨어아키텍트"
+                  - option "안드로이드 개발"
+                  - option "웹개발" [selected]
+                  - option "웹퍼블리셔"
+                  - option "클라우드 개발"
+                  - option "프론트엔드 개발"
+                  - option "하드웨어 개발"
+          - generic [ref=e635]:
+            - generic [ref=e637]:
+              - heading "* 업무 및 스킬" [level=3] [ref=e638]:
+                - generic [ref=e639]: "*"
+                - text: 업무 및 스킬
+              - generic [ref=e641]: 작성률 +30%
+            - list [ref=e642]:
+              - listitem [ref=e643]: 업무와 관련된 스킬을 추가해 보세요
+              - listitem [ref=e644]: 3개 이상 입력 시 이력서 작성률이 10%, 5개 이상 입력 시 20%, 7개 이상 입력 시 최대 30% 높아져요
+            - generic [ref=e645]:
+              - generic [ref=e646]: 추천 스킬
+              - list [ref=e647]:
+                - listitem [ref=e648] [cursor=pointer]:
+                  - generic [ref=e649]: 
+                  - text: java
+                - listitem [ref=e650] [cursor=pointer]:
+                  - generic [ref=e651]: 
+                  - text: Javascript
+                - listitem [ref=e652] [cursor=pointer]:
+                  - generic [ref=e653]: 
+                  - text: Spring
+                - listitem [ref=e654] [cursor=pointer]:
+                  - generic [ref=e655]: 
+                  - text: MYSQL
+                - listitem [ref=e656] [cursor=pointer]:
+                  - generic [ref=e657]: 
+                  - text: jsp
+                - listitem [ref=e658] [cursor=pointer]:
+                  - generic [ref=e659]: 
+                  - text: react
+                - listitem [ref=e660] [cursor=pointer]:
+                  - generic [ref=e661]: 
+                  - text: Oracle
+                - listitem [ref=e662] [cursor=pointer]:
+                  - generic [ref=e663]: 
+                  - text: HTML
+                - listitem [ref=e664] [cursor=pointer]:
+                  - generic [ref=e665]: 
+                  - text: python
+                - listitem [ref=e666] [cursor=pointer]:
+                  - generic [ref=e667]: 
+                  - text: Php
+            - generic [ref=e669]:
+              - textbox [ref=e673]:
+                - /placeholder: 스킬을 입력해 주세요 (예 Photoshop)
+              - generic [ref=e675]:
+                - generic [ref=e676]:
+                  - text: c
+                  - generic [ref=e677] [cursor=pointer]: 
+                - generic [ref=e678]:
+                  - text: java spring 백엔드
+                  - generic [ref=e679] [cursor=pointer]: 
+          - generic [ref=e680]:
+            - generic [ref=e681]: 
+            - text: 경력, 학력 등 추가한 항목은 저장 시 최신순으로 자동 정렬돼요.
+          - generic [ref=e682]:
+            - heading "경력 (인턴 포함)" [level=3] [ref=e684]
+            - list [ref=e685]:
+              - listitem [ref=e686]: 수행한 업무와 성과 기반으로 작성해 보세요
+              - listitem [ref=e687]: 기업명과 경력 상세 내용을 30자 이상 입력하면 작성률이 20% 높아져요
+            - generic [ref=e688]:
+              - generic [ref=e689]:
+                - generic [ref=e690]:
+                  - generic [ref=e691]:
+                    - generic [ref=e695]: 
+                    - generic [ref=e696]:
+                      - textbox "년/월" [ref=e699]: "2017.07"
+                      - generic [ref=e700]: ~
+                      - textbox "년/월" [ref=e702]: "2017.07"
+                    - generic [ref=e706] [cursor=pointer]:
+                      - checkbox "재직중" [ref=e707]
+                      - text: 재직중
+                  - generic [ref=e709]:
+                    - generic [ref=e711]:
+                      - textbox "기업명" [ref=e712]: (주)수경
+                      - text: 
+                    - generic [ref=e713]:
+                      - textbox "부서" [ref=e714]
+                      - textbox "직책" [ref=e715]
+                    - list [ref=e718]:
+                      - listitem [ref=e719]:
+                        - textbox "직무" [ref=e721]
+                      - listitem [ref=e722]:
+                        - generic [ref=e724]:
+                          - generic: "*"
+                          - generic [ref=e727]:
+                            - textbox "기본 연봉 정보 *" [ref=e728]:
+                              - /placeholder: 연봉(선택)
+                            - generic [ref=e729]: 만원
+                    - generic [ref=e731]:
+                      - textbox "하단 추천 양식으로 좋은 이력서를 완성해 보세요" [ref=e732]
+                      - generic [ref=e733]:
+                        - generic [ref=e734]: 추천 양식
+                        - list [ref=e735]:
+                          - listitem [ref=e736]:
+                            - button "프로젝트 기반" [ref=e737] [cursor=pointer]
+                          - listitem [ref=e738]:
+                            - button "개발/기술 기반" [ref=e739] [cursor=pointer]
+                          - listitem [ref=e740]:
+                            - button "성과 기반" [ref=e741] [cursor=pointer]
+                - generic [ref=e742]:
+                  - generic [ref=e743]:
+                    - generic [ref=e747]: 
+                    - generic [ref=e748]:
+                      - textbox "년/월" [ref=e751]: "2016.07"
+                      - generic [ref=e752]: ~
+                      - textbox "년/월" [ref=e754]: "2016.08"
+                    - generic [ref=e758] [cursor=pointer]:
+                      - checkbox "재직중" [ref=e759]
+                      - text: 재직중
+                  - generic [ref=e761]:
+                    - generic [ref=e763]:
+                      - textbox "기업명" [ref=e764]: (주)수경
+                      - text: 
+                    - generic [ref=e765]:
+                      - textbox "부서" [ref=e766]
+                      - textbox "직책" [ref=e767]
+                    - list [ref=e770]:
+                      - listitem [ref=e771]:
+                        - textbox "직무" [ref=e773]
+                      - listitem [ref=e774]:
+                        - generic [ref=e776]:
+                          - generic: "*"
+                          - generic [ref=e779]:
+                            - textbox "기본 연봉 정보 *" [ref=e780]:
+                              - /placeholder: 연봉(선택)
+                            - generic [ref=e781]: 만원
+                    - generic [ref=e783]:
+                      - textbox "하단 추천 양식으로 좋은 이력서를 완성해 보세요" [ref=e784]
+                      - generic [ref=e785]:
+                        - generic [ref=e786]: 추천 양식
+                        - list [ref=e787]:
+                          - listitem [ref=e788]:
+                            - button "프로젝트 기반" [ref=e789] [cursor=pointer]
+                          - listitem [ref=e790]:
+                            - button "개발/기술 기반" [ref=e791] [cursor=pointer]
+                          - listitem [ref=e792]:
+                            - button "성과 기반" [ref=e793] [cursor=pointer]
+                - generic [ref=e794]:
+                  - generic [ref=e795]:
+                    - generic [ref=e796]:
+                      - textbox "년/월" [ref=e799]
+                      - generic [ref=e800]: ~
+                      - textbox "년/월" [ref=e802]
+                    - generic [ref=e805] [cursor=pointer]:
+                      - checkbox "재직중" [ref=e806]
+                      - text: 재직중
+                  - generic [ref=e808]:
+                    - generic [ref=e810]:
+                      - textbox "기업명" [ref=e811]
+                      - text: 
+                    - generic [ref=e812]:
+                      - textbox "부서" [ref=e813]
+                      - textbox "직책" [ref=e814]
+                    - list [ref=e817]:
+                      - listitem [ref=e818]:
+                        - textbox "직무" [ref=e820]
+                      - listitem [ref=e821]:
+                        - generic [ref=e823]:
+                          - generic: "*"
+                          - generic [ref=e826]:
+                            - textbox "기본 연봉 정보 *" [ref=e827]:
+                              - /placeholder: 연봉(선택)
+                            - generic [ref=e828]: 만원
+                    - generic [ref=e830]:
+                      - textbox "하단 추천 양식으로 좋은 이력서를 완성해 보세요" [ref=e831]
+                      - generic [ref=e832]:
+                        - generic [ref=e833]: 추천 양식
+                        - list [ref=e834]:
+                          - listitem [ref=e835]:
+                            - button "프로젝트 기반" [ref=e836] [cursor=pointer]
+                          - listitem [ref=e837]:
+                            - button "개발/기술 기반" [ref=e838] [cursor=pointer]
+                          - listitem [ref=e839]:
+                            - button "성과 기반" [ref=e840] [cursor=pointer]
+              - generic [ref=e841]:
+                - button "+ 추가" [ref=e842] [cursor=pointer]
+                - generic [ref=e843]:
+                  - generic [ref=e844] [cursor=pointer]:
+                    - checkbox "신입입니다" [checked] [ref=e845]
+                    - text: 신입입니다
+                  - generic [ref=e848]: 
+          - generic [ref=e849]:
+            - heading "학력" [level=3] [ref=e851]
+            - generic [ref=e852]:
+              - generic [ref=e854]:
+                - generic [ref=e855]:
+                  - generic [ref=e856]:
+                    - textbox "년/월" [ref=e858]
+                    - generic [ref=e859]: ~
+                    - textbox "년/월" [ref=e861]
+                  - generic [ref=e863] [cursor=pointer]:
+                    - checkbox "재학중" [ref=e864]
+                    - text: 재학중
+                - generic [ref=e866]:
+                  - textbox "학교명" [ref=e869]
+                  - textbox "전공 및 학위" [ref=e871]
+                  - list [ref=e873]:
+                    - listitem [ref=e874]:
+                      - generic [ref=e875]:
+                        - generic [ref=e876] [cursor=pointer]: 학교 구분
+                        - generic [ref=e877]: 
+                        - combobox "학교 구분 " [disabled] [ref=e878] [cursor=pointer]:
+                          - option "학교 구분" [selected]
+                          - option "고등학교 졸업"
+                          - option "대학졸업 (2,3년)"
+                          - option "대학교졸업 (4년)"
+                          - option "대학원졸업"
+                    - listitem [ref=e879]:
+                      - generic [ref=e880]:
+                        - generic [ref=e881] [cursor=pointer]: 학위 선택
+                        - generic [ref=e882]: 
+                        - combobox "학위 선택 " [disabled] [ref=e883] [cursor=pointer]:
+                          - option "학위 선택" [selected]
+                          - option "전문학사"
+                          - option "학사"
+                          - option "석사"
+                          - option "박사"
+                          - option "석박사"
+                  - textbox "공유하고 싶은 내용을 입력해 주세요" [ref=e886]
+              - button "+ 추가" [ref=e888] [cursor=pointer]
+          - generic [ref=e889]:
+            - generic [ref=e890]:
+              - heading "활동 및 수상" [level=3] [ref=e891]
+              - generic [ref=e893]: 작성률 +10%
+            - generic [ref=e894]:
+              - generic [ref=e896]:
+                - generic [ref=e897]:
+                  - generic [ref=e898]:
+                    - textbox "년/월" [ref=e900]
+                    - generic [ref=e901]: ~
+                    - textbox "년/월" [ref=e903]
+                  - generic [ref=e905] [cursor=pointer]:
+                    - checkbox "수상" [ref=e906]
+                    - text: 수상
+                - generic [ref=e908]:
+                  - textbox "활동 및 수상명" [ref=e910]
+                  - textbox "외부 활동이나 수상 이력을 입력해 주세요" [ref=e912]
+              - button "+ 추가" [ref=e914] [cursor=pointer]
+          - generic [ref=e915]:
+            - generic [ref=e916]:
+              - heading "자격증 및 기타" [level=3] [ref=e917]
+              - generic [ref=e919]: 작성률 +10%
+            - generic [ref=e920]:
+              - generic [ref=e922]:
+                - textbox "년/월" [ref=e925]
+                - generic [ref=e926]:
+                  - textbox "항목명" [ref=e928]
+                  - textbox "항목에 대한 설명을 입력해 주세요" [ref=e930]
+              - button "+ 추가" [ref=e932] [cursor=pointer]
+          - generic [ref=e933]:
+            - heading "파일 첨부" [level=3] [ref=e935]
+            - button "+ 추가" [ref=e938] [cursor=pointer]
+          - generic [ref=e939]:
+            - heading "링크" [level=3] [ref=e941]
+            - button "+ 추가" [ref=e944] [cursor=pointer]
+          - generic [ref=e946]:
+            - generic [ref=e947]:
+              - heading "자기소개" [level=3] [ref=e948]
+              - generic [ref=e950]: 작성률 +10%
+            - textbox "자기소개를 30자 이상 작성하면 작성률이 10% 높아져요. 업무 경험과 나만의 강점을 토대로 자기소개를 작성해 보세요" [ref=e953]:
+              - /placeholder: "자기소개를 30자 이상 작성하면 작성률이 10% 높아져요.\n업무 경험과 나만의 강점을 토대로 자기소개를 작성해 보세요"
+          - generic [ref=e958]:
+            - heading "* 희망 연봉" [level=3] [ref=e960]:
+              - generic [ref=e961]: "*"
+              - text: 희망 연봉
+            - generic [ref=e963]:
+              - generic [ref=e964] [cursor=pointer]: 희망 연봉 선택
+              - generic [ref=e965]: 
+              - combobox "희망 연봉 선택 " [ref=e966] [cursor=pointer]:
+                - option "희망 연봉 선택" [selected]
+                - option "면접 후 결정"
+                - option "회사 내규에 따름"
+                - option "1,300 ~ 1,800만원"
+                - option "1,800 ~ 2,300만원"
+                - option "2,300 ~ 2,800만원"
+                - option "2,800 ~ 3,300만원"
+                - option "3,300 ~ 3,800만원"
+                - option "3,800 ~ 4,300만원"
+                - option "4,300 ~ 4,800만원"
+                - option "4,800 ~ 5,300만원"
+                - option "5,300 ~ 5,800만원"
+                - option "5,800 ~ 6,300만원"
+                - option "6,300 ~ 6,800만원"
+                - option "6,800 ~ 7,300만원"
+                - option "7,300 ~ 7,800만원"
+                - option "7,800 ~ 8,300만원"
+                - option "8,300 ~ 8,800만원"
+                - option "8,800 ~ 9,300만원"
+                - option "9,300 ~ 9,800만원"
+                - option "9,800 ~ 1억원"
+                - option "1억원 이상"
+        - generic [ref=e969]:
+          - generic [ref=e971]:
+            - paragraph [ref=e972]:
+              - text: 작성률40%
+              - generic [ref=e973]: 작성률 80% 이력서로 지원하면 서류 합격률이 62% 더 높아져요!
+            - generic [ref=e975]: 40%
+          - generic [ref=e976]:
+            - generic [ref=e978]:
+              - button "PDF 다운로드" [ref=e979] [cursor=pointer]:
+                - generic [ref=e980]: 
+                - text: PDF 다운로드
+              - generic [ref=e981]: 마지막 수정 2026.03.10 02:34
+            - generic [ref=e982]:
+              - button "임시 저장" [ref=e983] [cursor=pointer]
+              - button "작성 완료" [ref=e984] [cursor=pointer]
+    - contentinfo [ref=e986]:
+      - generic [ref=e988]:
+        - generic [ref=e989]:
+          - link "회사소개" [ref=e990] [cursor=pointer]:
+            - /url: https://team.jobplanet.co.kr/
+          - text: "|"
+          - link "이용약관" [ref=e991] [cursor=pointer]:
+            - /url: /welcome/terms
+          - text: "|"
+          - link "개인정보처리방침" [ref=e992] [cursor=pointer]:
+            - /url: /welcome/privacy
+          - text: "|"
+          - link "리뷰 운영 정책" [ref=e993] [cursor=pointer]:
+            - /url: /welcome/review_operation_policy
+          - text: "|"
+          - link "모바일 버전" [ref=e994] [cursor=pointer]:
+            - /url: /change_device/choose/phone
+          - text: "|"
+          - link "공지사항" [ref=e995] [cursor=pointer]:
+            - /url: /welcome/notices
+          - text: "|"
+          - link "광고 및 제휴문의" [ref=e996] [cursor=pointer]:
+            - /url: https://docs.google.com/forms/d/e/1FAIpQLSf2vGr1DBwo3CvxL_ohmnonI89XyMU1VzV4mVFcBfyqwKb-Ug/viewform
+          - text: "|"
+          - link "고객 문의" [ref=e997] [cursor=pointer]:
+            - /url: javascript:void(0);
+          - text: "|"
+          - link "FAQ" [ref=e998] [cursor=pointer]:
+            - /url: /faqs
+        - list [ref=e999]:
+          - listitem [ref=e1000]:
+            - link "Pcr" [ref=e1001] [cursor=pointer]:
+              - /url: https://www.pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS213&mCode=C040050000&nttId=8926
+          - listitem [ref=e1002]:
+            - link "페이스북" [ref=e1003] [cursor=pointer]:
+              - /url: https://www.facebook.com/jobplanetkorea
+          - listitem [ref=e1004]:
+            - link "네이버 포스트" [ref=e1005] [cursor=pointer]:
+              - /url: http://m.post.naver.com/my.nhn?memberNo=9520310
+          - listitem [ref=e1006]:
+            - link "youtube" [ref=e1007] [cursor=pointer]:
+              - /url: https://www.youtube.com/channel/UCUPhV9st5dkz3zRg7wC9x4A
+      - generic [ref=e1008]:
+        - paragraph [ref=e1009]: 잡플래닛 유한회사
+        - generic [ref=e1010]: 서울특별시 서초구 서초대로 301, 16층(서초동, 동익성봉빌딩) |대표 이창준 |개인정보보호관리자 이창준
+        - generic [ref=e1011]: 사업자등록번호 824-87-03495 |통신판매업 신고번호 제2025-서울서초-04030 |유료 직업소개사업 등록번호 (국내) 제2025-3210195-14-5-00031호
+        - generic [ref=e1012]:
+          - text: 대표번호 1644-5641 (10:00~17:00 / 매월 마지막 금요일 09:00~13:00 / 주말 및 공휴일 휴무) |
+          - generic [ref=e1013]: "대표이메일 : customer_service@jobplanet.co.kr"
+        - generic [ref=e1014]: ©Jobplanet. All rights reserved. 모든 컨텐츠의 무단 전재, 무단 수집, 재배포 및 AI 학습 이용 금지
+        - generic [ref=e1015]:
+          - link "android google play" [ref=e1016] [cursor=pointer]:
+            - /url: market://details?id=com.jobplanet.kr.android&referrer=utm_campaign%3Dapp_induction
+          - link "ios app store" [ref=e1017] [cursor=pointer]:
+            - /url: https://itunes.apple.com/us/app/jabpeullaenis-gieob-chaeyong/id981750452?l=ko&ls=1&mt=8&pt=117142070&ct=app_induction
+  - button "잡플래닛 상담 버튼" [ref=e1019] [cursor=pointer]:
+    - generic [ref=e1020]: 잡플래닛 상담 버튼

@@ -11,6 +11,7 @@ public class AiGenerationRequest {
     private String companyInfo; // 기업 정보
     private String matchedProjects; // 매칭된 프로젝트들 (JSON)
     private String templateContent; // 템플릿 내용 (플레이스홀더 포함)
+    private String sourceSite; // 출처 사이트 (SARAMIN, JOBKOREA, JOBPLANET, LINKAREER)
     private GenerationType type; // 생성 타입
 
     public enum GenerationType {
