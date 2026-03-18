@@ -13,4 +13,8 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findByUserIdAndType(Long userId, TemplateType type);
 
     Optional<Template> findByUserIdAndTypeAndIsDefaultTrue(Long userId, TemplateType type);
+
+    List<Template> findByIsSystemTrueOrderByCreatedAtDesc();
+
+    void deleteByIsSystemTrue();
 }

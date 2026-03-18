@@ -13,10 +13,10 @@ public interface ProjectService {
     Project getMyProject(Long userId, Long projectId);
 
     Project createProject(Long userId, String name, String description,
-            String githubUrl, String notionUrl, String techStack);
+            String githubUrl, String notionUrl, String techStack, String aiSummary);
 
     Project updateProject(Long userId, Long projectId, String name, String description,
-            String githubUrl, String notionUrl, String techStack);
+            String githubUrl, String notionUrl, String techStack, String aiSummary);
 
     void deleteProject(Long userId, Long projectId);
 }

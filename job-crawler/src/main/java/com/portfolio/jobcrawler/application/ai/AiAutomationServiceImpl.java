@@ -1,5 +1,8 @@
 package com.portfolio.jobcrawler.application.ai;
 
+import com.portfolio.jobcrawler.domain.coverletter.repository.CoverLetterRepository;
+import com.portfolio.jobcrawler.domain.resume.entity.Resume;
+import com.portfolio.jobcrawler.domain.resume.repository.ResumeRepository;
 import com.portfolio.jobcrawler.domain.jobposting.entity.JobPosting;
 import com.portfolio.jobcrawler.domain.jobposting.repository.JobPostingRepository;
 import com.portfolio.jobcrawler.domain.project.entity.Project;
@@ -39,22 +42,42 @@ public class AiAutomationServiceImpl implements AiAutomationService {
     private final JobPostingRepository jobPostingRepository;
     private final ProjectRepository projectRepository;
     private final TemplateRepository templateRepository;
+    private final CoverLetterRepository coverLetterRepository;
+    private final ResumeRepository resumeRepository;
     private final GitHubRepoReader gitHubRepoReader;
 
     @Override
     @Transactional
     public int analyzeMatchScore(Long userId, Long jobPostingId) {
-        // 캐시 확인
-        var cached = aiAnalysisResultRepository.findByUserIdAndJobPostingIdAndType(
-                userId, jobPostingId, AnalysisType.MATCH_SCORE);
-        if (cached.isPresent() && cached.get().getScore() != null) {
-            return cached.get().getScore();
+        return analyzeMatchScore(userId, jobPostingId, false);
+    }
+
+    @Transactional
+    public int analyzeMatchScore(Long userId, Long jobPostingId, boolean force) {
+        if (!force) {
+            var cached = aiAnalysisResultRepository.findByUserIdAndJobPostingIdAndType(
+                    userId, jobPostingId, AnalysisType.MATCH_SCORE);
+            if (cached.isPresent() && cached.get().getScore() != null) {
+                return cached.get().getScore();
+            }
         }
 
         UserProfile profile = getProfile(userId);
         JobPosting job = getJob(jobPostingId);
 
-        int score = aiTextGenerator.calculateMatchScore(buildProfileString(profile), buildJobString(job));
+        String jobString = buildJobString(job);
+
+        // 공고 이미지가 있으면 OCR로 텍스트 추출 후 합침
+        if (job.getCompanyImages() != null && !job.getCompanyImages().isBlank()) {
+            List<String> imageUrls = java.util.Arrays.stream(job.getCompanyImages().split(","))
+                    .map(String::trim).filter(u -> u.startsWith("http")).limit(3).toList();
+            String ocrText = com.portfolio.jobcrawler.global.util.ImageOcrUtil.extractTextFromImages(imageUrls);
+            if (!ocrText.isBlank()) {
+                jobString += "\n\n[이미지에서 추출한 텍스트]\n" + ocrText;
+            }
+        }
+
+        int score = aiTextGenerator.calculateMatchScore(buildProfileString(profile), jobString);
         job.updateAiMatchScore(score);
 
         // 유저별 저장
@@ -270,6 +293,28 @@ public class AiAutomationServiceImpl implements AiAutomationService {
         return "프로젝트 분석 실패: " + result.getErrorMessage();
     }
 
+    @Override
+    public String analyzeCoverLetterPattern(Long coverLetterId) {
+        log.info("[AI] 자소서 패턴 분석 시작: coverLetterId={}", coverLetterId);
+
+        var coverLetter = coverLetterRepository.findById(coverLetterId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COVER_LETTER_NOT_FOUND));
+
+        AiGenerationResult result = aiTextGenerator.generate(
+                AiGenerationRequest.builder()
+                        .type(AiGenerationRequest.GenerationType.COVER_LETTER_ANALYSIS)
+                        .companyInfo(coverLetter.getCompany())
+                        .jobDescription(coverLetter.getPosition())
+                        .sourceSite(coverLetter.getCompanyType())
+                        .matchedProjects(coverLetter.getContent())
+                        .build());
+
+        if (result.isSuccess()) {
+            return result.getGeneratedText();
+        }
+        return "자소서 패턴 분석 실패: " + result.getErrorMessage();
+    }
+
     // --- private helpers ---
 
     private UserProfile getProfile(Long userId) {
@@ -283,11 +328,51 @@ public class AiAutomationServiceImpl implements AiAutomationService {
     }
 
     private String buildProfileString(UserProfile p) {
+        boolean profileEmpty = p.getTechStack() == null && p.getCareer() == null && p.getEducation() == null;
+
+        if (profileEmpty) {
+            // UserProfile이 비어있으면 Resume에서 가져오기
+            return resumeRepository.findByUserId(p.getUser().getId())
+                    .map(this::buildProfileFromResume)
+                    .orElse("프로필 정보 없음");
+        }
+
         return "학력: " + nullSafe(p.getEducation()) +
                 "\n경력: " + nullSafe(p.getCareer()) +
                 "\n자격증: " + nullSafe(p.getCertifications()) +
                 "\n기술스택: " + nullSafe(p.getTechStack()) +
                 "\n강점: " + nullSafe(p.getStrengths());
+    }
+
+    private String buildProfileFromResume(Resume r) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("이름: ").append(nullSafe(r.getName()));
+
+        if (!r.getEducations().isEmpty()) {
+            sb.append("\n학력: ");
+            r.getEducations().forEach(e ->
+                    sb.append(e.getSchoolName()).append(" ").append(e.getMajor()).append(", "));
+        }
+        if (!r.getCareers().isEmpty()) {
+            sb.append("\n경력: ");
+            r.getCareers().forEach(c ->
+                    sb.append(c.getCompanyName()).append(" ").append(nullSafe(c.getPosition()))
+                            .append(" ").append(nullSafe(c.getJobDescription())).append(", "));
+        }
+        if (!r.getSkills().isEmpty()) {
+            sb.append("\n기술스택: ");
+            r.getSkills().forEach(s -> sb.append(s.getSkillName()).append(", "));
+        }
+        if (!r.getCertifications().isEmpty()) {
+            sb.append("\n자격증: ");
+            r.getCertifications().forEach(c -> sb.append(c.getCertName()).append(", "));
+        }
+        if (!r.getActivities().isEmpty()) {
+            sb.append("\n활동: ");
+            r.getActivities().forEach(a ->
+                    sb.append(a.getActivityName()).append(" ").append(nullSafe(a.getDescription())).append(", "));
+        }
+        return sb.toString();
     }
 
     private String buildJobString(JobPosting j) {
@@ -304,8 +389,9 @@ public class AiAutomationServiceImpl implements AiAutomationService {
             sb.append("\n자격요건/우대사항:\n").append(j.getRequirements());
         }
         if (j.getDescription() != null && !j.getDescription().isBlank()) {
-            String desc = j.getDescription();
-            if (desc.length() > 3000) desc = desc.substring(0, 3000) + "...";
+            // HTML 태그 제거 후 텍스트만 전달
+            String desc = com.portfolio.jobcrawler.global.util.HtmlSanitizer.toPlainText(j.getDescription());
+            if (desc.length() > 2000) desc = desc.substring(0, 2000) + "...";
             sb.append("\n상세내용:\n").append(desc);
         }
         return sb.toString();

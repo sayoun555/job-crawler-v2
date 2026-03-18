@@ -32,4 +32,7 @@ public interface AiAutomationService {
 
     /** GitHub URL로 프로젝트 AI 분석 (Step 4.4) */
     String analyzeGitHubProject(String githubUrl);
+
+    /** 합격 자소서 패턴 분석 */
+    String analyzeCoverLetterPattern(Long coverLetterId);
 }

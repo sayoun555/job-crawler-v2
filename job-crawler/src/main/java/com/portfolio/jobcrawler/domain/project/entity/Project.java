@@ -67,12 +67,13 @@ public class Project extends BaseTimeEntity {
     }
 
     public void update(String name, String description, String githubUrl,
-            String notionUrl, String techStack) {
+            String notionUrl, String techStack, String aiSummary) {
         this.name = name;
         this.description = description;
         this.githubUrl = githubUrl;
         this.notionUrl = notionUrl;
         this.techStack = techStack;
+        this.aiSummary = aiSummary;
     }
 
     public void updateAiSummary(String aiSummary) {

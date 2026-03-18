@@ -21,7 +21,7 @@ public class Template extends BaseTimeEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
@@ -36,6 +36,9 @@ public class Template extends BaseTimeEntity {
 
     private boolean isDefault = false;
 
+    @Column(nullable = false)
+    private boolean isSystem = false;
+
     @Builder
     public Template(User user, String name, TemplateType type, String content) {
         this.user = user;
@@ -44,10 +47,19 @@ public class Template extends BaseTimeEntity {
         this.content = content;
     }
 
+    public static Template createSystemTemplate(String name, TemplateType type, String content) {
+        Template t = new Template();
+        t.name = name;
+        t.type = type;
+        t.content = content;
+        t.isSystem = true;
+        return t;
+    }
+
     // === 도메인 비즈니스 로직 ===
 
     public boolean isOwnedBy(Long userId) {
-        return this.user.getId().equals(userId);
+        return this.user != null && this.user.getId().equals(userId);
     }
 
     public void update(String name, String content) {

@@ -4,6 +4,7 @@ import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.infrastructure.crawler.dto.CrawledJobData;
+import com.portfolio.jobcrawler.global.util.HtmlSanitizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import java.net.URLEncoder;
@@ -351,7 +352,7 @@ public class SaraminParser implements SiteParser {
         }
         if (summaryDls.count() == 0) return;
 
-        StringBuilder headerBuilder = new StringBuilder("[채용 요약]\n");
+        StringBuilder headerBuilder = new StringBuilder("<h3>채용 요약</h3><ul>");
 
         for (int i = 0; i < summaryDls.count(); i++) {
             String dt = safeText(summaryDls.nth(i).locator("dt"));
@@ -360,7 +361,7 @@ public class SaraminParser implements SiteParser {
             if (dt.contains("우대사항")) {
                 String preferred = extractPreferredQualifications(summaryDls.nth(i));
                 if (!preferred.isEmpty()) {
-                    headerBuilder.append("- 우대사항: ").append(preferred).append("\n");
+                    headerBuilder.append("<li><strong>우대사항</strong>: ").append(preferred).append("</li>");
                     reqBuilder.append("[우대사항]\n").append(preferred).append("\n");
                 }
                 continue;
@@ -369,7 +370,7 @@ public class SaraminParser implements SiteParser {
             String dd = safeText(summaryDls.nth(i).locator("dd"));
             if (dd.isEmpty()) continue;
 
-            headerBuilder.append("- ").append(dt).append(": ").append(dd).append("\n");
+            headerBuilder.append("<li><strong>").append(dt).append("</strong>: ").append(dd).append("</li>");
 
             if (dt.contains("급여") || dt.contains("연봉")) {
                 data.setSalary(dd);
@@ -379,7 +380,8 @@ public class SaraminParser implements SiteParser {
             }
         }
 
-        descBuilder.insert(0, headerBuilder.toString() + "\n\n");
+        headerBuilder.append("</ul>");
+        descBuilder.insert(0, headerBuilder.toString());
     }
 
     /**
@@ -454,13 +456,17 @@ public class SaraminParser implements SiteParser {
                 if (reqContent.count() > 0) reqBuilder.append(safeText(reqContent));
             }
 
-            // 표 구조 보존: innerHTML에서 테이블/div-table을 텍스트로 변환
+            // HTML 구조 보존: innerHTML로 가져와서 Jsoup으로 소독
             Locator userContent = frameLoc.locator(".user_content");
             if (userContent.count() > 0) {
-                String text = safeText(userContent.first());
-                descBuilder.append(text);
+                String html = userContent.first().innerHTML();
+                descBuilder.append(HtmlSanitizer.sanitize(html));
             } else {
-                descBuilder.append(safeText(frameLoc.locator("body").first()));
+                Locator body = frameLoc.locator("body");
+                if (body.count() > 0) {
+                    String html = body.first().innerHTML();
+                    descBuilder.append(HtmlSanitizer.sanitize(html));
+                }
             }
 
             // iframe 내 이미지 추출
@@ -497,13 +503,13 @@ public class SaraminParser implements SiteParser {
 
         Locator mainContent = detailPage.locator(".wrap_jv_cont, .relay_view, .detail_content");
         if (mainContent.count() > 0) {
-            descBuilder.append(safeText(mainContent.first()));
+            descBuilder.append(HtmlSanitizer.sanitize(mainContent.first().innerHTML()));
             return;
         }
 
         Locator userContent = detailPage.locator(".user_content, .user_detail_content");
         if (userContent.count() > 0) {
-            descBuilder.append(safeText(userContent.first()));
+            descBuilder.append(HtmlSanitizer.sanitize(userContent.first().innerHTML()));
         }
     }
 
@@ -535,19 +541,25 @@ public class SaraminParser implements SiteParser {
     }
 
     private String extractRequirementsFromDescription(String description) {
+        // HTML인 경우 텍스트로 변환 후 추출
+        String plainText = description.contains("<") ? HtmlSanitizer.toPlainText(description) : description;
+
         StringBuilder extracted = new StringBuilder();
-        String[] lines = description.split("\n");
+        String[] lines = plainText.split("\n");
         boolean inReqs = false;
 
         for (String line : lines) {
-            if (line.contains("자격요건") || line.contains("지원자격")) {
+            String trimmed = line.trim();
+            if (trimmed.isEmpty()) continue;
+
+            if (trimmed.contains("자격요건") || trimmed.contains("지원자격") || trimmed.contains("지원 자격")) {
                 inReqs = true;
-            } else if (inReqs && isSectionEndKeyword(line)) {
+            } else if (inReqs && isSectionEndKeyword(trimmed)) {
                 break;
             }
 
             if (inReqs) {
-                extracted.append(line).append("\n");
+                extracted.append(trimmed).append("\n");
             }
         }
         return extracted.toString().trim();

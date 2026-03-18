@@ -38,6 +38,9 @@ public enum ErrorCode {
     CRAWLER_BLOCKED(HttpStatus.SERVICE_UNAVAILABLE, "CR001", "크롤러가 차단되었습니다."),
     CRAWLER_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT, "CR002", "크롤링 시간이 초과되었습니다."),
 
+    // CoverLetter
+    COVER_LETTER_NOT_FOUND(HttpStatus.NOT_FOUND, "CL001", "자기소개서를 찾을 수 없습니다."),
+
     // Application
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "AP001", "지원 이력을 찾을 수 없습니다."),
     ALREADY_APPLIED(HttpStatus.CONFLICT, "AP002", "이미 지원한 공고입니다."),

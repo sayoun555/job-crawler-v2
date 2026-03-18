@@ -47,6 +47,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/cover-letters/crawl").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/cover-letters/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/test-checklist/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/templates/presets").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/templates/presets/refresh").hasRole("ADMIN")
                         .requestMatchers("/api/v1/crawler/**").hasRole("ADMIN")
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()

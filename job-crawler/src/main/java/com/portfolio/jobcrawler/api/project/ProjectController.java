@@ -39,7 +39,8 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<ApiResponse<Project>> create(Authentication auth, @Valid @RequestBody ProjectRequest req) {
         Project p = projectService.createProject((Long) auth.getPrincipal(),
-                req.getName(), req.getDescription(), req.getGithubUrl(), req.getNotionUrl(), req.getTechStack());
+                req.getName(), req.getDescription(), req.getGithubUrl(), req.getNotionUrl(),
+                req.getTechStack(), req.getAiSummary());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(p, "프로젝트 등록 완료"));
     }
 
@@ -47,7 +48,8 @@ public class ProjectController {
     public ResponseEntity<ApiResponse<Project>> update(Authentication auth, @PathVariable Long id,
             @Valid @RequestBody ProjectRequest req) {
         Project p = projectService.updateProject((Long) auth.getPrincipal(), id,
-                req.getName(), req.getDescription(), req.getGithubUrl(), req.getNotionUrl(), req.getTechStack());
+                req.getName(), req.getDescription(), req.getGithubUrl(), req.getNotionUrl(),
+                req.getTechStack(), req.getAiSummary());
         return ResponseEntity.ok(ApiResponse.ok(p, "프로젝트 수정 완료"));
     }
 
@@ -69,7 +71,7 @@ public class ProjectController {
             project.addImage(imageUrl);
             projectService.updateProject((Long) auth.getPrincipal(), id,
                     project.getName(), project.getDescription(), project.getGithubUrl(),
-                    project.getNotionUrl(), project.getTechStack());
+                    project.getNotionUrl(), project.getTechStack(), project.getAiSummary());
             return ResponseEntity.ok(ApiResponse.ok(Map.of("imageUrl", imageUrl), "이미지 업로드 완료"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.errorTyped("IMG_ERR", "이미지 업로드 실패: " + e.getMessage()));
@@ -79,13 +81,35 @@ public class ProjectController {
     // ===== AI GitHub 프로젝트 분석 (Step 4.4) =====
 
     @PostMapping("/ai-analyze")
-    public ResponseEntity<ApiResponse<Map<String, String>>> aiAnalyze(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> aiAnalyze(
             Authentication auth, @RequestBody Map<String, String> body) {
         String githubUrl = body.get("githubUrl");
         if (githubUrl == null || githubUrl.isBlank()) {
             return ResponseEntity.badRequest().body(ApiResponse.errorTyped("INVALID", "GitHub URL이 필요합니다."));
         }
         String summary = aiAutomationService.analyzeGitHubProject(githubUrl);
+
+        // JSON 파싱 시도 → 성공하면 구조화된 데이터 반환, 실패하면 원본 텍스트 반환
+        try {
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            // JSON 블록 추출 (```json ... ``` 또는 { ... })
+            String jsonStr = summary;
+            if (jsonStr.contains("```json")) {
+                jsonStr = jsonStr.substring(jsonStr.indexOf("```json") + 7);
+                jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+            } else if (jsonStr.contains("```")) {
+                jsonStr = jsonStr.substring(jsonStr.indexOf("```") + 3);
+                jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+            }
+            jsonStr = jsonStr.trim();
+            if (jsonStr.startsWith("{")) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> parsed = mapper.readValue(jsonStr, Map.class);
+                parsed.put("summary", summary);
+                return ResponseEntity.ok(ApiResponse.ok(parsed));
+            }
+        } catch (Exception ignored) {}
+
         return ResponseEntity.ok(ApiResponse.ok(Map.of("summary", summary)));
     }
 
@@ -93,10 +117,8 @@ public class ProjectController {
     public ResponseEntity<ApiResponse<Project>> saveAiAnalyzedProject(
             Authentication auth, @Valid @RequestBody ProjectRequest req) {
         Project p = projectService.createProject((Long) auth.getPrincipal(),
-                req.getName(), req.getDescription(), req.getGithubUrl(), req.getNotionUrl(), req.getTechStack());
-        if (req.getAiSummary() != null) {
-            p.updateAiSummary(req.getAiSummary());
-        }
+                req.getName(), req.getDescription(), req.getGithubUrl(), req.getNotionUrl(),
+                req.getTechStack(), req.getAiSummary());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(p, "AI 분석 프로젝트 저장 완료"));
     }
 }

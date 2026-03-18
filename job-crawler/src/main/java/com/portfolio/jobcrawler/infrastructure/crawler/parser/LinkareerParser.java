@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.infrastructure.crawler.dto.CrawledJobData;
 import com.portfolio.jobcrawler.infrastructure.crawler.parser.category.LinkareerJobCategory;
+import com.portfolio.jobcrawler.global.util.HtmlSanitizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -141,12 +142,26 @@ public class LinkareerParser implements SiteParser {
                     result.jobCategories = meta['모집직무'] || '';
                     result.website = meta['홈페이지'] || '';
                     result.company = document.querySelector('h3.company-info-content-title')?.innerText?.trim() || '';
-                    result.description = document.querySelector('.responsive-element')?.innerText?.trim() || '';
+                    result.descriptionHtml = document.querySelector('.responsive-element')?.innerHTML || '';
+                    // 지원서 다운로드 섹션
+                    const downloadSection = document.querySelector('section[class*="ActivityDetailTabFileAndManager"]');
+                    if (downloadSection) {
+                        const h3 = downloadSection.querySelector('h3');
+                        const items = downloadSection.querySelectorAll('li');
+                        if (h3 && items.length > 0) {
+                            let html = '<h3>' + h3.textContent.trim() + '</h3><ul>';
+                            items.forEach(li => { html += '<li>' + li.textContent.trim() + '</li>'; });
+                            html += '</ul>';
+                            result.downloadSection = html;
+                        }
+                    }
                     const imgs = document.querySelectorAll('.responsive-element img');
                     result.images = Array.from(imgs)
-                        .filter(img => img.width > 200 && img.height > 100)
+                        .filter(img => img.width > 50 && img.height > 50)
                         .map(img => img.src)
-                        .filter(s => s.startsWith('http'))
+                        .filter(s => s.startsWith('http')
+                            && !s.includes('blank') && !s.includes('transparent'))
+                        .filter((v, i, a) => a.indexOf(v) === i)
                         .slice(0, 10);
                     return result;
                 })()
@@ -163,9 +178,11 @@ public class LinkareerParser implements SiteParser {
                 if (end > 0) company = title.substring(1, end).split("\\s")[0];
             }
 
-            String description = (String) extracted.getOrDefault("description", "");
-            description = description.replaceAll("\\n{3,}", "\n\n");
-            if (description.length() > 5000) description = description.substring(0, 5000) + "...";
+            String rawHtml = (String) extracted.getOrDefault("descriptionHtml", "");
+            String downloadSection = (String) extracted.getOrDefault("downloadSection", "");
+            String description = rawHtml.isEmpty() ? "" : HtmlSanitizer.sanitize(rawHtml);
+            if (!downloadSection.isEmpty()) description += downloadSection;
+            if (description.length() > 10000) description = description.substring(0, 10000);
 
             String jobCategories = (String) extracted.getOrDefault("jobCategories", "");
             String requestedCategory = data.getJobCategory();

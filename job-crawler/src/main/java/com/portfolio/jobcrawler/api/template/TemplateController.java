@@ -12,13 +12,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/templates")
 @RequiredArgsConstructor
 public class TemplateController {
 
-    private final TemplateService templateService; // 인터페이스 의존
+    private final TemplateService templateService;
+
+    /** 시스템 프리셋 조회 (모든 유저) */
+    @GetMapping("/presets")
+    public ResponseEntity<ApiResponse<List<Template>>> presets() {
+        return ResponseEntity.ok(ApiResponse.ok(templateService.getSystemPresets()));
+    }
+
+    /** AI로 프리셋 갱신 (관리자 전용) */
+    @PostMapping("/presets/refresh")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> refreshPresets(Authentication auth) {
+        int count = templateService.refreshPresetsWithAi();
+        return ResponseEntity.ok(ApiResponse.ok(Map.of("updatedCount", count), count + "개 프리셋 갱신 완료"));
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Template>>> list(Authentication auth) {

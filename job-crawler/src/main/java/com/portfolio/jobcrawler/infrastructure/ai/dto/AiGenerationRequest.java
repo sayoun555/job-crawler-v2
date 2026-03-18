@@ -18,6 +18,8 @@ public class AiGenerationRequest {
         COVER_LETTER,
         PORTFOLIO,
         COMPANY_ANALYSIS,
-        PROJECT_SUMMARY
+        PROJECT_SUMMARY,
+        COVER_LETTER_ANALYSIS,
+        COVER_LETTER_PRESET_SEARCH
     }
 }

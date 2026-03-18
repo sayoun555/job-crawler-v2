@@ -35,7 +35,6 @@ public class CrawlerServiceImpl implements CrawlerService {
     private static final int BATCH_SIZE = 50;
 
     @Override
-    @Transactional
     public int crawlAll(String keyword, String jobCategory, int maxPages) {
         int total = 0;
         for (JobScraper scraper : scrapers) {
@@ -56,7 +55,6 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     @Override
-    @Transactional
     public int crawlBySite(String siteName, String keyword, String jobCategory, int maxPages) {
         return scrapers.stream()
                 .filter(s -> s.getSiteName().equalsIgnoreCase(siteName))
@@ -68,7 +66,6 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     @Override
-    @Transactional
     public int crawlBySites(List<String> siteNames, String keyword, String jobCategory, int maxPages) {
         int total = 0;
         for (JobScraper scraper : scrapers) {

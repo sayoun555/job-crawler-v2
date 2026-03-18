@@ -1,0 +1,4 @@
+[    1125ms] [WARNING] [Meta Pixel] - Duplicate Pixel ID: 1467820393452439. @ https://www.jobplanet.co.kr/job/search?posting_ids%5B%5D=1304776:13
+[    3217ms] [ERROR] Attestation check for Shared Storage on https://www.googleadservices.com failed. @ https://www.googleadservices.com/pagead/managed/js/activeview/current/reach_worklet.html:0
+[    3336ms] Failed to read a named property 'document' from 'Window': Blocked a frame with origin "https://5c4b35911d88e29e7d770a08c28b4a69.safeframe.googlesyndication.com" from accessing a frame with origin "https://www.jobplanet.co.kr". Protocols, domains, and ports must match.
+[    3336ms] Failed to read a named property 'document' from 'Window': Blocked a frame with origin "https://5c4b35911d88e29e7d770a08c28b4a69.safeframe.googlesyndication.com" from accessing a frame with origin "https://www.jobplanet.co.kr". Protocols, domains, and ports must match.

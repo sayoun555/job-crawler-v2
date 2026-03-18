@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.infrastructure.crawler.dto.CrawledJobData;
 import com.portfolio.jobcrawler.infrastructure.crawler.parser.category.JobKoreaJobCategory;
+import com.portfolio.jobcrawler.global.util.HtmlSanitizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -136,9 +137,21 @@ public class JobKoreaParser implements SiteParser {
     public void enrichFromDetailPage(Page detailPage, CrawledJobData data) {
         try {
             try {
-                detailPage.waitForSelector("iframe[src*='GI_Read_Comt_Ifrm'], h2",
+                detailPage.waitForSelector("iframe#gib_frame, iframe[src*='GI_Read_Comt_Ifrm'], h2, h1",
                         new Page.WaitForSelectorOptions().setTimeout(8_000));
+                // iframe src가 동적 로드될 수 있으므로 추가 대기
+                detailPage.waitForTimeout(2000);
             } catch (Exception ignored) {}
+
+            // 헤드헌팅 페이지 감지 (리다이렉트 후 URL 또는 DOM으로 판별)
+            boolean isHeadhunting = detailPage.url().contains("PageGbn=HH")
+                    || detailPage.locator("h1:has-text('헤드헌팅')").count() > 0
+                    || detailPage.locator("text=헤드헌팅 채용정보 보기").count() > 0;
+
+            if (isHeadhunting) {
+                enrichFromHeadhuntingPage(detailPage, data);
+                return;
+            }
 
             // 메인 페이지에서 구조화된 정보 추출
             Map<String, Object> detail = (Map<String, Object>) detailPage.evaluate("""
@@ -180,9 +193,21 @@ public class JobKoreaParser implements SiteParser {
             String iframeContent = "";
             String companyImages = "";
             try {
-                String iframeSrc = (String) detailPage.evaluate(
-                        "document.querySelector('iframe[src*=\"GI_Read_Comt_Ifrm\"]')?.src || ''");
-                if (iframeSrc != null && !iframeSrc.isEmpty()) {
+                String iframeSrc = (String) detailPage.evaluate("""
+                    (() => {
+                        const selectors = [
+                            'iframe[src*="GI_Read_Comt_Ifrm"]',
+                            'iframe#gib_frame',
+                            'iframe[src*="Gno="]'
+                        ];
+                        for (const sel of selectors) {
+                            const el = document.querySelector(sel);
+                            if (el && el.src && el.src.startsWith('http')) return el.src;
+                        }
+                        return '';
+                    })()
+                """);
+                if (iframeSrc != null && !iframeSrc.isBlank() && iframeSrc.startsWith("http")) {
                     Page iframePage = detailPage.context().newPage();
                     try {
                         iframePage.setDefaultNavigationTimeout(20_000);
@@ -190,30 +215,33 @@ public class JobKoreaParser implements SiteParser {
                                 .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.LOAD));
                         Map<String, Object> iframeData = (Map<String, Object>) iframePage.evaluate("""
                             (() => {
-                                const result = { text: '', images: [] };
-                                const detail = document.querySelector('.secDetailWrap');
+                                const result = { html: '', images: [] };
+                                // 새 구조: article 또는 .secDetailWrap
+                                const detail = document.querySelector('.detailed-summary-contents')
+                                             || document.querySelector('article')
+                                             || document.querySelector('.secDetailWrap')
+                                             || document.querySelector('body > div')
+                                             || document.querySelector('body');
                                 if (!detail) return result;
 
-                                result.text = detail.innerText.trim();
+                                result.html = detail.innerHTML;
                                 result.images = Array.from(detail.querySelectorAll('img'))
-                                    .filter(img => img.width > 300 && img.height > 200)
+                                    .filter(img => img.width > 50 && img.height > 50)
                                     .map(img => img.src)
-                                    .filter(s => s && s.startsWith('http'))
+                                    .filter(s => s && s.startsWith('http')
+                                        && !s.includes('blank') && !s.includes('transparent')
+                                        && !s.includes('spacer') && !s.includes('pixel'))
                                     .filter((v, i, a) => a.indexOf(v) === i)
                                     .slice(0, 10);
                                 return result;
                             })()
                         """);
                         if (iframeData != null) {
-                            iframeContent = ((String) iframeData.getOrDefault("text", "")).trim();
-                            // HTML 들여쓰기 공백 정리: 각 줄 앞뒤 공백 제거 후 빈 줄 압축
-                            iframeContent = iframeContent.lines()
-                                    .map(String::strip)
-                                    .filter(line -> !line.isEmpty())
-                                    .reduce((a, b) -> a + "\n" + b)
-                                    .orElse("");
-                            iframeContent = iframeContent.replaceAll("\\n{3,}", "\n\n");
-                            if (iframeContent.length() > 5000) iframeContent = iframeContent.substring(0, 5000);
+                            String rawHtml = ((String) iframeData.getOrDefault("html", "")).trim();
+                            if (!rawHtml.isEmpty()) {
+                                iframeContent = HtmlSanitizer.sanitize(rawHtml);
+                                if (iframeContent.length() > 10000) iframeContent = iframeContent.substring(0, 10000);
+                            }
                             List<String> iframeImages = (List<String>) iframeData.getOrDefault("images", List.of());
                             if (!iframeImages.isEmpty()) {
                                 companyImages = String.join(",", iframeImages);
@@ -257,6 +285,157 @@ public class JobKoreaParser implements SiteParser {
             log.info("[잡코리아-Parser] 수집: {} - {}", data.getCompany(), data.getTitle());
         } catch (Exception e) {
             log.warn("[잡코리아-Parser] 상세 페이지 보강 실패: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 헤드헌팅 공고 전용 파싱. dl/dt/dd 구조에서 데이터를 추출한다.
+     */
+    @SuppressWarnings("unchecked")
+    private void enrichFromHeadhuntingPage(Page detailPage, CrawledJobData data) {
+        try {
+            // iframe src 동적 로드 대기
+            try {
+                detailPage.waitForSelector("iframe#gib_frame[src*='GI_Read']",
+                        new Page.WaitForSelectorOptions().setTimeout(5_000));
+            } catch (Exception ignored) {
+                // iframe이 없는 헤드헌팅 공고도 있음
+                detailPage.waitForTimeout(2000);
+            }
+
+            Map<String, Object> detail = (Map<String, Object>) detailPage.evaluate("""
+                (() => {
+                    const result = {};
+                    // dl/dt/dd에서 정보 추출
+                    const dts = document.querySelectorAll('dt');
+                    const dds = document.querySelectorAll('dd');
+                    for (let i = 0; i < dts.length; i++) {
+                        const key = dts[i]?.textContent?.trim() || '';
+                        const dd = dts[i]?.nextElementSibling;
+                        if (!dd) continue;
+                        const val = dd.textContent?.trim() || '';
+                        if (key === '채용 기업정보' || key.includes('기업정보')) {
+                            // 다음 dd들에서 회사명, 기업구분 추출
+                            let next = dts[i].nextElementSibling;
+                            while (next && next.tagName === 'DD') {
+                                const t = next.textContent.trim().replace('·','').trim();
+                                if (t && !result.company) result.company = t;
+                                else if (t) result.companyType = t;
+                                next = next.nextElementSibling;
+                            }
+                        }
+                        if (key === '근무조건') {
+                            let items = [];
+                            let next = dts[i].nextElementSibling;
+                            while (next && next.tagName === 'DD') {
+                                items.push(next.textContent.trim().replace('·','').trim());
+                                next = next.nextElementSibling;
+                            }
+                            if (items.length > 0) result.salary = items[0];
+                            if (items.length > 1) result.location = items[1];
+                        }
+                        if (key === '지원자격') {
+                            let items = [];
+                            let next = dts[i].nextElementSibling;
+                            while (next && next.tagName === 'DD') {
+                                items.push(next.textContent.trim().replace('·','').trim());
+                                next = next.nextElementSibling;
+                                if (next && next.tagName === 'DT') break;
+                            }
+                            result.career = items.join(', ');
+                        }
+                        if (key === '스킬') {
+                            result.skills = val.replace('·','').trim();
+                        }
+                        if (key === '고용형태') {
+                            let items = [];
+                            let next = dts[i].nextElementSibling;
+                            while (next && next.tagName === 'DD') {
+                                items.push(next.textContent.trim().replace('·','').trim());
+                                next = next.nextElementSibling;
+                                if (next && next.tagName === 'DT') break;
+                            }
+                            result.employType = items.join(', ');
+                        }
+                    }
+                    return result;
+                })()
+            """);
+
+            if (detail != null) {
+                String company = (String) detail.getOrDefault("company", "");
+                if (!company.isEmpty()) data.setCompany(company);
+                String salary = (String) detail.getOrDefault("salary", "");
+                if (!salary.isEmpty()) data.setSalary(salary);
+                String location = (String) detail.getOrDefault("location", "");
+                if (!location.isEmpty()) data.setLocation(location);
+                String career = (String) detail.getOrDefault("career", "");
+                if (!career.isEmpty()) data.setCareer(career);
+                String skills = (String) detail.getOrDefault("skills", "");
+                if (!skills.isEmpty()) data.setTechStack(skills);
+                String employType = (String) detail.getOrDefault("employType", "");
+
+                // 채용 요약 HTML
+                StringBuilder desc = new StringBuilder("<h3>채용 요약</h3><ul>");
+                if (!company.isEmpty()) desc.append("<li><strong>기업</strong>: ").append(company).append("</li>");
+                if (!employType.isEmpty()) desc.append("<li><strong>고용형태</strong>: ").append(employType).append("</li>");
+                if (!career.isEmpty()) desc.append("<li><strong>지원자격</strong>: ").append(career).append("</li>");
+                if (!salary.isEmpty()) desc.append("<li><strong>급여</strong>: ").append(salary).append("</li>");
+                if (!location.isEmpty()) desc.append("<li><strong>근무지</strong>: ").append(location).append("</li>");
+                if (!skills.isEmpty()) desc.append("<li><strong>스킬</strong>: ").append(skills).append("</li>");
+                desc.append("</ul>");
+
+                // iframe 본문 — contentDocument로 직접 접근 (새 페이지 열기 대신)
+                @SuppressWarnings("unchecked")
+                Map<String, Object> iframeData = (Map<String, Object>) detailPage.evaluate("""
+                    (() => {
+                        const result = { html: '', images: [] };
+                        const selectors = ['iframe#gib_frame', 'iframe[src*="GI_Read_Comt_Ifrm"]', 'iframe[src*="Gno="]'];
+                        let doc = null;
+                        for (const sel of selectors) {
+                            const iframe = document.querySelector(sel);
+                            if (iframe) {
+                                try { doc = iframe.contentDocument; } catch(e) {}
+                                if (doc) break;
+                            }
+                        }
+                        if (!doc) return result;
+                        const detail = doc.querySelector('.detailed-summary-contents')
+                                     || doc.querySelector('article')
+                                     || doc.querySelector('.secDetailWrap')
+                                     || doc.querySelector('body > div');
+                        if (!detail) return result;
+                        result.html = detail.innerHTML;
+                        result.images = Array.from(detail.querySelectorAll('img'))
+                            .filter(img => img.width > 50 && img.height > 50)
+                            .map(img => img.src)
+                            .filter(s => s && s.startsWith('http')
+                                && !s.includes('blank') && !s.includes('transparent'))
+                            .filter((v, i, a) => a.indexOf(v) === i)
+                            .slice(0, 10);
+                        return result;
+                    })()
+                """);
+                if (iframeData != null) {
+                    String rawHtml = ((String) iframeData.getOrDefault("html", "")).trim();
+                    if (!rawHtml.isEmpty()) {
+                        desc.append(HtmlSanitizer.sanitize(rawHtml));
+                    }
+                    @SuppressWarnings("unchecked")
+                    List<String> imgList = (List<String>) iframeData.getOrDefault("images", List.of());
+                    if (!imgList.isEmpty()) {
+                        data.setCompanyImages(String.join(",", imgList));
+                    }
+                }
+
+                String description = desc.toString();
+                if (description.length() > 10000) description = description.substring(0, 10000);
+                data.setDescription(description);
+            }
+
+            log.info("[잡코리아-Parser] 헤드헌팅 수집: {} - {}", data.getCompany(), data.getTitle());
+        } catch (Exception e) {
+            log.warn("[잡코리아-Parser] 헤드헌팅 파싱 실패: {}", e.getMessage());
         }
     }
 

@@ -20,4 +20,8 @@ public interface TemplateService {
     void deleteTemplate(Long userId, Long templateId);
 
     void setDefault(Long userId, Long templateId);
+
+    List<Template> getSystemPresets();
+
+    int refreshPresetsWithAi();
 }

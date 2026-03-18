@@ -38,7 +38,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public Project createProject(Long userId, String name, String description,
-            String githubUrl, String notionUrl, String techStack) {
+            String githubUrl, String notionUrl, String techStack, String aiSummary) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -46,15 +46,16 @@ public class ProjectServiceImpl implements ProjectService {
                 .user(user).name(name).description(description)
                 .githubUrl(githubUrl).notionUrl(notionUrl).techStack(techStack)
                 .build();
+        if (aiSummary != null) project.updateAiSummary(aiSummary);
         return projectRepository.save(project);
     }
 
     @Override
     @Transactional
     public Project updateProject(Long userId, Long projectId, String name, String description,
-            String githubUrl, String notionUrl, String techStack) {
+            String githubUrl, String notionUrl, String techStack, String aiSummary) {
         Project project = getMyProject(userId, projectId);
-        project.update(name, description, githubUrl, notionUrl, techStack);
+        project.update(name, description, githubUrl, notionUrl, techStack, aiSummary);
         return project;
     }
 

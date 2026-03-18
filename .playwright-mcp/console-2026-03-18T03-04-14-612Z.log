@@ -1,0 +1,13 @@
+[     175ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/icon-192.png:0
+[     176ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:3000/jobs/1062:0
+[ 1048671ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=4tWWrdzlBi2UceiElq1lI' failed:  @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_client_121ab40e._.js:10878
+[ 1439781ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ http://localhost:8080/api/v1/jobs/1062:0
+[ 1439783ms] [ERROR] [API Error] GET /jobs/1062 -> 채용 공고를 찾을 수 없습니다. @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_77a734fe._.js:3127
+[ 1439784ms] [ERROR] Error: 채용 공고를 찾을 수 없습니다.
+    at api (http://localhost:3000/_next/static/chunks/src_b551509c._.js:105:15) @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_77a734fe._.js:3127
+[ 1440233ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ http://localhost:8080/api/v1/jobs/1062:0
+[ 1440233ms] [ERROR] [API Error] GET /jobs/1062 -> 채용 공고를 찾을 수 없습니다. @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_77a734fe._.js:3127
+[ 1440233ms] [ERROR] Error: 채용 공고를 찾을 수 없습니다.
+    at api (http://localhost:3000/_next/static/chunks/src_a35162c3._.js:105:15) @ http://localhost:3000/_next/static/chunks/b2b3e_next_dist_77a734fe._.js:3127
+[ 1440389ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/icon-192.png:0
+[ 1440423ms] [WARNING] Error while trying to use the following icon from the Manifest: http://localhost:3000/icon-192.png (Download error or resource isn't a valid image) @ http://localhost:3000/jobs/1062:0
