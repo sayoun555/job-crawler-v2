@@ -1,6 +1,7 @@
 package com.portfolio.jobcrawler.infrastructure.github;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,6 +17,9 @@ public class GitHubRepoReader {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private static final String API_BASE = "https://api.github.com";
+
+    @org.springframework.beans.factory.annotation.Value("${github.api.token:}")
+    private String githubToken;
 
     private static final List<String> BUILD_FILES = List.of(
             "build.gradle", "build.gradle.kts", "pom.xml", "package.json",
@@ -76,13 +80,18 @@ public class GitHubRepoReader {
         // 6) 핵심 소스 파일 (컨트롤러/서비스 목록에서 주요 파일 읽기)
         appendKeySourceFiles(result, ownerRepo);
 
-        // 7) 추가 .md 문서
+        // 7) 루트 .md 문서 (AGENTS.md, CONTRIBUTING.md 등)
         appendExtraMarkdownFiles(result, ownerRepo);
 
+        // 8) docs/ 폴더 .md 문서 (기술 블로그, 아키텍처 문서 등)
+        appendDocsFolder(result, ownerRepo);
+
         if (result.length() == 0) {
+            log.warn("[GitHub] 레포지토리에서 분석할 파일을 찾지 못했습니다: {} (token 설정: {})", ownerRepo, githubToken != null && !githubToken.isBlank());
             return "레포지토리에서 분석할 파일을 찾지 못했습니다.";
         }
 
+        log.info("[GitHub] 레포 분석 데이터 수집 완료: {} ({}자)", ownerRepo, result.length());
         return result.toString();
     }
 
@@ -128,15 +137,21 @@ public class GitHubRepoReader {
         }
     }
 
+    private static final Set<String> USEFUL_MD_FILES = Set.of(
+            "AGENTS.md", "CLAUDE.md", "CONTRIBUTING.md", "CHANGELOG.md", "API.md"
+    );
+
     @SuppressWarnings("unchecked")
     private void appendExtraMarkdownFiles(StringBuilder result, String ownerRepo) {
         try {
-            List<Map<String, Object>> contents = restTemplate.getForObject(
+            List<Map<String, Object>> contents = githubGet(
                     API_BASE + "/repos/" + ownerRepo + "/contents", List.class);
             if (contents != null) {
                 for (Map<String, Object> item : contents) {
                     String name = (String) item.get("name");
-                    if (name != null && name.endsWith(".md") && !name.equalsIgnoreCase("README.md")) {
+                    if (name != null && name.endsWith(".md")
+                            && !name.equalsIgnoreCase("README.md")
+                            && USEFUL_MD_FILES.contains(name)) {
                         appendFile(result, ownerRepo, name, 1500);
                     }
                 }
@@ -146,11 +161,47 @@ public class GitHubRepoReader {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private void appendDocsFolder(StringBuilder result, String ownerRepo) {
+        try {
+            List<Map<String, Object>> contents = githubGet(
+                    API_BASE + "/repos/" + ownerRepo + "/contents/docs", List.class);
+            if (contents == null) return;
+
+            for (Map<String, Object> item : contents) {
+                String name = (String) item.get("name");
+                if (name != null && name.endsWith(".md")) {
+                    appendFile(result, ownerRepo, "docs/" + name, 50000);
+                }
+            }
+        } catch (Exception e) {
+            log.debug("docs 폴더 읽기 실패: {}", e.getMessage());
+        }
+    }
+
+    private HttpEntity<Void> authHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        if (githubToken != null && !githubToken.isBlank()) {
+            headers.setBearerAuth(githubToken);
+        }
+        return new HttpEntity<>(headers);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T githubGet(String url, Class<T> type) {
+        try {
+            ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.GET, authHeaders(), type);
+            return response.getBody();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private String readFile(String ownerRepo, String path) {
         try {
             String url = API_BASE + "/repos/" + ownerRepo + "/contents/" + path;
             @SuppressWarnings("unchecked")
-            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> response = githubGet(url, Map.class);
             if (response != null && response.containsKey("content")) {
                 String encoded = ((String) response.get("content")).replaceAll("\\s", "");
                 return new String(Base64.getDecoder().decode(encoded));
@@ -163,10 +214,10 @@ public class GitHubRepoReader {
     private String readTree(String ownerRepo) {
         try {
             String url = API_BASE + "/repos/" + ownerRepo + "/git/trees/main?recursive=1";
-            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> response = githubGet(url, Map.class);
             if (response == null) {
                 url = API_BASE + "/repos/" + ownerRepo + "/git/trees/master?recursive=1";
-                response = restTemplate.getForObject(url, Map.class);
+                response = githubGet(url, Map.class);
             }
             if (response != null && response.containsKey("tree")) {
                 List<Map<String, Object>> tree = (List<Map<String, Object>>) response.get("tree");

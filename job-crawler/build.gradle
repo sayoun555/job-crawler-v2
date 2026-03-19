@@ -53,6 +53,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Environment (.env)
+	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+
 	// Dev Tools
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -65,3 +68,4 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
