@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -23,6 +24,14 @@ import com.portfolio.jobcrawler.infrastructure.crawler.parser.category.JobPlanet
 public class JobPlanetParser implements SiteParser {
 
     private static final String JOBPLANET_BASE_URL = "https://www.jobplanet.co.kr";
+
+    private static final Set<String> NON_TECH_KEYWORDS = Set.of(
+            "합격보상", "합격축하금", "보상금", "축하금", "만원", "홈페이지",
+            "지원하기", "채용", "접수", "마감", "상시", "정규직", "계약직",
+            "인턴", "신입", "경력무관", "면접", "서류", "전형", "우대",
+            "복리후생", "복지", "연봉", "급여", "4대보험", "퇴직금",
+            "주5일", "주 5일", "연차", "휴가", "재택", "출퇴근"
+    );
 
     @Override
     public String getSiteName() {
@@ -39,7 +48,7 @@ public class JobPlanetParser implements SiteParser {
             try {
                 urlBuilder.append("query=").append(URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString()));
                 hasQuery = true;
-            } catch (Exception e) {}
+            } catch (Exception ignored) {}
         }
 
         if (jobCategory != null && !jobCategory.isBlank() && !jobCategory.equals("전체") && !jobCategory.equals("all")) {
@@ -54,7 +63,7 @@ public class JobPlanetParser implements SiteParser {
                     if (hasQuery) urlBuilder.append("+").append(encodedCat);
                     else urlBuilder.append("query=").append(encodedCat);
                     hasQuery = true;
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
             }
         }
 
@@ -160,23 +169,16 @@ public class JobPlanetParser implements SiteParser {
                 return;
             }
 
-            // 요약 정보 세팅
-            String deadline = str(result, "마감일");
-            if (!deadline.isEmpty()) data.setDeadline(deadline);
+            String deadline = extractStringValue(result, "마감일");
+            String career = extractStringValue(result, "경력");
+            String location = extractStringValue(result, "근무지역");
+            String skill = extractStringValue(result, "스킬");
+            String jobType = extractStringValue(result, "직무");
+            String employType = extractStringValue(result, "고용형태");
 
-            String career = str(result, "경력");
-            if (!career.isEmpty()) data.setCareer(career);
-
-            String location = str(result, "근무지역");
-            if (!location.isEmpty()) data.setLocation(location);
-
-            String skill = str(result, "스킬");
-            if (!skill.isEmpty()) data.setTechStack(skill);
-
-            String jobType = str(result, "직무");
-            if (!jobType.isEmpty()) data.setJobCategory(jobType);
-
-            String employType = str(result, "고용형태");
+            data.enrichBasicInfo(null, null, location);
+            data.enrichConditions(career, null, deadline, null);
+            data.enrichClassification(jobType, skill, null);
 
             // description 조립 (HTML)
             StringBuilder desc = new StringBuilder();
@@ -212,19 +214,12 @@ public class JobPlanetParser implements SiteParser {
                 }
             }
 
-            // 기업 이미지
             @SuppressWarnings("unchecked")
             List<String> images = (List<String>) result.get("images");
-            if (images != null && !images.isEmpty()) {
-                data.setCompanyImages(String.join(",", images.stream().limit(10).toList()));
-            }
+            String companyImages = (images != null && !images.isEmpty())
+                    ? String.join(",", images.stream().limit(10).toList()) : null;
 
-            String description = desc.toString();
-            if (description.length() > 10000) {
-                description = description.substring(0, 10000);
-            }
-            data.setDescription(description);
-            data.setRequirements(reqBuilder.toString().trim());
+            data.enrichJobDetail(desc.toString(), reqBuilder.toString().trim(), companyImages);
 
         } catch (Exception e) {
             log.warn("[잡플래닛-Parser] 상세 페이지 보강 실패: {}", e.getMessage());
@@ -316,16 +311,34 @@ public class JobPlanetParser implements SiteParser {
         for (int i = 0; i < spans.count(); i++) {
             String text = safeText(spans.nth(i));
             if (text.isEmpty()) continue;
-            if (text.matches(".*\\d+년.*") || text.matches(".*\\d+\\s*~.*")) {
+
+            // 콤마로 분리된 경우 (예: "5년 이상, JIRA, react, git")
+            if (text.contains(",") && text.matches(".*\\d+년.*")) {
+                String[] parts = text.split(",");
+                for (String part : parts) {
+                    String trimmed = part.trim();
+                    if (trimmed.matches(".*\\d+년.*") || trimmed.matches("경력.*")) {
+                        career = trimmed;
+                    } else if (!trimmed.isEmpty() && !isNonTech(trimmed)) {
+                        techList.add(trimmed);
+                    }
+                }
+            } else if (text.matches(".*\\d+년.*") || text.matches(".*\\d+\\s*~.*")) {
                 career = text;
-            } else {
+            } else if (!isNonTech(text)) {
                 techList.add(text);
             }
         }
         return career;
     }
 
-    private String str(Map<String, Object> map, String key) {
+    private boolean isNonTech(String text) {
+        if (text == null || text.isBlank()) return true;
+        String lower = text.toLowerCase().trim();
+        return NON_TECH_KEYWORDS.stream().anyMatch(lower::contains);
+    }
+
+    private String extractStringValue(Map<String, Object> map, String key) {
         Object v = map.get(key);
         return v != null ? v.toString().trim() : "";
     }

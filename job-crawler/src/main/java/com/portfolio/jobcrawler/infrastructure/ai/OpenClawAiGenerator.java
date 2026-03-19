@@ -115,8 +115,85 @@ public class OpenClawAiGenerator implements AiTextGenerator {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> calculateMatchScoreWithReason(String userProfile, String jobDescription) {
+        Map<String, Object> result = new java.util.HashMap<>();
+        result.put("totalScore", -1);
+
+        try {
+            String prompt = String.format("""
+                    사용자 프로필과 채용 공고의 적합도를 분석하세요.
+                    가장 중요한 기준은 '기술스택 매칭'입니다.
+
+                    반드시 아래 JSON으로만 응답. JSON 외 텍스트 금지.
+
+                    {
+                      "totalScore": 0-100,
+                      "matched": ["매칭된 기술"],
+                      "missing": ["부족한 기술"],
+                      "summary": "적합도 요약 1문장"
+                    }
+
+                    === 핵심 규칙 ===
+                    1. 기술스택 매칭이 점수의 60%%%% 차지. 사용자 기술과 공고 기술이 얼마나 겹치는지가 핵심.
+                    2. 같은 분야(백엔드↔백엔드, 프론트↔프론트)면 기본 50점 이상.
+                    3. 다른 분야(백엔드↔미디어, 개발↔마케팅)면 30점 이하.
+                    4. 경력은 부족해도 기술이 맞으면 감점 적게.
+                    5. 관련 기술도 인정 (Spring Boot ↔ Spring 90%%%%, Java ↔ Kotlin 80%%%%).
+
+                    === 점수 기준 ===
+                    - 80+: 기술 대부분 매칭, 같은 직무
+                    - 60-79: 기술 절반 이상 매칭
+                    - 40-59: 일부 기술 매칭, 다른 분야지만 관련 있음
+                    - 20-39: 기술 거의 안 맞음
+                    - 0-19: 완전 다른 직무
+
+                    [사용자 프로필]
+                    %s
+
+                    [채용 공고]
+                    %s
+                    """, userProfile, jobDescription);
+
+            String response = callHttpApi(prompt).trim();
+            String jsonStr = extractJson(response);
+
+            if (jsonStr != null) {
+                var node = objectMapper.readTree(jsonStr);
+                if (node.has("totalScore")) {
+                    result.put("totalScore", Math.min(100, Math.max(0, node.get("totalScore").asInt())));
+                }
+                if (node.has("matched")) {
+                    result.put("matched", objectMapper.convertValue(node.get("matched"), List.class));
+                }
+                if (node.has("missing")) {
+                    result.put("missing", objectMapper.convertValue(node.get("missing"), List.class));
+                }
+                if (node.has("summary")) {
+                    result.put("summary", node.get("summary").asText());
+                }
+            }
+        } catch (Exception e) {
+            log.error("적합률 계산 실패: {}", e.getMessage());
+        }
+        return result;
+    }
+
+    private String extractJson(String response) {
+        String jsonStr = response;
+        if (jsonStr.contains("```json")) {
+            jsonStr = jsonStr.substring(jsonStr.indexOf("```json") + 7);
+            jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+        } else if (jsonStr.contains("```")) {
+            jsonStr = jsonStr.substring(jsonStr.indexOf("```") + 3);
+            jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+        }
+        jsonStr = jsonStr.trim();
+        return jsonStr.startsWith("{") ? jsonStr : null;
+    }
+
+    @Override
     public int calculateMatchScore(String userProfile, String jobDescription, List<String> imageUrls) {
-        // 이미지 멀티모달은 API가 지원하지 않을 수 있으므로 텍스트 분석으로 폴백
         return calculateMatchScore(userProfile, jobDescription);
     }
 

@@ -138,7 +138,15 @@ public class LinkareerParser implements SiteParser {
                     result.companyType = meta['기업형태'] || '';
                     result.careerType = meta['채용형태'] || '';
                     result.location = meta['근무지역'] || '';
-                    result.deadline = meta['접수기간'] || '';
+                    const rawDeadline = meta['접수기간'] || '';
+                    const magamIdx = rawDeadline.indexOf('마감일');
+                    if (magamIdx >= 0) {
+                        const afterMagam = rawDeadline.substring(magamIdx + 3).trim();
+                        const dateMatch = afterMagam.match(/[0-9]{4}[.][0-9]{2}[.][0-9]{2}/);
+                        result.deadline = dateMatch ? dateMatch[0] : afterMagam.split(' ')[0];
+                    } else {
+                        result.deadline = '';
+                    }
                     result.jobCategories = meta['모집직무'] || '';
                     result.website = meta['홈페이지'] || '';
                     result.company = document.querySelector('h3.company-info-content-title')?.innerText?.trim() || '';
@@ -192,15 +200,14 @@ public class LinkareerParser implements SiteParser {
             @SuppressWarnings("unchecked")
             List<String> images = (List<String>) extracted.getOrDefault("images", List.of());
 
-            data.setTitle(title);
-            data.setCompany(company);
-            data.setLocation((String) extracted.getOrDefault("location", ""));
-            data.setDescription(description);
-            data.setCareer((String) extracted.getOrDefault("careerType", ""));
-            data.setDeadline((String) extracted.getOrDefault("deadline", ""));
-            data.setTechStack(jobCategories);
-            data.setJobCategory(finalCategory);
-            data.setCompanyImages(String.join(",", images));
+            String location = (String) extracted.getOrDefault("location", "");
+            String careerType = (String) extracted.getOrDefault("careerType", "");
+            String deadlineValue = (String) extracted.getOrDefault("deadline", "");
+
+            data.enrichBasicInfo(title, company, location);
+            data.enrichJobDetail(description, null, String.join(",", images));
+            data.enrichConditions(careerType, null, deadlineValue, null);
+            data.enrichClassification(finalCategory, jobCategories, null);
 
             log.info("[링커리어-Parser] 공고 수집: {} - {}", company, title);
         } catch (Exception e) {

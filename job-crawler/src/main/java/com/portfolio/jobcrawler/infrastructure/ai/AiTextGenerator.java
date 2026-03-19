@@ -15,6 +15,9 @@ public interface AiTextGenerator {
     /** 적합률(0~100) 산출 */
     int calculateMatchScore(String userProfile, String jobDescription);
 
+    /** 적합률 + 근거 산출 */
+    java.util.Map<String, Object> calculateMatchScoreWithReason(String userProfile, String jobDescription);
+
     /** 적합률(0~100) 산출 - 이미지 포함 */
     int calculateMatchScore(String userProfile, String jobDescription, java.util.List<String> imageUrls);
 

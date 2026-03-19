@@ -373,9 +373,9 @@ public class SaraminParser implements SiteParser {
             headerBuilder.append("<li><strong>").append(dt).append("</strong>: ").append(dd).append("</li>");
 
             if (dt.contains("급여") || dt.contains("연봉")) {
-                data.setSalary(dd);
+                data.enrichConditions(null, dd, null, null);
             }
-            if (dt.contains("자격요건") || dt.contains("지원자격")) {
+            if ((dt.contains("자격요건") || dt.contains("지원자격")) && !dd.contains("상세보기")) {
                 reqBuilder.append(dd).append("\n");
             }
         }
@@ -425,13 +425,19 @@ public class SaraminParser implements SiteParser {
             method = safePageText(detailPage, ".wrap_jv_cont");
         }
 
+        String applicationMethod = resolveApplicationMethod(method);
+        data.enrichClassification(null, null, applicationMethod);
+    }
+
+    private String resolveApplicationMethod(String method) {
         if (method.contains("사람인 입사지원") || method.contains("온라인 입사지원")) {
-            data.setApplicationMethod("SARAMIN_APPLY");
+            return "SARAMIN_APPLY";
         } else if (method.contains("홈페이지 지원") || method.contains("홈페이지")) {
-            data.setApplicationMethod("HOMEPAGE");
+            return "HOMEPAGE";
         } else if (method.contains("이메일")) {
-            data.setApplicationMethod("EMAIL");
+            return "EMAIL";
         }
+        return null;
     }
 
     private void extractFromIframeIfExists(Page detailPage, StringBuilder descBuilder, StringBuilder reqBuilder, List<String> imageUrls) {
@@ -529,45 +535,9 @@ public class SaraminParser implements SiteParser {
             requirements = requirements.substring(0, 2000) + "...";
         }
 
-        if (requirements.isEmpty() && !description.isEmpty()) {
-            requirements = extractRequirementsFromDescription(description);
-        }
-
         String companyImages = String.join(",", imageUrls.stream().distinct().limit(10).toList());
 
-        data.setDescription(description);
-        data.setRequirements(requirements);
-        data.setCompanyImages(companyImages);
-    }
-
-    private String extractRequirementsFromDescription(String description) {
-        // HTML인 경우 텍스트로 변환 후 추출
-        String plainText = description.contains("<") ? HtmlSanitizer.toPlainText(description) : description;
-
-        StringBuilder extracted = new StringBuilder();
-        String[] lines = plainText.split("\n");
-        boolean inReqs = false;
-
-        for (String line : lines) {
-            String trimmed = line.trim();
-            if (trimmed.isEmpty()) continue;
-
-            if (trimmed.contains("자격요건") || trimmed.contains("지원자격") || trimmed.contains("지원 자격")) {
-                inReqs = true;
-            } else if (inReqs && isSectionEndKeyword(trimmed)) {
-                break;
-            }
-
-            if (inReqs) {
-                extracted.append(trimmed).append("\n");
-            }
-        }
-        return extracted.toString().trim();
-    }
-
-    private boolean isSectionEndKeyword(String line) {
-        return line.contains("우대사항") || line.contains("근무조건") ||
-               line.contains("복리후생") || line.contains("접수기간");
+        data.enrichJobDetail(description, requirements, companyImages);
     }
 
     private boolean isAdImage(String url) {

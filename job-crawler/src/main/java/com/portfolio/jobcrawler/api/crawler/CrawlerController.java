@@ -4,6 +4,7 @@ import com.portfolio.jobcrawler.application.crawler.CrawlerScheduler;
 import com.portfolio.jobcrawler.application.crawler.CrawlerService;
 import com.portfolio.jobcrawler.application.jobposting.JobPostingService;
 import com.portfolio.jobcrawler.application.notification.NotificationService;
+import com.portfolio.jobcrawler.domain.jobposting.repository.JobPostingRepository;
 import com.portfolio.jobcrawler.global.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class CrawlerController {
     private final CrawlerScheduler crawlerScheduler;
     private final JobPostingService jobPostingService;
     private final NotificationService notificationService;
+    private final com.portfolio.jobcrawler.application.crawler.PostingUrlValidator postingUrlValidator;
+    private final JobPostingRepository jobPostingRepository;
 
     @PostMapping("/crawl")
     public ResponseEntity<ApiResponse<Map<String, Object>>> crawlAll(
@@ -120,4 +123,27 @@ public class CrawlerController {
         notificationService.notifyNewJobPostings();
         return ResponseEntity.ok(ApiResponse.ok(null, "알림 발송 테스트 완료"));
     }
+
+    @PostMapping("/validate-urls")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> validateUrls() {
+        int closed = postingUrlValidator.closeStaleNoDeadlinePostings();
+        return ResponseEntity.ok(ApiResponse.ok(
+                Map.of("closedCount", closed), "URL 검증 완료 - " + closed + "건 만료 처리"));
+    }
+
+    @GetMapping("/jobs/closed")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getClosedJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        var closedJobs = jobPostingRepository.findByClosedTrue(
+                org.springframework.data.domain.PageRequest.of(page, size,
+                        org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "updatedAt")));
+        return ResponseEntity.ok(ApiResponse.ok(Map.of(
+                "content", closedJobs.getContent(),
+                "totalElements", closedJobs.getTotalElements(),
+                "totalPages", closedJobs.getTotalPages(),
+                "currentPage", page
+        )));
+    }
+
 }

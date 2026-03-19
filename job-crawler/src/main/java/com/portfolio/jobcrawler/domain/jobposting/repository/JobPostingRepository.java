@@ -50,4 +50,14 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     @Modifying
     @Query("UPDATE JobPosting j SET j.closed = true WHERE j.closed = false AND j.deadline IS NOT NULL AND j.deadline < :today")
     int closeExpired(@Param("today") LocalDate today);
+
+    Page<JobPosting> findByClosedTrue(Pageable pageable);
+
+    long countByClosedTrue();
+
+    @Query("SELECT j FROM JobPosting j WHERE j.closed = false AND j.deadline IS NULL")
+    List<JobPosting> findOpenWithNoDeadline();
+
+    @Query("SELECT j FROM JobPosting j WHERE j.closed = false AND j.deadline IS NULL AND j.createdAt < :before")
+    List<JobPosting> findStaleNoDeadlinePostings(@Param("before") java.time.LocalDateTime before);
 }

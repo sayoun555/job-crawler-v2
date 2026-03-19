@@ -26,12 +26,17 @@ public class AiController {
 
     /** 적합률 분석 */
     @PostMapping("/match-score/{jobId}")
-    public ResponseEntity<ApiResponse<Map<String, Integer>>> matchScore(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> matchScore(
             Authentication auth, @PathVariable Long jobId,
             @RequestParam(required = false, defaultValue = "false") boolean force) {
+        Long userId = (Long) auth.getPrincipal();
         int score = ((com.portfolio.jobcrawler.application.ai.AiAutomationServiceImpl) aiAutomationService)
-                .analyzeMatchScore((Long) auth.getPrincipal(), jobId, force);
-        return ResponseEntity.ok(ApiResponse.ok(Map.of("score", score)));
+                .analyzeMatchScore(userId, jobId, force);
+        Map<String, Object> result = new HashMap<>();
+        result.put("score", score);
+        aiAnalysisResultRepository.findByUserIdAndJobPostingIdAndType(userId, jobId, AnalysisType.MATCH_SCORE)
+                .ifPresent(r -> { if (r.getResultText() != null) result.put("reason", r.getResultText()); });
+        return ResponseEntity.ok(ApiResponse.ok(result));
     }
 
     /** 프로젝트 자동 매칭 */
@@ -60,7 +65,7 @@ public class AiController {
         return ResponseEntity.ok(ApiResponse.ok(Map.of("portfolio", text)));
     }
 
-    /** 기업 분석 (유저별 저장) */
+    /** 기업 분석 (공고 기준 공유) */
     @GetMapping("/company-analysis/{jobId}")
     public ResponseEntity<ApiResponse<Map<String, String>>> analyzeCompany(
             Authentication auth, @PathVariable Long jobId) {
@@ -68,7 +73,7 @@ public class AiController {
         return ResponseEntity.ok(ApiResponse.ok(Map.of("analysis", analysis)));
     }
 
-    /** 저장된 AI 분석 결과 조회 (적합률 + 기업분석) */
+    /** 저장된 AI 분석 결과 조회 (적합률: 유저별, 기업분석: 공유) */
     @GetMapping("/results/{jobId}")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getSavedResults(
             Authentication auth, @PathVariable Long jobId) {
@@ -77,10 +82,13 @@ public class AiController {
 
         Optional<AiAnalysisResult> matchScore = aiAnalysisResultRepository
                 .findByUserIdAndJobPostingIdAndType(userId, jobId, AnalysisType.MATCH_SCORE);
-        matchScore.ifPresent(r -> result.put("matchScore", r.getScore()));
+        matchScore.ifPresent(r -> {
+            result.put("matchScore", r.getScore());
+            if (r.getResultText() != null) result.put("matchScoreReason", r.getResultText());
+        });
 
         Optional<AiAnalysisResult> companyAnalysis = aiAnalysisResultRepository
-                .findByUserIdAndJobPostingIdAndType(userId, jobId, AnalysisType.COMPANY_ANALYSIS);
+                .findByJobPostingIdAndType(jobId, AnalysisType.COMPANY_ANALYSIS);
         companyAnalysis.ifPresent(r -> result.put("companyAnalysis", r.getResultText()));
 
         return ResponseEntity.ok(ApiResponse.ok(result));

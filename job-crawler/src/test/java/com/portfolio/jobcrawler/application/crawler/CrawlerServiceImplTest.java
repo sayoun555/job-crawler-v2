@@ -2,6 +2,7 @@ package com.portfolio.jobcrawler.application.crawler;
 
 import com.portfolio.jobcrawler.domain.jobposting.entity.JobPosting;
 import com.portfolio.jobcrawler.domain.jobposting.repository.JobPostingRepository;
+import com.portfolio.jobcrawler.infrastructure.crawler.CrawledJobDataConverter;
 import com.portfolio.jobcrawler.infrastructure.crawler.JobScraper;
 import com.portfolio.jobcrawler.infrastructure.crawler.dto.CrawledJobData;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,11 +43,12 @@ class CrawlerServiceImplTest {
     private ArgumentCaptor<List<JobPosting>> batchCaptor;
 
     private CrawlerServiceImpl crawlerService;
+    private final CrawledJobDataConverter converter = new CrawledJobDataConverter();
 
     @BeforeEach
     void setUp() {
         crawlerService = new CrawlerServiceImpl(
-                List.of(mockScraper), jobPostingRepository, redisTemplate);
+                List.of(mockScraper), jobPostingRepository, redisTemplate, converter);
     }
 
     @Test
@@ -177,7 +179,7 @@ class CrawlerServiceImplTest {
         given(jobPostingRepository.saveAll(anyList())).willAnswer(inv -> inv.getArgument(0));
 
         CrawlerServiceImpl service = new CrawlerServiceImpl(
-                List.of(failingScraper, workingScraper), jobPostingRepository, redisTemplate);
+                List.of(failingScraper, workingScraper), jobPostingRepository, redisTemplate, converter);
 
         // when
         int saved = service.crawlAll(null, null, 10);

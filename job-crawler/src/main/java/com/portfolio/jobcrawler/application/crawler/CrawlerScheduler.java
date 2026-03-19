@@ -34,6 +34,7 @@ public class CrawlerScheduler {
     private final CrawlerService crawlerService;
     private final NotificationService notificationService;
     private final JobPostingRepository jobPostingRepository;
+    private final PostingUrlValidator postingUrlValidator;
     private final TaskScheduler taskScheduler;
     private final SchedulerConfigRepository schedulerConfigRepository;
 
@@ -47,7 +48,8 @@ public class CrawlerScheduler {
         scheduleCrawl("crawl2", config.getCrawlCron2());
         scheduleTask("expiredClose", "0 0 * * * *", this::closeExpiredJobs);
         scheduleTask("userNotification", "0 0 * * * *", this::sendScheduledNotifications);
-        log.info("[스케줄러] 초기화 - 크롤링: {}, {} / enabled: {} / 마감 정리: 매시간 / 유저 알림: 매시간",
+        scheduleTask("urlValidation", "0 0 3 * * *", this::validateStalePostings);
+        log.info("[스케줄러] 초기화 - 크롤링: {}, {} / enabled: {} / 마감 정리: 매시간 / 유저 알림: 매시간 / URL검증: 매일 03시",
                 config.getCrawlCron1(), config.getCrawlCron2(), config.isEnabled());
     }
 
@@ -131,6 +133,17 @@ public class CrawlerScheduler {
         int closed = jobPostingRepository.closeExpired(LocalDate.now());
         if (closed > 0) {
             log.info("[스케줄러] 마감 공고 {} 건 자동 종료", closed);
+        }
+    }
+
+    private void validateStalePostings() {
+        try {
+            int closed = postingUrlValidator.closeStaleNoDeadlinePostings();
+            if (closed > 0) {
+                log.info("[스케줄러] URL 검증으로 만료 공고 {} 건 자동 종료", closed);
+            }
+        } catch (Exception e) {
+            log.warn("[스케줄러] URL 검증 실패: {}", e.getMessage());
         }
     }
 

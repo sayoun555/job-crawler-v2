@@ -169,6 +169,14 @@ public class JobKoreaParser implements SiteParser {
                             if (lines[i] === '고용형태') result.employType = lines[i+1];
                         }
                     }
+                    // 전체 DOM에서 마감일 검색 (정확한 날짜 형식 우선)
+                    const allEls = document.querySelectorAll('*');
+                    for (const el of allEls) {
+                        if (el.textContent?.trim() === '마감일' && el.children.length === 0) {
+                            const next = el.nextElementSibling || el.parentElement?.nextElementSibling;
+                            if (next) { result.deadline = next.textContent.trim(); break; }
+                        }
+                    }
                     const keepComponents = ['ApplyBox', 'CorpInformation', 'BenefitCard'];
                     const removeTexts = ['기업정보 더보기', '복리후생 더보기', '지도보기', '스크랩', '즉시 지원', '홈페이지 지원'];
                     let structuredDesc = '';
@@ -255,32 +263,33 @@ public class JobKoreaParser implements SiteParser {
                 log.warn("[잡코리아-Parser] iframe 콘텐츠 추출 실패: {}", e.getMessage());
             }
 
-            // 결과 조합하여 data에 세팅
             if (detail != null) {
                 String structuredDesc = (String) detail.getOrDefault("structuredDesc", "");
                 String description = iframeContent.isEmpty() ? structuredDesc : iframeContent + "\n\n" + structuredDesc;
                 description = description.trim().replaceAll("\\n{3,}", "\n\n");
-                if (description.length() > 5000) description = description.substring(0, 5000) + "...";
-                data.setDescription(description);
 
                 String detailCompany = (String) detail.getOrDefault("company", "");
-                if (!detailCompany.isEmpty() && !detailCompany.equals("검색") && detailCompany.length() > 1) {
-                    data.setCompany(detailCompany);
-                }
+                String validCompany = (!detailCompany.isEmpty() && !detailCompany.equals("검색") && detailCompany.length() > 1)
+                        ? detailCompany : null;
 
                 String dCareer = (String) detail.getOrDefault("career", "");
-                if (!dCareer.isEmpty()) {
-                    String dEmployType = (String) detail.getOrDefault("employType", "");
-                    data.setCareer(dCareer + (!dEmployType.isEmpty() ? " · " + dEmployType : ""));
-                }
-                String dSalary = (String) detail.getOrDefault("salary", "");
-                if (!dSalary.isEmpty()) data.setSalary(dSalary);
-                String dLocation = (String) detail.getOrDefault("location", "");
-                if (!dLocation.isEmpty()) data.setLocation(dLocation.replace(">", "").replace("&gt;", "").trim());
+                String dEmployType = (String) detail.getOrDefault("employType", "");
+                String combinedCareer = !dCareer.isEmpty()
+                        ? dCareer + (!dEmployType.isEmpty() ? " · " + dEmployType : "") : null;
 
-                data.setApplicationMethod((String) detail.getOrDefault("applyMethod", "HOMEPAGE"));
+                String dSalary = (String) detail.getOrDefault("salary", "");
+                String dLocation = (String) detail.getOrDefault("location", "");
+                String cleanLocation = !dLocation.isEmpty()
+                        ? dLocation.replace(">", "").replace("&gt;", "").trim() : null;
+                String dDeadline = (String) detail.getOrDefault("deadline", "");
+
+                data.enrichBasicInfo(null, validCompany, cleanLocation);
+                data.enrichJobDetail(description, null, companyImages);
+                data.enrichConditions(combinedCareer, dSalary, dDeadline, null);
+                data.enrichClassification(null, null, (String) detail.getOrDefault("applyMethod", "HOMEPAGE"));
+            } else {
+                data.enrichJobDetail(null, null, companyImages);
             }
-            data.setCompanyImages(companyImages);
 
             log.info("[잡코리아-Parser] 수집: {} - {}", data.getCompany(), data.getTitle());
         } catch (Exception e) {
@@ -364,16 +373,15 @@ public class JobKoreaParser implements SiteParser {
 
             if (detail != null) {
                 String company = (String) detail.getOrDefault("company", "");
-                if (!company.isEmpty()) data.setCompany(company);
                 String salary = (String) detail.getOrDefault("salary", "");
-                if (!salary.isEmpty()) data.setSalary(salary);
                 String location = (String) detail.getOrDefault("location", "");
-                if (!location.isEmpty()) data.setLocation(location);
                 String career = (String) detail.getOrDefault("career", "");
-                if (!career.isEmpty()) data.setCareer(career);
                 String skills = (String) detail.getOrDefault("skills", "");
-                if (!skills.isEmpty()) data.setTechStack(skills);
                 String employType = (String) detail.getOrDefault("employType", "");
+
+                data.enrichBasicInfo(null, company, location);
+                data.enrichConditions(career, salary, null, null);
+                data.enrichClassification(null, skills, null);
 
                 // 채용 요약 HTML
                 StringBuilder desc = new StringBuilder("<h3>채용 요약</h3><ul>");
@@ -416,6 +424,7 @@ public class JobKoreaParser implements SiteParser {
                         return result;
                     })()
                 """);
+                String companyImages = null;
                 if (iframeData != null) {
                     String rawHtml = ((String) iframeData.getOrDefault("html", "")).trim();
                     if (!rawHtml.isEmpty()) {
@@ -424,13 +433,11 @@ public class JobKoreaParser implements SiteParser {
                     @SuppressWarnings("unchecked")
                     List<String> imgList = (List<String>) iframeData.getOrDefault("images", List.of());
                     if (!imgList.isEmpty()) {
-                        data.setCompanyImages(String.join(",", imgList));
+                        companyImages = String.join(",", imgList);
                     }
                 }
 
-                String description = desc.toString();
-                if (description.length() > 10000) description = description.substring(0, 10000);
-                data.setDescription(description);
+                data.enrichJobDetail(desc.toString(), null, companyImages);
             }
 
             log.info("[잡코리아-Parser] 헤드헌팅 수집: {} - {}", data.getCompany(), data.getTitle());

@@ -31,6 +31,8 @@ public class JobPostingServiceImpl implements JobPostingService {
 
     private final JobPostingRepository jobPostingRepository;
     private final JobApplicationRepository jobApplicationRepository;
+    private final com.portfolio.jobcrawler.domain.aianalysis.repository.AiAnalysisResultRepository aiAnalysisResultRepository;
+    private final com.portfolio.jobcrawler.domain.notification.repository.NotificationHistoryRepository notificationHistoryRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -93,6 +95,8 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     @Transactional
     public void deleteJob(Long id) {
+        aiAnalysisResultRepository.deleteByJobPostingId(id);
+        notificationHistoryRepository.deleteByJobPostingId(id);
         jobApplicationRepository.deleteByJobPostingId(id);
         jobPostingRepository.deleteById(id);
         evictJobCaches();
@@ -101,6 +105,8 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     @Transactional
     public void deleteJobs(java.util.List<Long> ids) {
+        aiAnalysisResultRepository.deleteByJobPostingIdIn(ids);
+        notificationHistoryRepository.deleteByJobPostingIdIn(ids);
         jobApplicationRepository.deleteByJobPostingIdIn(ids);
         jobPostingRepository.deleteAllByIdInBatch(ids);
         evictJobCaches();
@@ -109,6 +115,8 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     @Transactional
     public void deleteAllJobs() {
+        aiAnalysisResultRepository.deleteAllInBatch();
+        notificationHistoryRepository.deleteAllInBatch();
         jobApplicationRepository.deleteAllInBatch();
         jobPostingRepository.deleteAllInBatch();
         clearCrawledCache();
@@ -122,9 +130,9 @@ public class JobPostingServiceImpl implements JobPostingService {
         java.util.List<JobPosting> jobs = jobPostingRepository.findBySource(sourceSite);
         if (jobs.isEmpty()) return 0;
         java.util.List<Long> ids = jobs.stream().map(JobPosting::getId).toList();
-        for (Long jobId : ids) {
-            jobApplicationRepository.deleteByJobPostingId(jobId);
-        }
+        aiAnalysisResultRepository.deleteByJobPostingIdIn(ids);
+        notificationHistoryRepository.deleteByJobPostingIdIn(ids);
+        jobApplicationRepository.deleteByJobPostingIdIn(ids);
         jobPostingRepository.deleteAllInBatch(jobs);
         evictJobCaches();
         return ids.size();
