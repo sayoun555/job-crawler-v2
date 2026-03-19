@@ -1,0 +1,15 @@
+# Environment
+.env
+.env.*
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# Screenshots
+*.png
+
+# OS
+.DS_Store
+
+# Claude
+.claude/

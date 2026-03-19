@@ -38,3 +38,8 @@ out/
 
 ### Logs ###
 logs/
+
+### Environment ###
+.env
+.env.*
+application-local.properties
