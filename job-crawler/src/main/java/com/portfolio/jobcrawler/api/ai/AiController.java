@@ -23,6 +23,7 @@ public class AiController {
 
     private final AiAutomationService aiAutomationService;
     private final AiAnalysisResultRepository aiAnalysisResultRepository;
+    private final com.portfolio.jobcrawler.application.ai.AiTaskQueue aiTaskQueue;
 
     /** 적합률 분석 */
     @PostMapping("/match-score/{jobId}")
@@ -129,5 +130,56 @@ public class AiController {
             @PathVariable Long projectId) {
         String summary = aiAutomationService.summarizeProject(projectId);
         return ResponseEntity.ok(ApiResponse.ok(Map.of("summary", summary)));
+    }
+
+    /** 비동기 자소서 생성 (즉시 taskId 반환 + 완료 시 WebSocket 알림) */
+    @PostMapping("/async/cover-letter/{jobId}")
+    public ResponseEntity<ApiResponse<Map<String, String>>> asyncCoverLetter(
+            Authentication auth, @PathVariable Long jobId,
+            @RequestParam(required = false) Long templateId) {
+        Long userId = (Long) auth.getPrincipal();
+        String taskId = aiTaskQueue.enqueue("COVER_LETTER", userId);
+
+        new Thread(() -> {
+            try {
+                String text = aiAutomationService.generateCoverLetter(userId, jobId, templateId);
+                aiTaskQueue.complete(taskId, userId, text);
+            } catch (Exception e) {
+                aiTaskQueue.fail(taskId, userId, e.getMessage());
+            }
+        }).start();
+
+        return ResponseEntity.ok(ApiResponse.ok(Map.of("taskId", taskId)));
+    }
+
+    /** 비동기 포트폴리오 생성 */
+    @PostMapping("/async/portfolio/{jobId}")
+    public ResponseEntity<ApiResponse<Map<String, String>>> asyncPortfolio(
+            Authentication auth, @PathVariable Long jobId,
+            @RequestParam(required = false) Long templateId) {
+        Long userId = (Long) auth.getPrincipal();
+        String taskId = aiTaskQueue.enqueue("PORTFOLIO", userId);
+
+        new Thread(() -> {
+            try {
+                String text = aiAutomationService.generatePortfolio(userId, jobId, templateId);
+                aiTaskQueue.complete(taskId, userId, text);
+            } catch (Exception e) {
+                aiTaskQueue.fail(taskId, userId, e.getMessage());
+            }
+        }).start();
+
+        return ResponseEntity.ok(ApiResponse.ok(Map.of("taskId", taskId)));
+    }
+
+    /** AI 태스크 상태 폴링 (WebSocket 미연결 시 fallback) */
+    @GetMapping("/async/status/{taskId}")
+    public ResponseEntity<ApiResponse<Map<Object, Object>>> getTaskStatus(
+            @PathVariable String taskId) {
+        Map<Object, Object> task = aiTaskQueue.getTask(taskId);
+        if (task.isEmpty()) {
+            return ResponseEntity.ok(ApiResponse.ok(Map.of("status", "NOT_FOUND")));
+        }
+        return ResponseEntity.ok(ApiResponse.ok(task));
     }
 }

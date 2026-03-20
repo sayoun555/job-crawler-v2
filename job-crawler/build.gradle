@@ -28,6 +28,7 @@ dependencies {
 	// Web & API
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	// Security & JWT
 	implementation 'org.springframework.boot:spring-boot-starter-security'

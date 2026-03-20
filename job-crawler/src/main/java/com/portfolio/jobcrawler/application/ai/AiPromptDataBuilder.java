@@ -1,39 +1,62 @@
 package com.portfolio.jobcrawler.application.ai;
 
 import com.portfolio.jobcrawler.domain.jobposting.entity.JobPosting;
-import com.portfolio.jobcrawler.domain.resume.entity.Resume;
+import com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite;
 import com.portfolio.jobcrawler.domain.resume.repository.ResumeRepository;
 import com.portfolio.jobcrawler.domain.user.entity.UserProfile;
 import com.portfolio.jobcrawler.global.util.HtmlSanitizer;
 import com.portfolio.jobcrawler.global.util.ImageOcrUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+/**
+ * AI 프롬프트용 데이터 빌더 (SRP: 프롬프트 데이터 조립만 담당).
+ * 사이트별 프로필 강조 로직은 SiteProfileStrategy에 위임한다.
+ */
 @Component
-@RequiredArgsConstructor
 public class AiPromptDataBuilder {
 
     private final ResumeRepository resumeRepository;
+    private final Map<String, SiteProfileStrategy> strategies;
 
-    public String buildProfileString(UserProfile profile) {
+    public AiPromptDataBuilder(ResumeRepository resumeRepository,
+                               List<SiteProfileStrategy> strategyList) {
+        this.resumeRepository = resumeRepository;
+        this.strategies = strategyList.stream()
+                .collect(Collectors.toMap(SiteProfileStrategy::getSiteName, Function.identity()));
+    }
+
+    /**
+     * 사이트별로 최적화된 프로필 문자열을 생성한다.
+     */
+    public String buildProfileString(UserProfile profile, SourceSite site) {
+        SiteProfileStrategy strategy = site != null ? strategies.get(site.name()) : null;
+
         boolean profileEmpty = profile.getTechStack() == null
                 && profile.getCareer() == null
                 && profile.getEducation() == null;
 
         if (profileEmpty) {
             return resumeRepository.findByUserId(profile.getUser().getId())
-                    .map(this::buildFromResume)
+                    .map(resume -> strategy != null
+                            ? strategy.buildFromResume(resume)
+                            : defaultResumeString(resume))
                     .orElse("프로필 정보 없음");
         }
 
-        return "학력: " + nullSafe(profile.getEducation()) +
-                "\n경력: " + nullSafe(profile.getCareer()) +
-                "\n자격증: " + nullSafe(profile.getCertifications()) +
-                "\n기술스택: " + nullSafe(profile.getTechStack()) +
-                "\n강점: " + nullSafe(profile.getStrengths());
+        return strategy != null
+                ? strategy.buildFromProfile(profile)
+                : defaultProfileString(profile);
+    }
+
+    /** 하위 호환 (사이트 미지정 시) */
+    public String buildProfileString(UserProfile profile) {
+        return buildProfileString(profile, null);
     }
 
     public String buildJobString(JobPosting job) {
@@ -79,7 +102,6 @@ public class AiPromptDataBuilder {
 
     public String buildJobStringWithOcr(JobPosting job) {
         String jobString = buildJobString(job);
-
         if (job.getCompanyImages() != null && !job.getCompanyImages().isBlank()) {
             List<String> imageUrls = Arrays.stream(job.getCompanyImages().split(","))
                     .map(String::trim).filter(u -> u.startsWith("http")).limit(3).toList();
@@ -91,34 +113,22 @@ public class AiPromptDataBuilder {
         return jobString;
     }
 
-    private String buildFromResume(Resume resume) {
+    private String defaultProfileString(UserProfile profile) {
+        return "학력: " + nullSafe(profile.getEducation()) +
+                "\n경력: " + nullSafe(profile.getCareer()) +
+                "\n자격증: " + nullSafe(profile.getCertifications()) +
+                "\n기술스택: " + nullSafe(profile.getTechStack()) +
+                "\n강점: " + nullSafe(profile.getStrengths());
+    }
+
+    private String defaultResumeString(com.portfolio.jobcrawler.domain.resume.entity.Resume resume) {
         StringBuilder sb = new StringBuilder();
         sb.append("이름: ").append(nullSafe(resume.getName()));
-
-        if (!resume.getEducations().isEmpty()) {
-            sb.append("\n학력: ");
-            resume.getEducations().forEach(e ->
-                    sb.append(e.getSchoolName()).append(" ").append(e.getMajor()).append(", "));
-        }
-        if (!resume.getCareers().isEmpty()) {
-            sb.append("\n경력: ");
-            resume.getCareers().forEach(c ->
-                    sb.append(c.getCompanyName()).append(" ").append(nullSafe(c.getPosition()))
-                            .append(" ").append(nullSafe(c.getJobDescription())).append(", "));
-        }
-        if (!resume.getSkills().isEmpty()) {
-            sb.append("\n기술스택: ");
-            resume.getSkills().forEach(s -> sb.append(s.getSkillName()).append(", "));
-        }
-        if (!resume.getCertifications().isEmpty()) {
-            sb.append("\n자격증: ");
-            resume.getCertifications().forEach(c -> sb.append(c.getCertName()).append(", "));
-        }
-        if (!resume.getActivities().isEmpty()) {
-            sb.append("\n활동: ");
-            resume.getActivities().forEach(a ->
-                    sb.append(a.getActivityName()).append(" ").append(nullSafe(a.getDescription())).append(", "));
-        }
+        ProfileBuildHelper.appendEducations(sb, resume);
+        ProfileBuildHelper.appendCareers(sb, resume);
+        ProfileBuildHelper.appendSkills(sb, resume);
+        ProfileBuildHelper.appendCertifications(sb, resume);
+        ProfileBuildHelper.appendActivities(sb, resume);
         return sb.toString();
     }
 

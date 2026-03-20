@@ -28,4 +28,7 @@ public interface ExternalAccountService {
 
     /** 세션 만료 시 DB + Redis 세션을 모두 무효화한다 */
     void invalidateSession(Long userId, SourceSite site);
+
+    /** 이력서 동기화 상태를 업데이트한다 */
+    void updateResumeSyncStatus(Long userId, SourceSite site, String status, String message);
 }

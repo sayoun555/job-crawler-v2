@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 import java.util.List;
 
-/**
- * 사람인용 자동 지원 프로바이더 구현체
- */
 @Slf4j
 @Component
 public class SaraminApplyProvider implements AutoApplyProvider {
@@ -24,7 +21,7 @@ public class SaraminApplyProvider implements AutoApplyProvider {
 
     @Override
     public boolean login(Page page, PlaywrightManager playwrightManager, String loginId, String password) {
-        log.info("[SaraminApplyProvider] 사람인 로그인 시도 - {}", loginId);
+        log.info("[사람인-지원] 로그인 시도 - {}", loginId);
         page.navigate("https://www.saramin.co.kr/zf_user/auth");
         playwrightManager.shortDelay();
 
@@ -32,11 +29,11 @@ public class SaraminApplyProvider implements AutoApplyProvider {
         Locator pwdInput = page.locator("#password");
 
         if (idInput.count() == 0 || pwdInput.count() == 0) {
-            log.warn("[SaraminApplyProvider] 로그인 폼을 찾을 수 없습니다.");
+            log.warn("[사람인-지원] 로그인 폼을 찾을 수 없습니다.");
             return false;
         }
 
-        // 사람인은 jQuery 이벤트로 유효성 검사 → fill() 대신 click+type으로 실제 키 입력
+        // jQuery 이벤트 호환: fill() 대신 click+type
         idInput.click();
         idInput.type(loginId, new Locator.TypeOptions().setDelay(50));
         pwdInput.click();
@@ -44,11 +41,10 @@ public class SaraminApplyProvider implements AutoApplyProvider {
 
         playwrightManager.shortDelay();
         page.locator("button.btn_login").click();
-
         playwrightManager.longDelay();
 
         if (page.url().contains("/auth") || page.locator(".error_message:visible").count() > 0) {
-            log.warn("[SaraminApplyProvider] 사람인 로그인 실패 (에러 메시지 발생 또는 리다이렉트 안됨)");
+            log.warn("[사람인-지원] 로그인 실패");
             return false;
         }
 
@@ -57,50 +53,161 @@ public class SaraminApplyProvider implements AutoApplyProvider {
 
     @Override
     public ApplyResult submit(Page page, PlaywrightManager playwrightManager, JobApplication app, List<Path> attachments) {
-        log.info("[SaraminApplyProvider] 사람인 지원 시작: {}", app.getJobPosting().getTitle());
-        
-        page.navigate(app.getJobPosting().getUrl());
-        playwrightManager.shortDelay();
+        String title = app.getJobPosting().getTitle();
+        log.info("[사람인-지원] 지원 시작: {}", title);
 
-        Locator applyBtn = page.locator("button:has-text('입사지원'), a:has-text('입사지원')");
+        // 1. 공고 페이지로 이동
+        page.navigate(app.getJobPosting().getUrl());
+        playwrightManager.longDelay();
+
+        // 2. 입사지원 버튼 찾기 (사람인은 다양한 형태)
+        Locator applyBtn = page.locator(
+                "button.btn_apply, " +
+                "a.btn_apply, " +
+                "button:has-text('입사지원'), " +
+                "a:has-text('입사지원'), " +
+                "button:has-text('온라인 입사지원')");
+
         if (applyBtn.count() == 0) {
+            // 홈페이지 지원인 경우
+            Locator homepageBtn = page.locator("a:has-text('홈페이지 지원'), a:has-text('기업 홈페이지')");
+            if (homepageBtn.count() > 0) {
+                return ApplyResult.fail("이 공고는 홈페이지 지원만 가능합니다. URL: " + homepageBtn.first().getAttribute("href"));
+            }
             return ApplyResult.fail("입사지원 버튼을 찾을 수 없습니다.");
         }
-        applyBtn.first().click();
-        playwrightManager.shortDelay();
 
-        Locator coverLetterField = page.locator("textarea[name*='cover'], textarea[name*='self']");
-        if (coverLetterField.count() > 0 && app.getCoverLetter() != null) {
-            coverLetterField.first().fill(app.getCoverLetter());
+        // 3. confirm 다이얼로그 자동 승인 (클릭 전 등록해야 누락 방지)
+        page.onDialog(dialog -> {
+            log.info("[사람인-지원] 다이얼로그: {}", dialog.message());
+            dialog.accept();
+        });
+
+        applyBtn.first().click();
+        playwrightManager.longDelay();
+
+        // 4. 팝업/새 탭 처리 (사람인은 지원 팝업을 띄울 수 있음)
+        Page applyPage = page;
+        if (page.context().pages().size() > 1) {
+            applyPage = page.context().pages().get(page.context().pages().size() - 1);
+            applyPage.waitForLoadState();
         }
 
-        if (attachments != null && !attachments.isEmpty()) {
-            Locator fileInput = page.locator("input[type='file']");
-            if (fileInput.count() > 0) {
-                Path[] pathArray = attachments.toArray(new Path[0]);
-                fileInput.first().setInputFiles(pathArray);
+        // 4. 이력서 선택 (사람인은 기본 이력서가 선택되어 있는 경우가 많음)
+        Locator resumeRadio = applyPage.locator("input[type='radio'][name*='resume'], input[type='radio'][name*='이력서']");
+        if (resumeRadio.count() > 0) {
+            resumeRadio.first().check();
+            log.info("[사람인-지원] 이력서 선택 완료");
+        }
+
+        // 5. 자소서 입력 (textarea가 있으면 채움)
+        fillCoverLetter(applyPage, app.getCoverLetter());
+
+        // 6. 첨부파일 업로드
+        uploadAttachments(applyPage, attachments);
+
+        // 7. 약관 동의 체크박스 (있으면)
+        Locator agreeCheck = applyPage.locator("input[type='checkbox'][name*='agree'], input[type='checkbox']#agree");
+        if (agreeCheck.count() > 0) {
+            for (int i = 0; i < agreeCheck.count(); i++) {
+                if (!agreeCheck.nth(i).isChecked()) {
+                    agreeCheck.nth(i).check();
+                }
             }
         }
 
-        Locator submitBtn = page.locator("button[type='submit'], button:has-text('제출'), button:has-text('지원 완료')");
-        if (submitBtn.count() > 0) {
-            submitBtn.first().click();
-            playwrightManager.shortDelay();
+        // 8. 제출
+        Locator submitBtn = applyPage.locator(
+                "button:has-text('지원완료'), " +
+                "button:has-text('입사지원'), " +
+                "button[type='submit']:has-text('제출'), " +
+                "button:has-text('지원하기')");
+
+        if (submitBtn.count() == 0) {
+            return ApplyResult.fail("제출 버튼을 찾을 수 없습니다.");
         }
 
-        return checkResult(page);
+        submitBtn.first().click();
+        playwrightManager.longDelay();
+
+        return checkResult(applyPage);
+    }
+
+    private void fillCoverLetter(Page page, String coverLetter) {
+        if (coverLetter == null || coverLetter.isBlank()) return;
+
+        // 사람인 자소서 입력: textarea 또는 contenteditable div
+        Locator textareas = page.locator("textarea");
+        if (textareas.count() > 0) {
+            for (int i = 0; i < textareas.count(); i++) {
+                Locator ta = textareas.nth(i);
+                String name = ta.getAttribute("name");
+                String placeholder = ta.getAttribute("placeholder");
+
+                // 자소서 관련 textarea만 채움
+                if (isRelevantField(name, placeholder)) {
+                    ta.fill(coverLetter);
+                    log.info("[사람인-지원] 자소서 입력 완료 (textarea: {})", name);
+                    return;
+                }
+            }
+            // 관련 필드 못 찾으면 첫 번째 빈 textarea에 입력
+            for (int i = 0; i < textareas.count(); i++) {
+                if (textareas.nth(i).inputValue().isBlank()) {
+                    textareas.nth(i).fill(coverLetter);
+                    log.info("[사람인-지원] 자소서 입력 (첫 번째 빈 textarea)");
+                    return;
+                }
+            }
+        }
+
+        // contenteditable div 시도
+        Locator editableDiv = page.locator("[contenteditable='true']");
+        if (editableDiv.count() > 0) {
+            editableDiv.first().fill(coverLetter);
+            log.info("[사람인-지원] 자소서 입력 (contenteditable)");
+        }
+    }
+
+    private boolean isRelevantField(String name, String placeholder) {
+        String combined = ((name != null ? name : "") + (placeholder != null ? placeholder : "")).toLowerCase();
+        return combined.contains("cover") || combined.contains("자소서") || combined.contains("자기소개")
+                || combined.contains("지원동기") || combined.contains("self") || combined.contains("intro");
+    }
+
+    private void uploadAttachments(Page page, List<Path> attachments) {
+        if (attachments == null || attachments.isEmpty()) return;
+
+        Locator fileInput = page.locator("input[type='file']");
+        if (fileInput.count() > 0) {
+            fileInput.first().setInputFiles(attachments.toArray(new Path[0]));
+            log.info("[사람인-지원] 첨부파일 {} 개 업로드", attachments.size());
+        }
     }
 
     private ApplyResult checkResult(Page page) {
-        Locator successMsg = page.locator("text=지원이 완료, text=입사지원 완료, text=성공");
-        Locator errorMsg = page.locator("text=오류, text=실패, text=에러, .error");
+        page.waitForTimeout(2000);
 
-        if (successMsg.count() > 0) {
+        // 성공 패턴
+        String[] successPatterns = {"지원이 완료", "입사지원 완료", "지원완료", "정상적으로 접수"};
+        for (String pattern : successPatterns) {
+            if (page.locator("text=" + pattern).count() > 0) {
+                return ApplyResult.success();
+            }
+        }
+
+        // URL 변화로 성공 판단
+        if (page.url().contains("apply_success") || page.url().contains("complete")) {
             return ApplyResult.success();
-        } else if (errorMsg.count() > 0) {
+        }
+
+        // 실패 패턴
+        Locator errorMsg = page.locator(".error, .err_msg, text=오류, text=실패");
+        if (errorMsg.count() > 0) {
             String reason = errorMsg.first().textContent();
             return ApplyResult.fail(reason != null ? reason.trim() : "알 수 없는 오류");
         }
-        return ApplyResult.unknown("제출 결과를 확인할 수 없습니다. 사후 검증이 필요합니다.");
+
+        return ApplyResult.unknown("제출 결과를 확인할 수 없습니다. 사이트에서 직접 확인해주세요.");
     }
 }

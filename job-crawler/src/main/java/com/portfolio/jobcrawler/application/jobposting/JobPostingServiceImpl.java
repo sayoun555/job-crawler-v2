@@ -37,7 +37,9 @@ public class JobPostingServiceImpl implements JobPostingService {
     private final ObjectMapper objectMapper;
 
     private static final String STATS_CACHE_KEY = "cache:job:stats";
+    private static final String STATS_LOCK_KEY = "lock:job:stats";
     private static final Duration STATS_CACHE_TTL = Duration.ofMinutes(5);
+    private static final Duration LOCK_TTL = Duration.ofSeconds(10);
 
     @Override
     public Page<JobPosting> searchJobs(SourceSite source, String keyword, String jobCategory,
@@ -67,6 +69,19 @@ public class JobPostingServiceImpl implements JobPostingService {
             }
         } catch (Exception e) {
             log.debug("[캐시 미스] 역직렬화 실패, DB 조회: {}", e.getMessage());
+        }
+
+        // Cache Stampede 방지: 분산 락으로 동시 DB 조회 차단
+        Boolean locked = redisTemplate.opsForValue().setIfAbsent(STATS_LOCK_KEY, "1", LOCK_TTL);
+        if (Boolean.FALSE.equals(locked)) {
+            // 다른 스레드가 이미 DB 조회 중 → 짧게 대기 후 캐시 재확인
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+            try {
+                Object retry = redisTemplate.opsForValue().get(STATS_CACHE_KEY);
+                if (retry instanceof String json2) {
+                    return objectMapper.readValue(json2, new TypeReference<Map<String, Long>>() {});
+                }
+            } catch (Exception ignored) {}
         }
 
         // DB 조회 후 캐시 저장

@@ -65,7 +65,7 @@ public class AiAutomationServiceImpl implements AiAutomationService {
 
         String jobString = promptDataBuilder.buildJobStringWithOcr(job);
         Map<String, Object> result = aiTextGenerator.calculateMatchScoreWithReason(
-                promptDataBuilder.buildProfileString(profile), jobString);
+                promptDataBuilder.buildProfileString(profile, job.getSource()), jobString);
 
         int score = (int) result.getOrDefault("totalScore", -1);
         job.updateAiMatchScore(score);
@@ -112,7 +112,7 @@ public class AiAutomationServiceImpl implements AiAutomationService {
         AiGenerationResult result = aiTextGenerator.generate(
                 AiGenerationRequest.builder()
                         .type(AiGenerationRequest.GenerationType.COVER_LETTER)
-                        .userProfile(promptDataBuilder.buildProfileString(profile))
+                        .userProfile(promptDataBuilder.buildProfileString(profile, job.getSource()))
                         .jobDescription(promptDataBuilder.buildJobString(job))
                         .companyInfo(job.getCompany())
                         .matchedProjects(projectsStr)
@@ -134,7 +134,7 @@ public class AiAutomationServiceImpl implements AiAutomationService {
         AiGenerationResult result = aiTextGenerator.generate(
                 AiGenerationRequest.builder()
                         .type(AiGenerationRequest.GenerationType.PORTFOLIO)
-                        .userProfile(promptDataBuilder.buildProfileString(profile))
+                        .userProfile(promptDataBuilder.buildProfileString(profile, job.getSource()))
                         .jobDescription(promptDataBuilder.buildJobString(job))
                         .matchedProjects(projectsStr)
                         .sourceSite(job.getSource().name())

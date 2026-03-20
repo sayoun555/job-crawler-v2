@@ -162,4 +162,14 @@
 - 크롤링 대상: 사람인, 잡플래닛, 잡코리아, 링커리어 (4개 사이트)
 - AI 기능: 적합률 분석, 기업 분석, 자소서 생성, 포트폴리오 생성, GitHub 분석, 합격 자소서 패턴 분석
 - 이력서: 학력·경력·스킬·자격·어학·활동·포트폴리오 7개 하위 엔티티
-- 문제 해결 기록: 12개 (PROJECT_REPORT) + 9개 (SESSION4) + 11개 (SESSION5) = 32건
+- 문제 해결 기록: 12개 (PROJECT_REPORT) + 9개 (SESSION4) + 11개 (SESSION5) + 5개 (TRAFFIC_SCALE) = 37건
+
+---
+
+## 9. 대규모 트래픽 대응 설계 (BLOG_TRAFFIC_SCALE.md)
+
+- **AI Semaphore 동시 제한**: 다수 유저 동시 AI 요청 시 톰캣 스레드 고갈 위험 → java.util.concurrent.Semaphore(5)로 동시 AI 요청 5개 제한, 6번째부터 30초 대기, 초과 시 "잠시 후 다시 시도해주세요" 안내 메시지 → 일반 API와 AI 요청 격리, 외부 API 과부하 방지
+- **Cache Stampede 방지**: 캐시 만료 순간 동시 요청이 전부 DB를 조회하는 Stampede 현상 → Redis setIfAbsent 분산 락으로 첫 스레드만 DB 조회, 나머지 500ms 대기 후 캐시 재확인 → 5개 동시 요청에서 "캐시 저장" 1회만 발생, DB 쿼리 20개→4개로 감소
+- **AI 비동기 큐**: AI 자소서/포트폴리오 생성 30초~1분 동기 대기로 화면 멈춤 → Redis 기반 태스크 큐(AiTaskQueue)로 즉시 접수(1초) + 백그라운드 처리(30초) + 폴링(/async/status)으로 결과 수신 → 유저 체감 대기 1초, 탭 닫아도 taskId로 재조회 가능
+- **WebSocket 실시간 알림**: 폴링 방식은 3초 간격 불필요한 요청 발생, 실시간성 부족 → STOMP over SockJS로 AI 태스크 완료 시 유저별 채널(/topic/ai/{userId})로 즉시 푸시, 폴링 fallback 유지 → 결과 수신 지연 3초→0ms, 불필요한 네트워크 요청 제거
+- **DB 검색 인덱스**: LIKE '%keyword%' 검색이 Full Table Scan → PostgreSQL pg_trgm GIN 인덱스로 title, company 트라이그램 검색 가속 + JPA @Index 9개(title, jobCategory, createdAt, source, deadline, company, url, source+closed, closed+deadline) → 만 건 이상에서 검색 100ms+→20ms

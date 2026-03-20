@@ -149,4 +149,12 @@ public class ExternalAccountServiceImpl implements ExternalAccountService {
         externalAccountRepository.findByUserIdAndSite(userId, site)
                 .ifPresent(ExternalAccount::invalidateSession);
     }
+
+    @Override
+    @Transactional
+    public void updateResumeSyncStatus(Long userId, SourceSite site, String status, String message) {
+        externalAccountRepository.findByUserIdAndSite(userId, site)
+                .ifPresent(account -> account.updateResumeSyncStatus(
+                        status, message, java.time.Instant.now()));
+    }
 }

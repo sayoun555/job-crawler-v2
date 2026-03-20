@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "external_accounts")
 @Getter
@@ -40,6 +42,20 @@ public class ExternalAccount extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String sessionCookies;
 
+    /** 세션 쿠키 중 가장 빨리 만료되는 시각 (Unix epoch seconds → Instant) */
+    private Instant sessionExpiresAt;
+
+    /** 이력서 마지막 동기화 시각 */
+    private Instant resumeSyncedAt;
+
+    /** 이력서 동기화 상태 (SUCCESS / PARTIAL_SUCCESS / FAILED / null) */
+    @Column(length = 20)
+    private String resumeSyncStatus;
+
+    /** 이력서 동기화 결과 메시지 */
+    @Column(length = 500)
+    private String resumeSyncMessage;
+
     @Builder
     public ExternalAccount(User user, SourceSite site, AuthType authType,
                            String accountId, String encryptedPassword) {
@@ -65,8 +81,20 @@ public class ExternalAccount extends BaseTimeEntity {
         this.sessionCookies = cookies;
     }
 
+    public void updateSessionWithExpiry(String cookies, Instant expiresAt) {
+        this.sessionCookies = cookies;
+        this.sessionExpiresAt = expiresAt;
+    }
+
     public void invalidateSession() {
         this.sessionCookies = null;
+        this.sessionExpiresAt = null;
+    }
+
+    public void updateResumeSyncStatus(String status, String message, Instant syncedAt) {
+        this.resumeSyncStatus = status;
+        this.resumeSyncMessage = message;
+        this.resumeSyncedAt = syncedAt;
     }
 
     public void updateCredentials(String accountId, String encryptedPassword) {
@@ -76,7 +104,13 @@ public class ExternalAccount extends BaseTimeEntity {
 
     @JsonProperty("sessionValid")
     public boolean hasValidSession() {
-        return this.sessionCookies != null && !this.sessionCookies.isBlank();
+        if (this.sessionCookies == null || this.sessionCookies.isBlank()) {
+            return false;
+        }
+        if (this.sessionExpiresAt != null && Instant.now().isAfter(this.sessionExpiresAt)) {
+            return false;
+        }
+        return true;
     }
 
     public boolean isOwnedBy(Long userId) {

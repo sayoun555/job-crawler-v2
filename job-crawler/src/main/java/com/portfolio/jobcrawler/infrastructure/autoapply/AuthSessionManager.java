@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,18 +50,21 @@ public class AuthSessionManager {
 
     /**
      * 쿠키 문자열을 DB(원본) + Redis(캐시)에 저장한다.
+     * 쿠키의 expires 값을 파싱하여 세션 만료 시각도 함께 저장.
      */
     @Transactional
     public void saveSessionString(Long userId, String site, String cookiesJson) {
-        // DB 저장 (원본)
         SourceSite sourceSite = SourceSite.valueOf(site.toUpperCase());
+        Instant expiresAt = extractEarliestExpiry(cookiesJson);
+
+        // DB 저장 (원본 + 만료시각)
         externalAccountRepository.findByUserIdAndSite(userId, sourceSite)
-                .ifPresent(account -> account.updateSessionCookies(cookiesJson));
+                .ifPresent(account -> account.updateSessionWithExpiry(cookiesJson, expiresAt));
 
         // Redis 캐시
         String key = buildSessionKey(userId, site);
         redisTemplate.opsForValue().set(key, cookiesJson, SESSION_EXPIRATION_HOURS, TimeUnit.HOURS);
-        log.info("[AuthSessionManager] {} 세션 저장 완료 (userId:{})", site, userId);
+        log.info("[AuthSessionManager] {} 세션 저장 완료 (userId:{}, 만료:{})", site, userId, expiresAt);
     }
 
     /**
@@ -119,6 +123,37 @@ public class AuthSessionManager {
 
     private String buildSessionKey(Long userId, String site) {
         return SESSION_KEY_PREFIX + userId + ":" + site.toUpperCase();
+    }
+
+    /**
+     * 쿠키 JSON에서 인증 관련 쿠키의 가장 빠른 만료 시각을 추출한다.
+     * session 쿠키(expires 없음)는 무시하고, expires가 있는 것 중 가장 빠른 값을 반환.
+     */
+    private Instant extractEarliestExpiry(String cookiesJson) {
+        try {
+            List<Map<String, Object>> cookieList = objectMapper.readValue(cookiesJson,
+                    new com.fasterxml.jackson.core.type.TypeReference<>() {});
+
+            double minExpires = Double.MAX_VALUE;
+            for (Map<String, Object> cookie : cookieList) {
+                Object expiresObj = cookie.get("expires");
+                if (expiresObj instanceof Number) {
+                    double expires = ((Number) expiresObj).doubleValue();
+                    // 세션 쿠키(expires=-1 또는 0)는 무시, 미래 값만 취급
+                    if (expires > 0 && expires < minExpires) {
+                        minExpires = expires;
+                    }
+                }
+            }
+
+            if (minExpires < Double.MAX_VALUE) {
+                return Instant.ofEpochSecond((long) minExpires);
+            }
+        } catch (Exception e) {
+            log.warn("[AuthSessionManager] 쿠키 만료 시각 파싱 실패: {}", e.getMessage());
+        }
+        // expires가 없는 경우 기본 24시간
+        return Instant.now().plusSeconds(SESSION_EXPIRATION_HOURS * 3600L);
     }
 
     private String serializeCookies(List<Cookie> cookieList) {

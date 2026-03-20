@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/crawler/**").hasRole("ADMIN")
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(h -> h
                         .frameOptions(f -> f.deny())

@@ -85,8 +85,8 @@ public class ResumeSyncRobot {
 
             log.info("[ResumeSyncRobot] {} 동기화 완료 - 상태:{}", site, result.getStatus());
 
-            // 디버깅: 저장 후 5초간 브라우저 유지
-            try { Thread.sleep(5000); } catch (InterruptedException ignored) {}
+            // 동기화 상태를 ExternalAccount에 영속
+            persistSyncStatus(userId, site, result);
 
             page.close();
             ctx.close();
@@ -94,6 +94,7 @@ public class ResumeSyncRobot {
 
         } catch (Exception e) {
             log.error("[ResumeSyncRobot] {} 동기화 실패: {}", site, e.getMessage());
+            persistSyncStatus(userId, site, ResumeSyncResult.fail(e.getMessage()));
             return ResumeSyncResult.fail(e.getMessage());
         } finally {
             if (headedBrowser != null) {
@@ -167,6 +168,16 @@ public class ResumeSyncRobot {
     /**
      * 세션 만료 시 DB + Redis 세션을 안전하게 무효화한다.
      */
+    private void persistSyncStatus(Long userId, String site, ResumeSyncResult result) {
+        try {
+            SourceSite sourceSite = SourceSite.valueOf(site.toUpperCase());
+            externalAccountService.updateResumeSyncStatus(
+                    userId, sourceSite, result.getStatus().name(), result.getMessage());
+        } catch (Exception e) {
+            log.warn("[ResumeSyncRobot] 동기화 상태 저장 실패: {}", e.getMessage());
+        }
+    }
+
     private void invalidateSessionSafely(Long userId, String site) {
         try {
             SourceSite sourceSite = SourceSite.valueOf(site.toUpperCase());

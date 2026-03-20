@@ -49,8 +49,9 @@ public class JobApplyServiceImpl implements JobApplyService {
     @Override
     @Transactional
     public JobApplication prepareApplication(Long userId, Long jobPostingId, Long templateId) {
-        if (jobApplicationRepository.existsByUserIdAndJobPostingId(userId, jobPostingId)) {
-            throw new CustomException(ErrorCode.ALREADY_APPLIED);
+        var existing = jobApplicationRepository.findByUserIdAndJobPostingId(userId, jobPostingId);
+        if (existing.isPresent()) {
+            return existing.get();
         }
 
         User user = userRepository.findById(userId)
@@ -102,13 +103,8 @@ public class JobApplyServiceImpl implements JobApplyService {
             List<Path> attachments = new ArrayList<>();
             // TODO: 사용자가 업로드한 파일 경로를 JobApplication에서 가져오기
 
-            // Playwright 로봇 실행
-            ApplyResult result;
-            if ("SARAMIN".equals(siteName)) {
-                result = autoApplyRobot.submitSaramin(userId, app, attachments);
-            } else {
-                result = autoApplyRobot.submitJobPlanet(userId, app, attachments);
-            }
+            // Playwright 로봇 실행 (전략 패턴 - 사이트별 Provider 자동 라우팅)
+            ApplyResult result = autoApplyRobot.submitApply(userId, siteName, app, attachments);
 
             // 1단계 즉시 검증 결과 반영
             if (result.isSuccess()) {
