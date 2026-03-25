@@ -35,7 +35,7 @@ public class CrawledJobData {
     }
 
     public void enrichJobDetail(String description, String requirements, String companyImages) {
-        if (isNotBlank(description)) this.description = truncate(description, 10000);
+        if (isNotBlank(description)) this.description = description;
         if (isNotBlank(requirements)) this.requirements = requirements;
         if (isNotBlank(companyImages)) this.companyImages = companyImages;
     }

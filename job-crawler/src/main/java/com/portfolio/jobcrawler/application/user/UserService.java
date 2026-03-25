@@ -21,4 +21,10 @@ public interface UserService {
 
     UserProfile updateProfile(Long userId, String education, String career,
             String certifications, String techStack, String strengths);
+
+    java.util.List<User> listAllUsers();
+
+    void approveUser(Long userId);
+
+    void suspendUser(Long userId);
 }

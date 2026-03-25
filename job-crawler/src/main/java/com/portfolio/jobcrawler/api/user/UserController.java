@@ -100,4 +100,28 @@ public class UserController {
         userService.updateNotificationHours((Long) auth.getPrincipal(), body.get("hours"));
         return ResponseEntity.ok(ApiResponse.ok());
     }
+
+    // ===== 관리자: 유저 관리 =====
+
+    @Operation(summary = "[관리자] 전체 유저 목록 조회")
+    @GetMapping("/admin/users")
+    public ResponseEntity<ApiResponse<java.util.List<User>>> listUsers(Authentication auth) {
+        return ResponseEntity.ok(ApiResponse.ok(userService.listAllUsers()));
+    }
+
+    @Operation(summary = "[관리자] 유저 가입 승인")
+    @PatchMapping("/admin/users/{userId}/approve")
+    public ResponseEntity<ApiResponse<Void>> approveUser(
+            Authentication auth, @PathVariable Long userId) {
+        userService.approveUser(userId);
+        return ResponseEntity.ok(ApiResponse.ok(null, "유저 승인 완료"));
+    }
+
+    @Operation(summary = "[관리자] 유저 계정 정지")
+    @PatchMapping("/admin/users/{userId}/suspend")
+    public ResponseEntity<ApiResponse<Void>> suspendUser(
+            Authentication auth, @PathVariable Long userId) {
+        userService.suspendUser(userId);
+        return ResponseEntity.ok(ApiResponse.ok(null, "유저 정지 완료"));
+    }
 }

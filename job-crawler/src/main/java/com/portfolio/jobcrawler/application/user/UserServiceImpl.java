@@ -70,4 +70,25 @@ public class UserServiceImpl implements UserService {
         profile.updateBasicInfo(education, career, certifications, techStack, strengths);
         return profile;
     }
+
+    @Override
+    public java.util.List<User> listAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void approveUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        user.approve();
+    }
+
+    @Override
+    @Transactional
+    public void suspendUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        user.suspend();
+    }
 }

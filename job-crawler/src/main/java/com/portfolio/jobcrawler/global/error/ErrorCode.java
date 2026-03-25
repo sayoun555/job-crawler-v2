@@ -16,6 +16,8 @@ public enum ErrorCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A002", "토큰이 만료되었습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A003", "유효하지 않은 토큰입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A004", "인증이 필요합니다."),
+    ACCOUNT_NOT_APPROVED(HttpStatus.FORBIDDEN, "A005", "관리자 승인 대기 중입니다. 승인 후 로그인할 수 있습니다."),
+    ACCOUNT_SUSPENDED(HttpStatus.FORBIDDEN, "A006", "계정이 정지되었습니다."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "A005", "접근 권한이 없습니다."),
 
     // User

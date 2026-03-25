@@ -19,18 +19,24 @@
 ### AI 자동화 (8종)
 - **AI 적합률 분석** — 기술스택 60% 가중치, 매칭/부족 기술 근거 팝업
 - **AI 기업 분석** — 웹 검색 + 공고 데이터 교차 분석 (모든 유저 공유 캐시)
-- **자기소개서 생성** — 기본 모드 (전체 텍스트) + 커스텀 모드 (문항별 JSON)
-- **포트폴리오 생성** — 기본 + 커스텀 모드 (문항별 JSON)
-- **GitHub 프로젝트 AI 분석** — 소스 코드, README, docs/ 기술 블로그 자동 분석
+- **자기소개서 생성** — 기본 모드 + 커스텀 모드 + 2차 다듬기(polish). 학력/개인정보 자동 필터링
+- **포트폴리오 생성** — 프로젝트 단위 독립 관리. 기승전결 구조 + 2차 문체 교정. Tiptap 리치 에디터(이미지 삽입/리사이즈)
+- **GitHub 프로젝트 AI 분석** — 소스 코드, README, docs/ 기술 블로그 자동 분석 + 다이어그램 프롬프트 생성 (아키텍처 + 기능 흐름)
 - **Notion 페이지 크롤링** — 공개 페이지 텍스트 + 이미지 추출, 멀티모달 AI 전달
 - **합격 자소서 패턴 분석** — 구조, 패턴, 키워드, 강점 분석 + 템플릿 저장 (모든 유저 공유)
 - **OCR 이미지 텍스트 추출** — Tesseract 기반 한글 인식 (85~90%)
 
-### 커스텀 자소서/포트폴리오
+### 포트폴리오 관리 (/portfolio)
+- 프로젝트 단위 독립 관리 (공고 종속 아님, 1번 생성 → 재사용)
+- Tiptap 리치텍스트 에디터 (이미지 삽입/리사이즈/정렬/드래그앤드롭)
+- AI 2차 다듬기 (기승전결 구조, 문체 교정, AI 표현 제거)
+- 복사 / PDF 출력 / 저장 / 삭제
+- 다이어그램 프롬프트 생성 (Eraser.io/Miro AI에 바로 붙여넣기)
+
+### 커스텀 자소서
 - 문항별 AI 생성 (제목 + 규칙 입력 → AI가 문항별 맞춤 작성)
 - 대기업 프리셋 9종 (삼성, 현대, SK하이닉스, LG, 카카오, 포스코, 한화, CJ, 공기업)
 - 프로젝트 여러 개일 때 문항별 적합한 프로젝트 자동 분배
-- 포트폴리오 항목 체크박스 선택/제외 UI
 - PDF 출력 (섹션 번호, 구분선, 【소제목】 강조, ▶/✔ 불릿)
 
 ### 이력서 관리 & 사이트 연동
@@ -51,10 +57,18 @@
 - 유저별 희망 직무 매칭 → 디스코드 웹훅 알림
 - 알림 시간대 설정 + 중복 알림 방지
 
+### 성능 최적화 & 부하 테스트
+- **k6 부하 테스트** — 200명 동시접속, p95 5.79ms, 성공률 100%, 에러율 0%
+- **Redis 캐시** — 공고 상세 5분 TTL, 통계 5분 TTL (Cache Stampede 방지)
+- **HikariCP 50** — 동시 DB 접근 최적화
+- **gzip 압축** — 네트워크 전송량 ~70% 감소
+- **GIN 인덱스** — ILIKE 키워드 검색 최적화
+- **Rate Limiting** — IP당 200회/분, 비정상 트래픽 96% 차단
+
 ### 모니터링 & API 문서
 - **Spring Boot Actuator** — 서버 상태, JVM 메트릭, DB 커넥션 모니터링
 - **Prometheus 메트릭** — Grafana 연동 가능
-- **Swagger/OpenAPI 3.0** — API 108개 전체 문서화 (한국어 설명, 파라미터 예시)
+- **Swagger/OpenAPI 3.0** — API 129개 전체 문서화 (한국어 설명, 파라미터 예시)
 - 운영 환경에서는 Swagger 비활성화, Actuator 최소 노출 (ADMIN만)
 
 ### 관리자 대시보드
@@ -71,7 +85,7 @@
 | 구분 | 기술 |
 |------|------|
 | **Backend** | Java 21, Spring Boot 3.4, Spring Security, Spring Data JPA |
-| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS 4, shadcn/ui |
+| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Tiptap |
 | **Database** | PostgreSQL 14, Redis |
 | **크롤링** | Playwright 1.49, JSoup 1.17 |
 | **인증/보안** | JWT (자동 갱신), AES-256-GCM 암호화, BCrypt |
@@ -89,7 +103,9 @@ job-crawler/
 ├── job-crawler/                    # Backend (Spring Boot)
 ├── job-frontend/                   # Frontend (Next.js)
 ├── browser-extension/              # Chrome 확장 프로그램
-└── docs/                           # 기술 블로그 & 아키텍처 문서
+├── docs/                           # 기술 블로그 & 아키텍처 문서
+│   └── education/                 # 트러블슈팅 & CS 학습 기록
+└── k6-load-test.js                # 부하 테스트 스크립트
 ```
 
 ### Backend
@@ -154,9 +170,10 @@ com.portfolio.jobcrawler/
 job-frontend/src/
 ├── app/                            # Next.js App Router (페이지)
 │   ├── (홈) /                      #   채용 공고 리스트 + 사이트별 필터
-│   ├── jobs/[id]/                  #   공고 상세 + AI 분석 + 커스텀 자소서/포트폴리오
+│   ├── jobs/[id]/                  #   공고 상세 + AI 분석 + 자소서 생성 (완료 시 자동 이동)
+│   ├── portfolio/                  #   포트폴리오 관리 (Tiptap 에디터, AI 생성)
 │   ├── resume/                     #   이력서 관리 (마스터 + 사이트별 탭 편집)
-│   ├── applications/               #   지원 이력 + 미리보기 + PDF 출력
+│   ├── applications/               #   지원 이력 + 미리보기 (자소서만, 포트폴리오 분리)
 │   ├── cover-letters/              #   합격 자소서 목록 + AI 패턴 분석
 │   ├── templates/                  #   자소서 템플릿 + 대기업 프리셋 + 수정 기능
 │   ├── projects/                   #   프로젝트 + GitHub/Notion AI 분석
@@ -166,8 +183,12 @@ job-frontend/src/
 │
 ├── components/                     # 재사용 컴포넌트
 │   ├── resume/                     #   이력서 섹션별 11개 컴포넌트 (사이트별 편집 지원)
+│   ├── ui/rich-editor.tsx          #   Tiptap 리치 에디터 (이미지 삽입/리사이즈)
+│   ├── ui/resizable-image.tsx      #   이미지 리사이즈/정렬/삭제 NodeView
+│   ├── ui/skeleton.tsx             #   로딩 스켈레톤 컴포넌트
+│   ├── global-ai-notification.tsx  #   AI 완료 알림 (클릭 시 페이지 이동)
 │   ├── ai-task-indicator.tsx       #   AI 작업 진행률/알림 컴포넌트
-│   └── job-card.tsx                #   공고 카드 (적합률 색상 분기)
+│   └── job-card.tsx                #   공고 카드 (새 탭 열기, 적합률 색상)
 │
 └── lib/                            # 유틸리티
     ├── api.ts                      #   API 클라이언트 (자동 토큰 갱신)

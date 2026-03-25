@@ -41,13 +41,13 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(command.password()))
                 .nickname(command.nickname())
                 .build();
+        // 신규 가입은 PENDING 상태 (관리자 승인 전 로그인 불가)
         userRepository.save(user);
 
         userProfileRepository.save(UserProfile.builder().user(user).build());
 
-        String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getEmail(), user.getRole().name());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getId(), user.getEmail(), user.getRole().name());
-        return TokenResult.of(accessToken, refreshToken, jwtTokenProvider.getAccessTokenValidityInSeconds());
+        // PENDING 상태이므로 토큰 발급하지 않음
+        return null;
     }
 
     @Override
@@ -57,6 +57,10 @@ public class AuthServiceImpl implements AuthService {
 
         if (!passwordEncoder.matches(command.password(), user.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
+        }
+
+        if (!user.isActive()) {
+            throw new CustomException(ErrorCode.ACCOUNT_NOT_APPROVED);
         }
 
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getEmail(), user.getRole().name());

@@ -97,12 +97,43 @@ public class JobPlanetParser implements SiteParser {
 
     @Override
     public boolean goToNextPage(Page page, int currentPageNum) {
-        Locator nextBtn = page.locator("button:has-text('다음'), a:has-text('다음'), [aria-label='Next']");
-        if (nextBtn.count() > 0) {
-            nextBtn.first().click();
-            try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
-            return true;
+        // 잡플래닛은 무한 스크롤 방식 — 페이지 하단 도달 시 새 공고 로드
+        int beforeCount = getListItems(page).count();
+
+        // 현재 스크롤 위치에서 문서 끝까지 단계적으로 스크롤
+        // scrollBy(innerHeight)는 이미 공고가 많으면 하단까지 못 닿으므로
+        // scrollHeight 기준으로 하단까지 도달하는 방식 사용
+        for (int scroll = 0; scroll < 5; scroll++) {
+            page.evaluate("""
+                    (() => {
+                        const current = window.scrollY;
+                        const max = document.body.scrollHeight - window.innerHeight;
+                        const step = Math.max(window.innerHeight, (max - current) / 3);
+                        window.scrollBy(0, step);
+                    })()
+                    """);
+            try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
+
+            // 스크롤 중간에 공고가 로드되면 바로 감지
+            int midCount = getListItems(page).count();
+            if (midCount > beforeCount) {
+                // 추가 공고가 더 로드될 수 있으므로 안정화 대기
+                try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
+                return true;
+            }
         }
+
+        // 스크롤 완료 후에도 로드 대기 — 최대 8초간 공고 수 변화 감지
+        for (int wait = 0; wait < 8; wait++) {
+            int afterCount = getListItems(page).count();
+            if (afterCount > beforeCount) {
+                try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
+                return true;
+            }
+            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+        }
+
+        // 변화 없으면 더 이상 로드할 공고 없음
         return false;
     }
 

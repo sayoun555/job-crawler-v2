@@ -23,12 +23,13 @@ public class AuthController {
 
     private final AuthService authService; // 인터페이스 의존
 
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입 (관리자 승인 후 로그인 가능)")
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<TokenResult>> signup(@Valid @RequestBody SignupRequest req) {
-        TokenResult result = authService
-                .signup(new SignupCommand(req.getEmail(), req.getPassword(), req.getNickname()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.ok(result, "회원가입 성공"));
+    public ResponseEntity<ApiResponse<Object>> signup(@Valid @RequestBody SignupRequest req) {
+        authService.signup(new SignupCommand(req.getEmail(), req.getPassword(), req.getNickname()));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok(java.util.Map.of("status", "PENDING"),
+                        "회원가입이 완료되었습니다. 관리자 승인 후 로그인할 수 있습니다."));
     }
 
     @Operation(summary = "로그인")

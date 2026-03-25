@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/templates/presets").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/templates/presets/refresh").hasRole("ADMIN")
                         .requestMatchers("/api/v1/crawler/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .requestMatchers("/uploads/**").permitAll()

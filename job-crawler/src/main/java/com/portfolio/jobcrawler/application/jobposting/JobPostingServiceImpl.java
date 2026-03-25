@@ -41,6 +41,11 @@ public class JobPostingServiceImpl implements JobPostingService {
     private static final Duration STATS_CACHE_TTL = Duration.ofMinutes(5);
     private static final Duration LOCK_TTL = Duration.ofSeconds(10);
 
+    private static final String LIST_CACHE_PREFIX = "cache:job:list:";
+    private static final String DETAIL_CACHE_PREFIX = "cache:job:detail:";
+    private static final Duration LIST_CACHE_TTL = Duration.ofMinutes(1);
+    private static final Duration DETAIL_CACHE_TTL = Duration.ofMinutes(5);
+
     @Override
     public Page<JobPosting> searchJobs(SourceSite source, String keyword, String jobCategory,
                                        String career, String education, String location, String applicationMethod,
@@ -49,13 +54,35 @@ public class JobPostingServiceImpl implements JobPostingService {
         if (applicationMethod != null && !applicationMethod.isBlank()) {
             try { method = ApplicationMethod.valueOf(applicationMethod); } catch (Exception ignored) {}
         }
+
+        // 목록 캐시: 로컬 DB가 0.1ms로 충분히 빨라 직렬화 오버헤드가 더 큼.
+        // 클라우드(DB 네트워크 지연 1~5ms) 환경에서만 캐시 적용 권장.
         return jobPostingRepository.searchJobs(source, keyword, jobCategory, career, education, location, method, pageable);
     }
 
     @Override
     public JobPosting getJobPosting(Long id) {
-        return jobPostingRepository.findById(id)
+        String cacheKey = DETAIL_CACHE_PREFIX + id;
+        try {
+            Object cached = redisTemplate.opsForValue().get(cacheKey);
+            if (cached instanceof String json) {
+                log.debug("[캐시 히트] 공고 상세: {}", id);
+                return objectMapper.readValue(json, JobPosting.class);
+            }
+        } catch (Exception e) {
+            log.debug("[캐시 미스] 공고 상세: {}", e.getMessage());
+        }
+
+        JobPosting job = jobPostingRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.JOB_POSTING_NOT_FOUND));
+
+        try {
+            redisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(job), DETAIL_CACHE_TTL);
+            log.debug("[캐시 저장] 공고 상세: {} (5분 TTL)", id);
+        } catch (Exception e) {
+            log.debug("[캐시 저장 실패] {}", e.getMessage());
+        }
+        return job;
     }
 
     @Override
@@ -156,7 +183,16 @@ public class JobPostingServiceImpl implements JobPostingService {
     /** 공고 변경 시 관련 캐시 무효화 */
     public void evictJobCaches() {
         redisTemplate.delete(STATS_CACHE_KEY);
-        log.debug("[캐시 무효화] 공고 통계 캐시 삭제");
+        // 목록 캐시 전체 삭제
+        try {
+            Set<String> listKeys = redisTemplate.keys(LIST_CACHE_PREFIX + "*");
+            if (listKeys != null && !listKeys.isEmpty()) redisTemplate.delete(listKeys);
+            Set<String> detailKeys = redisTemplate.keys(DETAIL_CACHE_PREFIX + "*");
+            if (detailKeys != null && !detailKeys.isEmpty()) redisTemplate.delete(detailKeys);
+        } catch (Exception e) {
+            log.debug("[캐시 무효화 실패] {}", e.getMessage());
+        }
+        log.debug("[캐시 무효화] 공고 통계/목록/상세 캐시 삭제");
     }
 
     private void clearCrawledCache() {

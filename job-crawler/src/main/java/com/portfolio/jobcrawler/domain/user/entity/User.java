@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.portfolio.jobcrawler.domain.common.entity.BaseTimeEntity;
 import com.portfolio.jobcrawler.domain.user.vo.Role;
+import com.portfolio.jobcrawler.domain.user.vo.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,6 +42,10 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 10)
     private Role role = Role.USER;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private UserStatus status = UserStatus.PENDING;
+
     @Builder
     public User(String email, String password, String nickname) {
         this.email = email;
@@ -53,8 +58,25 @@ public class User extends BaseTimeEntity {
         return this.role == Role.ADMIN;
     }
 
+    public boolean isActive() {
+        return this.status == UserStatus.ACTIVE;
+    }
+
+    public boolean isPending() {
+        return this.status == UserStatus.PENDING;
+    }
+
+    public void approve() {
+        this.status = UserStatus.ACTIVE;
+    }
+
+    public void suspend() {
+        this.status = UserStatus.SUSPENDED;
+    }
+
     public void promoteToAdmin() {
         this.role = Role.ADMIN;
+        this.status = UserStatus.ACTIVE;
     }
 
     // === 도메인 비즈니스 로직 ===
