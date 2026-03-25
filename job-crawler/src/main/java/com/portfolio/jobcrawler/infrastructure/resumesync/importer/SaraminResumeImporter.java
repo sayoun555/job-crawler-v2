@@ -1,4 +1,4 @@
-package com.portfolio.jobcrawler.infrastructure.resumesync;
+package com.portfolio.jobcrawler.infrastructure.resumesync.importer;
 
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.domain.resume.entity.*;

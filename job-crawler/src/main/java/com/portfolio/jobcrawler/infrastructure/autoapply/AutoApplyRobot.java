@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
+import com.portfolio.jobcrawler.application.ai.dto.CoverLetterSection;
 import com.portfolio.jobcrawler.domain.jobapply.entity.JobApplication;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
+import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -28,15 +30,18 @@ public class AutoApplyRobot {
     private final PlaywrightManager playwrightManager;
     private final AuthSessionManager sessionManager;
     private final Map<String, AutoApplyProvider> providers;
+    private final Map<String, ResumeProvider> resumeProviders;
 
     public AutoApplyRobot(PlaywrightManager playwrightManager,
                           AuthSessionManager sessionManager,
-                          List<AutoApplyProvider> providerList) {
+                          List<AutoApplyProvider> providerList,
+                          List<ResumeProvider> resumeProviderList) {
         this.playwrightManager = playwrightManager;
         this.sessionManager = sessionManager;
-        // 사이트 이름(String)을 키로 하여 Provider 매핑
         this.providers = providerList.stream()
                 .collect(Collectors.toMap(AutoApplyProvider::getSiteName, Function.identity()));
+        this.resumeProviders = resumeProviderList.stream()
+                .collect(Collectors.toMap(ResumeProvider::getSiteName, Function.identity()));
     }
 
     /**
@@ -149,17 +154,58 @@ public class AutoApplyRobot {
         log.info("[AutoApplyRobot] {} 자동 지원 위임 - 공고: {}", site, app.getJobPosting().getTitle());
 
         try (BrowserContext ctx = playwrightManager.createStealthContext()) {
-            // Redis에서 쿠키 복원은 다음 로직에서 Playwright Context에 Inject 하도록 수정 필요 시 처리
-            // 현재 PlaywrightContext에 수동으로 쿠키를 넣으려면 ObjectMapper 역직렬화 필요
             injectSessionCookies(ctx, userId, site);
-
             Page page = ctx.newPage();
+
+            // 지원 전: 이력서 자기소개서를 커스텀 자소서로 업데이트
+            syncCoverLetterToResume(page, site, app);
+
             return provider.submit(page, playwrightManager, app, attachments);
 
         } catch (Exception e) {
             log.error("[AutoApplyRobot] {} 지원 실패: {}", site, e.getMessage());
             return ApplyResult.fail(e.getMessage());
         }
+    }
+
+    /**
+     * 지원 전 이력서의 자기소개서 섹션을 해당 공고의 자소서로 업데이트한다.
+     * coverLetterSections(커스텀)가 있으면 문항별 매핑, 없으면 coverLetter 전체 텍스트 사용.
+     */
+    private void syncCoverLetterToResume(Page page, String site, JobApplication app) {
+        ResumeProvider resumeProvider = resumeProviders.get(site.toUpperCase());
+        if (resumeProvider == null) {
+            log.warn("[AutoApplyRobot] {} ResumeProvider 없음, 자소서 동기화 스킵", site);
+            return;
+        }
+
+        List<CoverLetterSection> sections = parseCoverLetterSections(app);
+        if (sections.isEmpty()) {
+            log.info("[AutoApplyRobot] {} 자소서 섹션 없음, 동기화 스킵", site);
+            return;
+        }
+
+        log.info("[AutoApplyRobot] {} 이력서 자기소개서 동기화 시작 ({}개 섹션)", site, sections.size());
+        try {
+            var result = resumeProvider.updateSelfIntroduction(page, playwrightManager, sections);
+            log.info("[AutoApplyRobot] {} 자기소개서 동기화 결과: {}", site, result.getStatus());
+        } catch (Exception e) {
+            log.warn("[AutoApplyRobot] {} 자기소개서 동기화 실패 (지원은 계속): {}", site, e.getMessage());
+        }
+    }
+
+    private List<CoverLetterSection> parseCoverLetterSections(JobApplication app) {
+        // 커스텀 자소서 섹션이 있으면 파싱
+        if (app.hasCoverLetterSections()) {
+            List<CoverLetterSection> sections = CoverLetterFiller.parseSections(app.getCoverLetterSections());
+            if (!sections.isEmpty()) return sections;
+        }
+        // 없으면 일반 자소서를 단일 섹션으로 변환
+        String coverLetter = app.getCoverLetter();
+        if (coverLetter != null && !coverLetter.isBlank()) {
+            return List.of(new CoverLetterSection("자기소개서", "", coverLetter));
+        }
+        return List.of();
     }
 
     /**

@@ -1,8 +1,11 @@
-package com.portfolio.jobcrawler.infrastructure.autoapply;
+package com.portfolio.jobcrawler.infrastructure.autoapply.provider;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.domain.jobapply.entity.JobApplication;
+import com.portfolio.jobcrawler.infrastructure.autoapply.ApplyResult;
+import com.portfolio.jobcrawler.infrastructure.autoapply.AutoApplyProvider;
+import com.portfolio.jobcrawler.infrastructure.autoapply.CoverLetterFiller;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -92,8 +95,8 @@ public class LinkareerApplyProvider implements AutoApplyProvider {
         // 5. 이력서 선택 (라디오 버튼 또는 셀렉트)
         selectResume(applyPage);
 
-        // 6. 자소서 입력
-        fillCoverLetter(applyPage, app.getCoverLetter());
+        // 6. 자소서 입력 (커스텀 섹션이면 다중 textarea 매핑)
+        CoverLetterFiller.fill(applyPage, app);
 
         // 7. 첨부파일 업로드
         uploadAttachments(applyPage, attachments);
@@ -153,47 +156,6 @@ public class LinkareerApplyProvider implements AutoApplyProvider {
                 }
             }
         }
-    }
-
-    private void fillCoverLetter(Page page, String coverLetter) {
-        if (coverLetter == null || coverLetter.isBlank()) return;
-
-        Locator textareas = page.locator("textarea");
-        // 자소서 관련 textarea 우선 탐색
-        for (int i = 0; i < textareas.count(); i++) {
-            Locator ta = textareas.nth(i);
-            String name = ta.getAttribute("name");
-            String placeholder = ta.getAttribute("placeholder");
-
-            if (isRelevantField(name, placeholder)) {
-                ta.fill(coverLetter);
-                log.info("[링커리어-지원] 자소서 입력 완료 (관련 textarea: {})", name);
-                return;
-            }
-        }
-
-        // 관련 필드 못 찾으면 첫 번째 빈 textarea에 입력
-        for (int i = 0; i < textareas.count(); i++) {
-            if (textareas.nth(i).inputValue().isBlank()) {
-                textareas.nth(i).fill(coverLetter);
-                log.info("[링커리어-지원] 자소서 입력 (첫 번째 빈 textarea)");
-                return;
-            }
-        }
-
-        // contenteditable div 시도 (링커리어 SPA는 이 방식을 쓸 수 있음)
-        Locator editableDiv = page.locator("[contenteditable='true']");
-        if (editableDiv.count() > 0) {
-            editableDiv.first().fill(coverLetter);
-            log.info("[링커리어-지원] 자소서 입력 (contenteditable)");
-        }
-    }
-
-    private boolean isRelevantField(String name, String placeholder) {
-        String combined = ((name != null ? name : "") + (placeholder != null ? placeholder : "")).toLowerCase();
-        return combined.contains("cover") || combined.contains("자소서") || combined.contains("자기소개")
-                || combined.contains("지원동기") || combined.contains("self") || combined.contains("intro")
-                || combined.contains("motivation");
     }
 
     private void uploadAttachments(Page page, List<Path> attachments) {

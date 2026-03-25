@@ -12,11 +12,13 @@ import com.portfolio.jobcrawler.global.error.CustomException;
 import com.portfolio.jobcrawler.global.error.ErrorCode;
 import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeSyncResult;
 import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeSyncRobot;
-import com.portfolio.jobcrawler.infrastructure.resumesync.SaraminResumeImporter;
+import com.portfolio.jobcrawler.infrastructure.resumesync.importer.SaraminResumeImporter;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -39,7 +41,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     @Transactional
     public Resume getOrCreateResume(Long userId) {
-        return resumeRepository.findByUserId(userId)
+        return resumeRepository.findByUserIdAndSourceSiteIsNull(userId)
                 .orElseGet(() -> {
                     User user = userRepository.findById(userId)
                             .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -351,28 +353,188 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     @Transactional
     public SaraminResumeImporter.ImportResult importFromSite(Long userId, String site) {
-        Resume resume = getOrCreateResume(userId);
-
-        if (!"SARAMIN".equalsIgnoreCase(site)) {
-            return SaraminResumeImporter.ImportResult.fail("현재 사람인만 가져오기를 지원합니다.");
+        String upperSite = site.toUpperCase();
+        if (!List.of("SARAMIN", "JOBKOREA", "JOBPLANET", "LINKAREER").contains(upperSite)) {
+            return SaraminResumeImporter.ImportResult.fail("지원하지 않는 사이트입니다: " + site);
         }
 
-        // 기존 데이터 초기화
-        resume.getEducations().clear();
-        resume.getCareers().clear();
-        resume.getSkills().clear();
-        resume.getCertifications().clear();
-        resume.getLanguages().clear();
-        resume.getActivities().clear();
+        // 사이트별 이력서에 저장 (마스터 이력서는 건드리지 않음)
+        com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite sourceSite =
+                com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite.valueOf(upperSite);
 
-        return resumeSyncRobot.importResume(userId, site, resume);
+        // 기존 사이트 이력서가 있으면 업데이트, 없으면 새로 생성
+        Resume siteResume = resumeRepository
+                .findFirstByUserIdAndSourceSiteOrderByUpdatedAtDesc(userId, sourceSite)
+                .orElseGet(() -> {
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                    return resumeRepository.save(
+                            Resume.createSiteResume(user, sourceSite, sourceSite.name() + " 이력서"));
+                });
+
+        // 기존 데이터 초기화 후 새로 채움
+        siteResume.getEducations().clear();
+        siteResume.getCareers().clear();
+        siteResume.getSkills().clear();
+        siteResume.getCertifications().clear();
+        siteResume.getLanguages().clear();
+        siteResume.getActivities().clear();
+
+        return resumeSyncRobot.importResume(userId, site, siteResume);
+    }
+
+    @Override
+    public java.util.List<Resume> getSiteResumes(Long userId, String site) {
+        com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite sourceSite =
+                com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite.valueOf(site.toUpperCase());
+        return resumeRepository.findByUserIdAndSourceSite(userId, sourceSite);
+    }
+
+    @Override
+    public java.util.List<Resume> getAllResumes(Long userId) {
+        return resumeRepository.findAllByUserId(userId);
+    }
+
+    // ── 사이트별 이력서 수정 (resumeId 지정) ──
+
+    @Override
+    public Resume getResumeById(Long userId, Long resumeId) {
+        return resolveResume(userId, resumeId);
+    }
+
+    @Override
+    @Transactional
+    public Resume updateBasicInfo(Long userId, Long resumeId, ResumeBasicInfoCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        resume.updateBasicInfo(command.name(), command.phone(), command.email(),
+                command.gender(), command.birthDate(), command.address());
+        return resume;
+    }
+
+    @Override
+    @Transactional
+    public Resume updateIntroduction(Long userId, Long resumeId, String introduction, String selfIntroduction) {
+        Resume resume = resolveResume(userId, resumeId);
+        resume.updateIntroduction(introduction);
+        resume.updateSelfIntroduction(selfIntroduction);
+        return resume;
+    }
+
+    @Override
+    @Transactional
+    public Resume updateDesiredConditions(Long userId, Long resumeId, DesiredConditionsCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        resume.updateDesiredConditions(command.desiredSalary(), command.desiredEmploymentType(), command.desiredLocation());
+        resume.updateSpecialStatus(command.militaryStatus(), command.disabilityStatus(), command.veteranStatus());
+        return resume;
+    }
+
+    @Override
+    @Transactional
+    public ResumeEducation addEducation(Long userId, Long resumeId, EducationCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumeEducation education = ResumeEducation.builder()
+                .resume(resume)
+                .schoolType(SchoolType.from(command.schoolType()))
+                .schoolName(command.schoolName()).major(command.major()).subMajor(command.subMajor())
+                .startDate(command.startDate()).endDate(command.endDate())
+                .graduationStatus(GraduationStatus.from(command.graduationStatus()))
+                .gpa(command.gpa()).gpaScale(command.gpaScale())
+                .build();
+        return resumeEducationRepository.save(education);
+    }
+
+    @Override
+    @Transactional
+    public ResumeCareer addCareer(Long userId, Long resumeId, CareerCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumeCareer career = ResumeCareer.builder()
+                .resume(resume)
+                .companyName(command.companyName()).department(command.department())
+                .position(command.position()).rank(command.rank())
+                .startDate(command.startDate()).endDate(command.endDate())
+                .currentlyWorking(command.currentlyWorking())
+                .jobDescription(command.jobDescription()).salary(command.salary())
+                .build();
+        return resumeCareerRepository.save(career);
+    }
+
+    @Override
+    @Transactional
+    public ResumeSkill addSkill(Long userId, Long resumeId, String skillName) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumeSkill skill = ResumeSkill.builder().resume(resume).skillName(skillName).build();
+        return resumeSkillRepository.save(skill);
+    }
+
+    @Override
+    @Transactional
+    public ResumeCertification addCertification(Long userId, Long resumeId, CertificationCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumeCertification cert = ResumeCertification.builder()
+                .resume(resume)
+                .certName(command.certName()).issuingOrganization(command.issuingOrganization())
+                .acquiredDate(command.acquiredDate())
+                .build();
+        return resumeCertificationRepository.save(cert);
+    }
+
+    @Override
+    @Transactional
+    public ResumeLanguage addLanguage(Long userId, Long resumeId, LanguageCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumeLanguage lang = ResumeLanguage.builder()
+                .resume(resume)
+                .languageName(command.languageName()).examName(command.examName())
+                .score(command.score()).grade(command.grade()).examDate(command.examDate())
+                .build();
+        return resumeLanguageRepository.save(lang);
+    }
+
+    @Override
+    @Transactional
+    public ResumeActivity addActivity(Long userId, Long resumeId, ActivityCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumeActivity activity = ResumeActivity.builder()
+                .resume(resume)
+                .activityType(ActivityType.from(command.activityType()))
+                .activityName(command.activityName()).organization(command.organization())
+                .description(command.description())
+                .startDate(command.startDate()).endDate(command.endDate())
+                .build();
+        return resumeActivityRepository.save(activity);
+    }
+
+    @Override
+    @Transactional
+    public ResumePortfolioLink addPortfolioLink(Long userId, Long resumeId, PortfolioLinkCommand command) {
+        Resume resume = resolveResume(userId, resumeId);
+        ResumePortfolioLink link = ResumePortfolioLink.builder()
+                .resume(resume)
+                .linkType(command.linkType()).url(command.url()).description(command.description())
+                .build();
+        return resumePortfolioLinkRepository.save(link);
     }
 
     // ── private helpers ──
 
     private Resume getResumeByUserId(Long userId) {
-        return resumeRepository.findByUserId(userId)
+        return resumeRepository.findByUserIdAndSourceSiteIsNull(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESUME_NOT_FOUND));
+    }
+
+    /**
+     * resumeId가 지정되면 해당 이력서를, 아니면 마스터 이력서를 반환한다.
+     * 소유자 검증 포함.
+     */
+    private Resume resolveResume(Long userId, Long resumeId) {
+        if (resumeId == null) {
+            return getResumeByUserId(userId);
+        }
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.RESUME_NOT_FOUND));
+        validateOwnership(resume, userId);
+        return resume;
     }
 
     private void validateOwnership(Resume resume, Long userId) {

@@ -71,8 +71,6 @@ public class JobPosting extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String companyImages;
 
-    private Integer aiMatchScore;
-
     private boolean closed = false;
 
     @Builder
@@ -100,10 +98,6 @@ public class JobPosting extends BaseTimeEntity {
     }
 
     // === 도메인 비즈니스 로직 ===
-
-    public void updateAiMatchScore(int score) {
-        this.aiMatchScore = score;
-    }
 
     public void markAsClosed() {
         this.closed = true;

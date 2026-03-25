@@ -1,4 +1,4 @@
-package com.portfolio.jobcrawler.application.ai;
+package com.portfolio.jobcrawler.application.ai.profile;
 
 import com.portfolio.jobcrawler.domain.resume.entity.Resume;
 

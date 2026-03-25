@@ -526,9 +526,6 @@ public class SaraminParser implements SiteParser {
             List<String> imageUrls) {
 
         String description = rawDescription.trim().replaceAll("\\n{3,}", "\n\n");
-        if (description.length() > 5000) {
-            description = description.substring(0, 5000) + "...";
-        }
 
         String requirements = rawRequirements.trim().replaceAll("\\n{3,}", "\n\n");
         if (requirements.length() > 2000) {

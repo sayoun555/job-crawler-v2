@@ -1,8 +1,11 @@
-package com.portfolio.jobcrawler.infrastructure.autoapply;
+package com.portfolio.jobcrawler.infrastructure.autoapply.provider;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.domain.jobapply.entity.JobApplication;
+import com.portfolio.jobcrawler.infrastructure.autoapply.ApplyResult;
+import com.portfolio.jobcrawler.infrastructure.autoapply.AutoApplyProvider;
+import com.portfolio.jobcrawler.infrastructure.autoapply.CoverLetterFiller;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -70,7 +73,7 @@ public class JobPlanetApplyProvider implements AutoApplyProvider {
         Page applyPage = getLatestPage(page);
 
         selectResume(applyPage);
-        fillCoverLetter(applyPage, app.getCoverLetter());
+        CoverLetterFiller.fill(applyPage, app);
         uploadAttachments(applyPage, attachments);
         checkAllAgreements(applyPage);
 
@@ -99,18 +102,6 @@ public class JobPlanetApplyProvider implements AutoApplyProvider {
     private void selectResume(Page page) {
         Locator resume = page.locator("input[type='radio'][name*='resume']");
         if (resume.count() > 0) resume.first().check();
-    }
-
-    private void fillCoverLetter(Page page, String coverLetter) {
-        if (coverLetter == null || coverLetter.isBlank()) return;
-        Locator textareas = page.locator("textarea");
-        for (int i = 0; i < textareas.count(); i++) {
-            if (textareas.nth(i).inputValue().isBlank()) {
-                textareas.nth(i).fill(coverLetter);
-                log.info("[잡플래닛-지원] 자소서 입력 완료");
-                return;
-            }
-        }
     }
 
     private void uploadAttachments(Page page, List<Path> attachments) {

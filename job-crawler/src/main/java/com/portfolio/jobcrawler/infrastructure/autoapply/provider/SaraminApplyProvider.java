@@ -1,8 +1,11 @@
-package com.portfolio.jobcrawler.infrastructure.autoapply;
+package com.portfolio.jobcrawler.infrastructure.autoapply.provider;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.domain.jobapply.entity.JobApplication;
+import com.portfolio.jobcrawler.infrastructure.autoapply.ApplyResult;
+import com.portfolio.jobcrawler.infrastructure.autoapply.AutoApplyProvider;
+import com.portfolio.jobcrawler.infrastructure.autoapply.CoverLetterFiller;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -100,8 +103,8 @@ public class SaraminApplyProvider implements AutoApplyProvider {
             log.info("[사람인-지원] 이력서 선택 완료");
         }
 
-        // 5. 자소서 입력 (textarea가 있으면 채움)
-        fillCoverLetter(applyPage, app.getCoverLetter());
+        // 5. 자소서 입력 (커스텀 섹션이면 다중 textarea 매핑)
+        CoverLetterFiller.fill(applyPage, app);
 
         // 6. 첨부파일 업로드
         uploadAttachments(applyPage, attachments);
@@ -131,48 +134,6 @@ public class SaraminApplyProvider implements AutoApplyProvider {
         playwrightManager.longDelay();
 
         return checkResult(applyPage);
-    }
-
-    private void fillCoverLetter(Page page, String coverLetter) {
-        if (coverLetter == null || coverLetter.isBlank()) return;
-
-        // 사람인 자소서 입력: textarea 또는 contenteditable div
-        Locator textareas = page.locator("textarea");
-        if (textareas.count() > 0) {
-            for (int i = 0; i < textareas.count(); i++) {
-                Locator ta = textareas.nth(i);
-                String name = ta.getAttribute("name");
-                String placeholder = ta.getAttribute("placeholder");
-
-                // 자소서 관련 textarea만 채움
-                if (isRelevantField(name, placeholder)) {
-                    ta.fill(coverLetter);
-                    log.info("[사람인-지원] 자소서 입력 완료 (textarea: {})", name);
-                    return;
-                }
-            }
-            // 관련 필드 못 찾으면 첫 번째 빈 textarea에 입력
-            for (int i = 0; i < textareas.count(); i++) {
-                if (textareas.nth(i).inputValue().isBlank()) {
-                    textareas.nth(i).fill(coverLetter);
-                    log.info("[사람인-지원] 자소서 입력 (첫 번째 빈 textarea)");
-                    return;
-                }
-            }
-        }
-
-        // contenteditable div 시도
-        Locator editableDiv = page.locator("[contenteditable='true']");
-        if (editableDiv.count() > 0) {
-            editableDiv.first().fill(coverLetter);
-            log.info("[사람인-지원] 자소서 입력 (contenteditable)");
-        }
-    }
-
-    private boolean isRelevantField(String name, String placeholder) {
-        String combined = ((name != null ? name : "") + (placeholder != null ? placeholder : "")).toLowerCase();
-        return combined.contains("cover") || combined.contains("자소서") || combined.contains("자기소개")
-                || combined.contains("지원동기") || combined.contains("self") || combined.contains("intro");
     }
 
     private void uploadAttachments(Page page, List<Path> attachments) {

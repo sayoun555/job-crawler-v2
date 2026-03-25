@@ -52,6 +52,14 @@ public class JobApplication extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String matchedProjectIds;
 
+    /** 커스텀 자소서 문항별 JSON: [{"title":"지원동기","rule":"500자","content":"..."}] */
+    @Column(columnDefinition = "TEXT")
+    private String coverLetterSections;
+
+    /** 커스텀 포트폴리오 문항별 JSON: [{"title":"프로젝트 개요","rule":"...","content":"..."}] */
+    @Column(columnDefinition = "TEXT")
+    private String portfolioSections;
+
     private LocalDateTime appliedAt;
 
     @Column(columnDefinition = "TEXT")
@@ -110,11 +118,27 @@ public class JobApplication extends BaseTimeEntity {
         this.portfolioContent = portfolioContent;
     }
 
+    public void updateCoverLetterSections(String sectionsJson) {
+        this.coverLetterSections = sectionsJson;
+    }
+
+    public void updatePortfolioSections(String sectionsJson) {
+        this.portfolioSections = sectionsJson;
+    }
+
+    public boolean hasPortfolioSections() {
+        return portfolioSections != null && !portfolioSections.isBlank();
+    }
+
     public void changeTemplate(Template template) {
         this.template = template;
     }
 
     public void updateMatchedProjects(String matchedProjectIds) {
         this.matchedProjectIds = matchedProjectIds;
+    }
+
+    public boolean hasCoverLetterSections() {
+        return coverLetterSections != null && !coverLetterSections.isBlank();
     }
 }

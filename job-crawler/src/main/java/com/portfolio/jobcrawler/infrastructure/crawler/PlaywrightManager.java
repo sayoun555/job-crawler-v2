@@ -28,7 +28,9 @@ public class PlaywrightManager {
                         .setArgs(List.of(
                                 "--disable-blink-features=AutomationControlled",
                                 "--no-sandbox", "--disable-dev-shm-usage",
-                                "--disable-infobars", "--disable-extensions", "--disable-gpu")));
+                                "--disable-infobars", "--disable-extensions", "--disable-gpu",
+                                "--window-position=-9999,-9999",
+                                "--no-focus-on-navigate")));
     }
 
     public BrowserContext createStealthContext() {
@@ -115,7 +117,9 @@ public class PlaywrightManager {
                             .setArgs(List.of(
                                     "--disable-blink-features=AutomationControlled",
                                     "--no-sandbox", "--disable-dev-shm-usage",
-                                    "--disable-infobars", "--disable-extensions", "--disable-gpu")));
+                                    "--disable-infobars", "--disable-extensions", "--disable-gpu",
+                                    "--window-position=-9999,-9999",
+                                    "--no-focus-on-navigate")));
         }
 
         public BrowserContext createStealthContext() {

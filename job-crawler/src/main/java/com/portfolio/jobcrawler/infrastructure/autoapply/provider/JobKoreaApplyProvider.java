@@ -1,8 +1,11 @@
-package com.portfolio.jobcrawler.infrastructure.autoapply;
+package com.portfolio.jobcrawler.infrastructure.autoapply.provider;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.portfolio.jobcrawler.domain.jobapply.entity.JobApplication;
+import com.portfolio.jobcrawler.infrastructure.autoapply.ApplyResult;
+import com.portfolio.jobcrawler.infrastructure.autoapply.AutoApplyProvider;
+import com.portfolio.jobcrawler.infrastructure.autoapply.CoverLetterFiller;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -95,8 +98,8 @@ public class JobKoreaApplyProvider implements AutoApplyProvider {
             log.info("[잡코리아-지원] 이력서 선택 완료");
         }
 
-        // 5. 자소서 입력
-        fillCoverLetter(applyPage, app.getCoverLetter());
+        // 5. 자소서 입력 (커스텀 섹션이면 다중 textarea 매핑)
+        CoverLetterFiller.fill(applyPage, app);
 
         // 6. 첨부파일
         if (attachments != null && !attachments.isEmpty()) {
@@ -130,29 +133,6 @@ public class JobKoreaApplyProvider implements AutoApplyProvider {
         playwrightManager.longDelay();
 
         return checkResult(applyPage);
-    }
-
-    private void fillCoverLetter(Page page, String coverLetter) {
-        if (coverLetter == null || coverLetter.isBlank()) return;
-
-        Locator textareas = page.locator("textarea");
-        for (int i = 0; i < textareas.count(); i++) {
-            Locator ta = textareas.nth(i);
-            String name = ta.getAttribute("name");
-            if (name != null && (name.contains("cover") || name.contains("self") || name.contains("intro"))) {
-                ta.fill(coverLetter);
-                log.info("[잡코리아-지원] 자소서 입력 완료 ({})", name);
-                return;
-            }
-        }
-        // 첫 번째 빈 textarea에 입력
-        for (int i = 0; i < textareas.count(); i++) {
-            if (textareas.nth(i).inputValue().isBlank()) {
-                textareas.nth(i).fill(coverLetter);
-                log.info("[잡코리아-지원] 자소서 입력 (첫 번째 빈 textarea)");
-                return;
-            }
-        }
     }
 
     private ApplyResult checkResult(Page page) {

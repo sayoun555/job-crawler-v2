@@ -54,6 +54,13 @@ public class FileStorageService {
     }
 
     /**
+     * 포트폴리오 에디터 이미지 저장.
+     */
+    public String storePortfolioImage(MultipartFile file, Long projectId) throws IOException {
+        return storeFile(file, "portfolio/" + projectId);
+    }
+
+    /**
      * 지원 첨부 파일 저장.
      */
     public String storeApplicationAttachment(MultipartFile file, Long applicationId) throws IOException {

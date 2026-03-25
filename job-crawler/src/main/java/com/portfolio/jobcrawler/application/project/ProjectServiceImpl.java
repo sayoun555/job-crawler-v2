@@ -65,4 +65,12 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = getMyProject(userId, projectId);
         projectRepository.delete(project);
     }
+
+    @Override
+    @Transactional
+    public Project updatePortfolio(Long userId, Long projectId, String content) {
+        Project project = getMyProject(userId, projectId);
+        project.updatePortfolioContent(content);
+        return project;
+    }
 }

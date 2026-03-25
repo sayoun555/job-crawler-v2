@@ -17,6 +17,8 @@ public interface AiAnalysisResultRepository extends JpaRepository<AiAnalysisResu
 
     Optional<AiAnalysisResult> findByJobPostingIdAndType(Long jobPostingId, AnalysisType type);
 
+    List<AiAnalysisResult> findByUserIdAndJobPostingIdInAndType(Long userId, List<Long> jobPostingIds, AnalysisType type);
+
     void deleteByJobPostingId(Long jobPostingId);
 
     void deleteByJobPostingIdIn(List<Long> jobPostingIds);

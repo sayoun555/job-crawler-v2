@@ -1,4 +1,4 @@
-package com.portfolio.jobcrawler.infrastructure.resumesync;
+package com.portfolio.jobcrawler.infrastructure.resumesync.provider;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -6,7 +6,12 @@ import com.portfolio.jobcrawler.domain.resume.entity.*;
 import com.portfolio.jobcrawler.domain.resume.vo.ActivityType;
 import com.portfolio.jobcrawler.domain.resume.vo.GraduationStatus;
 import com.portfolio.jobcrawler.domain.resume.vo.SchoolType;
+import com.portfolio.jobcrawler.application.ai.dto.CoverLetterSection;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
+import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeProvider;
+import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeSyncResult;
+import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeSyncResult.Builder;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -131,6 +136,157 @@ public class SaraminResumeProvider implements ResumeProvider {
         saveResume(page, pm, result);
 
         return result.build();
+    }
+
+    @Override
+    public ResumeSyncResult updateSelfIntroduction(Page page, PlaywrightManager pm,
+                                                   List<CoverLetterSection> sections) {
+        log.info("[SaraminResume] 자기소개서 업데이트 시작 ({}개 문항)", sections.size());
+
+        try {
+            // beforeunload 다이얼로그 자동 수락
+            page.onDialog(dialog -> {
+                log.info("[SaraminResume] 다이얼로그 자동 수락: {}", dialog.message());
+                dialog.accept();
+            });
+
+            // 이력서 편집 페이지로 이동 (기존 이력서 관리 목록에서 편집)
+            page.navigate("https://www.saramin.co.kr/zf_user/member/resume-manage/list",
+                    new Page.NavigateOptions()
+                            .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.NETWORKIDLE)
+                            .setTimeout(60000));
+            pm.shortDelay();
+
+            String currentUrl = page.url();
+            if (currentUrl.contains("/login") || currentUrl.contains("/auth")) {
+                log.error("[SaraminResume] 로그인 세션 만료: {}", currentUrl);
+                return ResumeSyncResult.sessionExpired(
+                        "사람인 로그인 세션이 만료되었습니다. 설정에서 다시 연동해주세요.");
+            }
+
+            // 첫 번째 이력서의 편집 링크 클릭
+            Boolean navigated = (Boolean) page.evaluate("() => {" +
+                    "  const editLink = document.querySelector('a[href*=\"resume-manage/edit\"]');" +
+                    "  if (editLink) { location.href = editLink.href; return true; }" +
+                    "  return false;" +
+                    "}");
+
+            if (!Boolean.TRUE.equals(navigated)) {
+                log.error("[SaraminResume] 편집 가능한 이력서를 찾을 수 없음");
+                return ResumeSyncResult.fail("편집 가능한 이력서가 없습니다.");
+            }
+
+            pm.shortDelay();
+            pm.shortDelay();
+
+            try {
+                page.waitForSelector("section#introduce",
+                        new Page.WaitForSelectorOptions().setTimeout(30000));
+            } catch (Exception waitEx) {
+                log.warn("[SaraminResume] section#introduce 대기 타임아웃, 계속 진행");
+            }
+
+            dismissOverlays(page, pm);
+
+            // confirm/alert 오버라이드
+            page.evaluate("() => {" +
+                    "  window.confirm = function() { return true; };" +
+                    "  window.alert = function() { return; };" +
+                    "}");
+
+            // 좌측 메뉴에서 자기소개서(#introduce) 클릭
+            page.evaluate("() => {" +
+                    "  const link = document.querySelector('a[href=\"#introduce\"]');" +
+                    "  if (link) link.click();" +
+                    "}");
+            pm.shortDelay();
+
+            // 기존 자기소개서 항목 모두 삭제
+            deleteAllIntroduceItems(page, pm);
+
+            // 새 자기소개서 문항 추가 및 입력
+            for (int i = 0; i < sections.size(); i++) {
+                CoverLetterSection section = sections.get(i);
+
+                if (!clickAddButton(page, "section#introduce", pm)) {
+                    log.error("[SaraminResume] 자기소개서 추가 버튼 클릭 실패 ({}번째)", i + 1);
+                    return ResumeSyncResult.fail("자기소개서 추가 버튼 클릭 실패");
+                }
+
+                // 제목 입력
+                fillInputInOpenForm(page, "section#introduce",
+                        "input[name='intro_title[]']", section.title());
+                pm.randomDelay(300, 500);
+
+                // 내용 입력
+                fillTextareaInOpenForm(page, "section#introduce",
+                        "textarea[name='intro_contents[]']", section.content());
+                pm.randomDelay(300, 500);
+
+                // 저장
+                clickSaveButton(page, "section#introduce", pm);
+                log.info("[SaraminResume] 자기소개서 문항 저장 완료: {}", section.title());
+            }
+
+            // 최종 저장 (작성완료)
+            saveResumeForUpdate(page, pm);
+
+            log.info("[SaraminResume] 자기소개서 업데이트 완료 ({}개 문항)", sections.size());
+            return ResumeSyncResult.success();
+
+        } catch (Exception e) {
+            log.error("[SaraminResume] 자기소개서 업데이트 실패: {}", e.getMessage(), e);
+            return ResumeSyncResult.fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 기존 자기소개서 항목을 모두 삭제한다.
+     */
+    private void deleteAllIntroduceItems(Page page, PlaywrightManager pm) {
+        for (int i = 0; i < 20; i++) {
+            Boolean deleted = (Boolean) page.evaluate("() => {" +
+                    "  const section = document.querySelector('section#introduce');" +
+                    "  if (!section) return false;" +
+                    "  const deleteBtn = section.querySelector('button.evtDeleteItem');" +
+                    "  if (deleteBtn) { deleteBtn.click(); return true; }" +
+                    "  return false;" +
+                    "}");
+            if (!Boolean.TRUE.equals(deleted)) break;
+            pm.randomDelay(500, 800);
+        }
+        pm.shortDelay();
+    }
+
+    /**
+     * 이력서 편집 페이지에서 최종 저장 버튼을 클릭한다.
+     */
+    private void saveResumeForUpdate(Page page, PlaywrightManager pm) {
+        // confirm/alert 오버라이드
+        page.evaluate("() => {" +
+                "  window.confirm = function() { return true; };" +
+                "  window.alert = function() { return; };" +
+                "}");
+
+        // 작성완료 버튼 스크롤 + 클릭
+        Object clicked = page.evaluate("() => {" +
+                "  const btn = document.querySelector('button.evtResumeSave');" +
+                "  if (!btn) return false;" +
+                "  btn.scrollIntoView({behavior:'instant', block:'center'});" +
+                "  return true;" +
+                "}");
+
+        if (Boolean.TRUE.equals(clicked)) {
+            pm.randomDelay(500, 1000);
+            Locator saveBtn = page.locator("button.evtResumeSave");
+            if (saveBtn.count() > 0) {
+                saveBtn.first().click();
+                log.info("[SaraminResume] 이력서 저장 버튼 클릭 완료");
+            } else {
+                page.evaluate("() => document.querySelector('button.evtResumeSave')?.click()");
+            }
+            pm.longDelay();
+        }
     }
 
     // ── 학력 ──

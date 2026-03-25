@@ -55,7 +55,7 @@ public class AuthSessionManager {
     @Transactional
     public void saveSessionString(Long userId, String site, String cookiesJson) {
         SourceSite sourceSite = SourceSite.valueOf(site.toUpperCase());
-        Instant expiresAt = extractEarliestExpiry(cookiesJson);
+        Instant expiresAt = estimateSessionExpiry(site);
 
         // DB 저장 (원본 + 만료시각)
         externalAccountRepository.findByUserIdAndSite(userId, sourceSite)
@@ -126,34 +126,18 @@ public class AuthSessionManager {
     }
 
     /**
-     * 쿠키 JSON에서 인증 관련 쿠키의 가장 빠른 만료 시각을 추출한다.
-     * session 쿠키(expires 없음)는 무시하고, expires가 있는 것 중 가장 빠른 값을 반환.
+     * 사이트별 세션 유효 시간 (하드코딩).
+     * 각 사이트의 실제 세션 유지 시간을 경험 기반으로 설정.
      */
-    private Instant extractEarliestExpiry(String cookiesJson) {
-        try {
-            List<Map<String, Object>> cookieList = objectMapper.readValue(cookiesJson,
-                    new com.fasterxml.jackson.core.type.TypeReference<>() {});
-
-            double minExpires = Double.MAX_VALUE;
-            for (Map<String, Object> cookie : cookieList) {
-                Object expiresObj = cookie.get("expires");
-                if (expiresObj instanceof Number) {
-                    double expires = ((Number) expiresObj).doubleValue();
-                    // 세션 쿠키(expires=-1 또는 0)는 무시, 미래 값만 취급
-                    if (expires > 0 && expires < minExpires) {
-                        minExpires = expires;
-                    }
-                }
-            }
-
-            if (minExpires < Double.MAX_VALUE) {
-                return Instant.ofEpochSecond((long) minExpires);
-            }
-        } catch (Exception e) {
-            log.warn("[AuthSessionManager] 쿠키 만료 시각 파싱 실패: {}", e.getMessage());
-        }
-        // expires가 없는 경우 기본 24시간
-        return Instant.now().plusSeconds(SESSION_EXPIRATION_HOURS * 3600L);
+    private Instant estimateSessionExpiry(String site) {
+        long hours = switch (site.toUpperCase()) {
+            case "SARAMIN" -> 4;       // 사람인: ~2~4시간
+            case "JOBKOREA" -> 12;     // 잡코리아: ~12시간
+            case "JOBPLANET" -> 24;    // 잡플래닛: ~24시간
+            case "LINKAREER" -> 168;   // 링커리어: ~7일 (OAuth)
+            default -> 4;
+        };
+        return Instant.now().plusSeconds(hours * 3600L);
     }
 
     private String serializeCookies(List<Cookie> cookieList) {

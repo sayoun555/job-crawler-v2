@@ -1,6 +1,9 @@
 package com.portfolio.jobcrawler.api.test;
 
 import com.portfolio.jobcrawler.global.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import java.util.*;
  * 프론트에서 체크박스 형태로 각 기능 검증 항목을 표시하고,
  * 사용자가 체크하면 상태를 저장한다.
  */
+@Tag(name = "테스트", description = "기능 검증용 테스트 API")
 @RestController
 @RequestMapping("/api/v1/test-checklist")
 public class TestChecklistController {
@@ -20,20 +24,29 @@ public class TestChecklistController {
     // 메모리 기반 저장 (프로토타입용, 운영 시 Redis/DB 전환)
     private final Map<String, Boolean> checklistState = new LinkedHashMap<>();
 
+    @Operation(summary = "테스트 체크리스트 전체 조회")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ChecklistItem>>> getChecklist() {
         List<ChecklistItem> items = buildChecklist();
         return ResponseEntity.ok(ApiResponse.ok(items));
     }
 
+    @Operation(summary = "체크리스트 항목 토글")
     @PatchMapping("/{itemId}")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> toggleItem(
-            @PathVariable String itemId, @RequestBody Map<String, Boolean> body) {
+            @Parameter(description = "체크리스트 항목 ID") @PathVariable String itemId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "체크 상태",
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                    example = "{\"checked\": true}")))
+            @RequestBody Map<String, Boolean> body) {
         boolean checked = body.getOrDefault("checked", false);
         checklistState.put(itemId, checked);
         return ResponseEntity.ok(ApiResponse.ok(Map.of(itemId, checked)));
     }
 
+    @Operation(summary = "체크리스트 상태 조회")
     @GetMapping("/state")
     public ResponseEntity<ApiResponse<Map<String, Boolean>>> getState() {
         return ResponseEntity.ok(ApiResponse.ok(checklistState));

@@ -32,12 +32,24 @@ public class PlaywrightScrapingEngine {
     private int detailConcurrency;
 
     private static final int MAX_DETAIL_RETRIES = 3;
-    private static final int EMPTY_PAGE_THRESHOLD = 2; // 연속 N페이지 신규 0건이면 조기 종료
+    private static final int EMPTY_PAGE_THRESHOLD = 2;
+
+    private volatile boolean cancelRequested = false;
+
+    public void cancelCrawling() {
+        this.cancelRequested = true;
+        log.info("[크롤링] 취소 요청됨");
+    }
+
+    public boolean isCancelled() {
+        return cancelRequested;
+    }
 
     public List<CrawledJobData> scrape(SiteParser parser, String keyword, String jobCategory, int maxPages, int timeoutMs) {
         String siteName = parser.getSiteName();
         boolean unlimited = maxPages <= 0;
         log.info("[{}] 크롤링 시작 - 키워드: {}, 카테고리: {}, 최대페이지: {}", siteName, keyword, jobCategory, unlimited ? "무제한" : maxPages);
+        cancelRequested = false;
         List<CrawledJobData> results = new ArrayList<>();
         int consecutiveEmptyPages = 0;
 
@@ -46,6 +58,10 @@ public class PlaywrightScrapingEngine {
             navigateToSearchUrl(page, parser, siteName, keyword, jobCategory);
 
             for (int pageNum = 1; unlimited || pageNum <= maxPages; pageNum++) {
+                if (cancelRequested) {
+                    log.info("[{}] 크롤링 취소됨 ({}페이지 진행 중, {} 건 수집)", siteName, pageNum, results.size());
+                    break;
+                }
                 int beforeSize = results.size();
                 boolean hasMorePages = processSinglePage(page, parser, siteName, pageNum, results, jobCategory);
 

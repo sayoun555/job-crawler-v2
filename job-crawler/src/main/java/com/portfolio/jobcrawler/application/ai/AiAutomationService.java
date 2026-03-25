@@ -24,6 +24,12 @@ public interface AiAutomationService {
     /** 포트폴리오 자동 생성 */
     String generatePortfolio(Long userId, Long jobPostingId, Long templateId);
 
+    /** 포트폴리오 자동 생성 (프로젝트 지정) */
+    String generatePortfolio(Long userId, Long jobPostingId, Long templateId, List<Long> projectIds);
+
+    /** 자소서 자동 생성 (프로젝트 지정) */
+    String generateCoverLetter(Long userId, Long jobPostingId, Long templateId, List<Long> projectIds);
+
     /** 기업/직무 사전 분석 (유저별 저장) */
     String analyzeCompany(Long userId, Long jobPostingId);
 
@@ -35,4 +41,15 @@ public interface AiAutomationService {
 
     /** 합격 자소서 패턴 분석 */
     String analyzeCoverLetterPattern(Long coverLetterId);
+
+    /** 커스텀 자소서 생성 (문항별 JSON 반환) */
+    String generateCustomCoverLetter(Long userId, Long jobPostingId,
+            String sectionsJson, String additionalRequest);
+
+    /** 커스텀 포트폴리오 생성 (문항별 JSON 반환) */
+    String generateCustomPortfolio(Long userId, Long jobPostingId,
+            String sectionsJson, String additionalRequest);
+
+    /** 프로젝트 단위 범용 포트폴리오 생성 (공고 없이) */
+    String generateProjectPortfolio(Long userId, Long projectId);
 }

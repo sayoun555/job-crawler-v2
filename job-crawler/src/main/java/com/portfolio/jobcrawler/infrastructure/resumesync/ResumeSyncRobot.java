@@ -9,6 +9,11 @@ import com.portfolio.jobcrawler.application.account.ExternalAccountService;
 import com.portfolio.jobcrawler.domain.jobposting.vo.SourceSite;
 import com.portfolio.jobcrawler.infrastructure.autoapply.AuthSessionManager;
 import com.portfolio.jobcrawler.infrastructure.crawler.PlaywrightManager;
+import com.portfolio.jobcrawler.infrastructure.resumesync.importer.JobKoreaResumeImporter;
+import com.portfolio.jobcrawler.infrastructure.resumesync.importer.JobPlanetResumeImporter;
+import com.portfolio.jobcrawler.infrastructure.resumesync.importer.LinkareerResumeImporter;
+import com.portfolio.jobcrawler.infrastructure.resumesync.importer.SaraminResumeImporter;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -32,17 +37,26 @@ public class ResumeSyncRobot {
     private final AuthSessionManager sessionManager;
     private final ExternalAccountService externalAccountService;
     private final SaraminResumeImporter saraminResumeImporter;
+    private final JobKoreaResumeImporter jobKoreaResumeImporter;
+    private final JobPlanetResumeImporter jobPlanetResumeImporter;
+    private final LinkareerResumeImporter linkareerResumeImporter;
     private final Map<String, ResumeProvider> providers;
 
     public ResumeSyncRobot(PlaywrightManager playwrightManager,
                            AuthSessionManager sessionManager,
                            ExternalAccountService externalAccountService,
                            SaraminResumeImporter saraminResumeImporter,
+                           JobKoreaResumeImporter jobKoreaResumeImporter,
+                           JobPlanetResumeImporter jobPlanetResumeImporter,
+                           LinkareerResumeImporter linkareerResumeImporter,
                            List<ResumeProvider> providerList) {
         this.playwrightManager = playwrightManager;
         this.sessionManager = sessionManager;
         this.externalAccountService = externalAccountService;
         this.saraminResumeImporter = saraminResumeImporter;
+        this.jobKoreaResumeImporter = jobKoreaResumeImporter;
+        this.jobPlanetResumeImporter = jobPlanetResumeImporter;
+        this.linkareerResumeImporter = linkareerResumeImporter;
         this.providers = providerList.stream()
                 .collect(Collectors.toMap(ResumeProvider::getSiteName, Function.identity()));
     }
@@ -140,8 +154,13 @@ public class ResumeSyncRobot {
             injectSessionCookies(ctx, userId, site);
             Page page = ctx.newPage();
 
-            SaraminResumeImporter.ImportResult result =
-                    saraminResumeImporter.importResume(page, playwrightManager, resume);
+            SaraminResumeImporter.ImportResult result = switch (site.toUpperCase()) {
+                case "SARAMIN" -> saraminResumeImporter.importResume(page, playwrightManager, resume);
+                case "JOBKOREA" -> jobKoreaResumeImporter.importResume(page, playwrightManager, resume);
+                case "JOBPLANET" -> jobPlanetResumeImporter.importResume(page, playwrightManager, resume);
+                case "LINKAREER" -> linkareerResumeImporter.importResume(page, playwrightManager, resume);
+                default -> SaraminResumeImporter.ImportResult.fail(site + " 이력서 가져오기는 지원되지 않습니다.");
+            };
 
             if (result.sessionExpired()) {
                 invalidateSessionSafely(userId, site);

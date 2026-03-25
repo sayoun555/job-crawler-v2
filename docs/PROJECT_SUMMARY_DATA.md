@@ -173,3 +173,150 @@
 - **AI 비동기 큐**: AI 자소서/포트폴리오 생성 30초~1분 동기 대기로 화면 멈춤 → Redis 기반 태스크 큐(AiTaskQueue)로 즉시 접수(1초) + 백그라운드 처리(30초) + 폴링(/async/status)으로 결과 수신 → 유저 체감 대기 1초, 탭 닫아도 taskId로 재조회 가능
 - **WebSocket 실시간 알림**: 폴링 방식은 3초 간격 불필요한 요청 발생, 실시간성 부족 → STOMP over SockJS로 AI 태스크 완료 시 유저별 채널(/topic/ai/{userId})로 즉시 푸시, 폴링 fallback 유지 → 결과 수신 지연 3초→0ms, 불필요한 네트워크 요청 제거
 - **DB 검색 인덱스**: LIKE '%keyword%' 검색이 Full Table Scan → PostgreSQL pg_trgm GIN 인덱스로 title, company 트라이그램 검색 가속 + JPA @Index 9개(title, jobCategory, createdAt, source, deadline, company, url, source+closed, closed+deadline) → 만 건 이상에서 검색 100ms+→20ms
+
+---
+
+## 10. 자동 지원 시스템 완성 & 사이트별 AI 연동 (세션 7)
+
+### 10-1. 자동 지원 라우팅 버그 수정
+
+**문제**: JobApplyServiceImpl에서 SARAMIN/JOBPLANET만 하드코딩 분기. 잡코리아/링커리어 공고 지원 시 잘못된 Provider로 라우팅.
+
+**해결**: `submitApply(userId, siteName, app, attachments)` 전략패턴 통합 호출로 변경. AutoApplyRobot이 사이트명으로 올바른 Provider를 자동 선택.
+
+**결과**: 4개 사이트 모두 올바른 Provider로 라우팅 확인.
+
+### 10-2. Dialog 핸들러 순서 버그 수정
+
+**문제**: SaraminApplyProvider/JobKoreaApplyProvider에서 `page.onDialog()` 핸들러를 제출 버튼 클릭 **이후**에 등록. 클릭 시 발생하는 confirm 다이얼로그를 놓칠 수 있음.
+
+**해결**: dialog 핸들러를 지원 버튼 클릭 **이전**에 등록하고, 중복 핸들러 제거.
+
+### 10-3. LinkareerApplyProvider 전면 재작성
+
+**문제**: 링커리어 Provider가 미완성. 팝업 처리, 이력서 선택, 약관 동의, 외부 사이트 감지 누락.
+
+**해결**: 사람인/잡코리아 수준으로 강화.
+
+| 기능 | Before | After |
+|------|--------|-------|
+| 팝업/새탭 처리 | 없음 | getLatestPage() |
+| 이력서 선택 | 없음 | 라디오/셀렉트 지원 |
+| 자소서 입력 | 첫 textarea만 | name/placeholder 기반 스마트 매칭 + contenteditable |
+| 약관 동의 | 없음 | 전체동의 우선 + 개별 checkbox |
+| 외부 사이트 감지 | 없음 | linkareer.com 외 href 감지 → fail 반환 |
+| 결과 검증 | 기본 3패턴 | 5개 성공패턴 + URL 변화 + 에러 감지 |
+
+### 10-4. 사후 검증 스케줄러 4개 사이트 확장
+
+**문제**: ApplicationVerificationScheduler가 사람인/잡플래닛만 지원. 직접 Redis 접근.
+
+**해결**: AuthSessionManager 위임으로 리팩토링 + 잡코리아/링커리어 검증 추가. switch 표현식으로 사이트별 URL/셀렉터 분리.
+
+### 10-5. 세션 만료 정확 감지
+
+**문제**: ExternalAccount.hasValidSession()이 쿠키 문자열 존재만 체크. 사이트 세션이 만료돼도 "연동됨"으로 표시.
+
+**해결**: sessionExpiresAt 필드 추가. 세션 저장 시 쿠키 expires 중 최소값을 파싱하여 기록. hasValidSession()에서 현재 시각과 비교.
+
+| 항목 | Before | After |
+|------|--------|-------|
+| 만료 감지 | 쿠키 문자열 존재만 체크 | expires 시각 기반 정확 비교 |
+| 만료 시 UI | "연동됨" (잘못 표시) | "세션 만료" + 재연동 버튼 |
+
+### 10-6. 프론트엔드 WebSocket + 비동기 큐 UI
+
+**문제**: 백엔드 AiTaskQueue + WebSocket은 완성됐지만 프론트에서 소비하지 않음. AI 자소서/포트폴리오 생성 시 30초~1분 동기 대기.
+
+**해결**:
+- `useAiTaskQueue` 훅: WebSocket `onAiTaskComplete` 리스너 + 3초 간격 폴링 fallback
+- `AiTaskProgress` 컴포넌트: 인라인 진행상태 (PENDING/PROCESSING + 경과 시간)
+- `AiTaskNotification` 컴포넌트: 성공/실패 토스트 (5초 자동 소멸)
+- 미리보기 페이지: 동기 `aiApi.coverLetter()` → 비동기 `aiQueue.startCoverLetter()` 전환
+
+| 항목 | Before | After |
+|------|--------|-------|
+| 재생성 UX | 버튼 클릭 → 30초 멈춤 → 결과 | 버튼 클릭 → 즉시 "생성 중..." → 실시간 완료 알림 |
+| 결과 수신 | 동기 HTTP 응답 | WebSocket 푸시 (0ms 지연) + 폴링 fallback |
+| 생성 중 다른 작업 | 불가 (UI 블로킹) | 가능 (비동기) |
+
+### 10-7. 사이트별 AI 프로필 전략패턴
+
+**문제**: AiPromptDataBuilder.buildProfileString()이 모든 사이트에 동일한 프로필을 전달. 각 사이트의 이력서 양식과 강조 포인트가 다른데 반영 안 됨.
+
+**해결**: SiteProfileStrategy 인터페이스 + 4개 구현체 (SRP, OCP, DIP 준수)
+
+| 사이트 | 강조 포인트 | 서술 스타일 |
+|--------|-----------|-----------|
+| 사람인 | 경력 상세 + 기술스택 | 자유 서술형, 프로젝트 경험 구체적 |
+| 잡코리아 | 자격증 + 스킬 | 간결 구조화, 핵심 키워드 중심 |
+| 잡플래닛 | 커리어 내러티브 | 기업문화 핏, 성장 스토리 |
+| 링커리어 | 학력 + 대외활동 | 성장가능성, 학습 의지 |
+
+**구조**: `ProfileBuildHelper`(공통 유틸) + `SiteProfileStrategy`(인터페이스) + 4개 구현체 → `AiPromptDataBuilder`가 위임
+
+### 10-8. 이력서 동기화 상태 추적
+
+**문제**: 어떤 사이트에 이력서가 동기화됐는지 추적 불가. 프론트에서 상태 표시 안 됨.
+
+**해결**: ExternalAccount에 resumeSyncedAt/resumeSyncStatus/resumeSyncMessage 필드 추가. ResumeSyncRobot이 sync 완료 후 상태 저장. 기존 `/api/v1/accounts` 응답에 자동 포함 (새 API 불필요).
+
+---
+
+## 11. 사이트별 이력서 시스템 & 커스텀 자소서 & AI 프롬프트 강화 (세션 7 후반)
+
+### 11-1. 사이트별 이력서 저장 시스템
+
+**문제**: Resume 엔티티가 유저당 1개(1:1)로, 모든 사이트에 같은 이력서를 사용. 실제로는 사람인/잡코리아/잡플래닛/링커리어에 등록한 이력서가 각각 다름.
+
+**해결**: Resume에 `sourceSite` 컬럼 추가하여 유저당 최대 5개(마스터 + 사이트별 4개) 이력서 저장. `@OneToOne` → `@ManyToOne` 변경. 4개 사이트 Importer 구현(Saramin/JobKorea: hidden form 추출, JobPlanet: SPA 카드 클릭 후 DOM 추출, Linkareer: React input + CareerChip 추출).
+
+| 항목 | Before | After |
+|------|--------|-------|
+| 이력서 | 유저당 1개 | 유저당 최대 5개 (마스터 + 사이트별) |
+| Import | 사람인만 | **4개 사이트 전부** |
+| AI 자소서 | 통합 이력서 사용 | **해당 사이트 이력서 우선 사용 (fallback: 마스터)** |
+
+### 11-2. AI 프롬프트 강화 (합격 자소서 패턴 기반)
+
+**문제**: AI 자소서가 건조한 "~적용 → ~달성" 패턴으로 생성. 실제 합격 자소서와 톤/구조 차이가 큼.
+
+**해결**: IT 대기업 합격 자소서 5건(LG CNS, LG유플러스, 세메스, 하나금융TI, 한전KDN) 분석 후 공통 패턴 추출하여 프롬프트에 반영.
+- 소제목 [대괄호] 필수, 3단 구조(상황→행동→결과→교훈), 다층적 문제 해결, 정량적 성과, 솔직한 한계 인정
+- 포트폴리오 문제 해결 섹션: 건조체 → 구어체 + 시행착오 + 트레이드오프
+- 기업분석 결과를 자소서 프롬프트에 전달하여 지원동기 구체화
+- 공고 상세내용 제한 2,000자 → 5,000자 확대
+
+### 11-3. 커스텀 자소서 시스템
+
+**문제**: AI가 고정된 4섹션(지원동기/직무역량/프로젝트/성장계획) 자유 양식으로만 생성. 실제 사이트 지원 폼은 문항별 textarea가 여러 개이고 문항마다 요구사항이 다름.
+
+**해결**: 유저가 문항을 동적으로 추가하고 문항별 규칙을 설정하면 AI가 문항별로 분리 생성하는 커스텀 자소서 시스템 구현.
+- 모드 1(기본): 기존 사이트별 맞춤 프롬프트로 자유 양식 생성
+- 모드 2(커스텀): 유저 입력 문항 + 규칙 + 추가 요청 → AI가 JSON 형식으로 문항별 생성
+- 프론트: 문항 동적 추가/삭제 UI, 규칙 입력 가이드, 추가 요청 필드
+- 비동기: WebSocket + 폴링 fallback으로 생성 완료 알림
+
+### 11-4. 지원서 준비 비동기 전환
+
+**문제**: "지원서 준비" 클릭 시 AI 생성(30초~1분) 동안 화면이 멈춤.
+
+**해결**: 빈 지원서를 즉시 생성 → 미리보기 페이지로 이동 → 백그라운드에서 AI 생성 → WebSocket으로 완료 알림 → 프론트 자동 갱신.
+
+| 항목 | Before | After |
+|------|--------|-------|
+| 응답 시간 | 30초~1분 (블로킹) | **즉시** (비동기) |
+| UX | 화면 멈춤 | 미리보기에서 "AI 생성 중..." → 자동 완료 |
+
+---
+
+## 12. 프로젝트 규모 업데이트
+
+- Backend: Java 21, Spring Boot 3.4, 14개 도메인, **Strategy Pattern 4종** (크롤러파서 + 자동지원Provider + AI프로필전략 + 이력서Import)
+- Frontend: Next.js 16, React 19, TypeScript, 14페이지, **WebSocket 실시간 통신**, **커스텀 자소서 UI**
+- 크롤링 대상: 사람인, 잡플래닛, 잡코리아, 링커리어 (4개 사이트)
+- AI 기능: 적합률 분석, 기업 분석, **기본+커스텀 자소서 생성**, 포트폴리오 생성, GitHub 분석, 합격 자소서 패턴 분석, **사이트별 맞춤 프로필 전략**
+- 이력서: **사이트별 이력서 저장** (마스터 + 4사이트), **4개 사이트 Import** (Saramin/JobKorea/JobPlanet/Linkareer)
+- 자동 지원: 4개 사이트 Provider, **사후 교차검증 4개 사이트**, 세션 만료 정확 감지
+- 비동기 처리: Redis 태스크 큐 + WebSocket 실시간 알림 + 폴링 fallback (**지원서 준비 비동기 포함**)
+- 문제 해결 기록: 37건 + **8건 (세션 7)** + **4건 (세션 7 후반)** = **총 49건**

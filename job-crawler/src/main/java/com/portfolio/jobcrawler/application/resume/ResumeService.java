@@ -3,7 +3,7 @@ package com.portfolio.jobcrawler.application.resume;
 import com.portfolio.jobcrawler.application.resume.dto.*;
 import com.portfolio.jobcrawler.domain.resume.entity.*;
 import com.portfolio.jobcrawler.infrastructure.resumesync.ResumeSyncResult;
-import com.portfolio.jobcrawler.infrastructure.resumesync.SaraminResumeImporter;
+import com.portfolio.jobcrawler.infrastructure.resumesync.importer.SaraminResumeImporter;
 
 import java.util.Map;
 
@@ -70,4 +70,33 @@ public interface ResumeService {
 
     // 이력서 가져오기
     SaraminResumeImporter.ImportResult importFromSite(Long userId, String site);
+
+    // 사이트별 이력서 목록 조회 (사이트에 여러 이력서 가능)
+    java.util.List<Resume> getSiteResumes(Long userId, String site);
+
+    // 유저의 모든 이력서 (마스터 + 사이트별)
+    java.util.List<Resume> getAllResumes(Long userId);
+
+    // 사이트별 이력서 수정 (resumeId 지정)
+    Resume getResumeById(Long userId, Long resumeId);
+
+    Resume updateBasicInfo(Long userId, Long resumeId, ResumeBasicInfoCommand command);
+
+    Resume updateIntroduction(Long userId, Long resumeId, String introduction, String selfIntroduction);
+
+    Resume updateDesiredConditions(Long userId, Long resumeId, DesiredConditionsCommand command);
+
+    ResumeEducation addEducation(Long userId, Long resumeId, EducationCommand command);
+
+    ResumeCareer addCareer(Long userId, Long resumeId, CareerCommand command);
+
+    ResumeSkill addSkill(Long userId, Long resumeId, String skillName);
+
+    ResumeCertification addCertification(Long userId, Long resumeId, CertificationCommand command);
+
+    ResumeLanguage addLanguage(Long userId, Long resumeId, LanguageCommand command);
+
+    ResumeActivity addActivity(Long userId, Long resumeId, ActivityCommand command);
+
+    ResumePortfolioLink addPortfolioLink(Long userId, Long resumeId, PortfolioLinkCommand command);
 }

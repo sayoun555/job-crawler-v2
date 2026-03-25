@@ -10,6 +10,31 @@
 
 # OS
 .DS_Store
-
+db_backup_20260324.sql
 # Claude
 .claude/
+
+# Uploads (서버 로컬 이미지)
+job-crawler/uploads/
+
+# Logs
+job-crawler/logs/
+*.log
+
+# Build artifacts
+job-crawler/build/
+job-frontend/.next/
+job-frontend/node_modules/
+node_modules/
+
+# AWS 세팅 스크립트 (비밀번호, 키 포함)
+*.sh
+
+# 개인 자료 (이력서, 자소서, 포트폴리오 PDF)
+2.IT합격자소서/
+포트폴리오_*.pdf
+jobplanet-resume-edit.md
+linkareer-resume*.md
+docs/jobkorea-resume-full.md
+AGENTS.md
+CLAUDE.md

@@ -12,6 +12,11 @@ public interface JobApplyService {
     /** 지원 서류 준비 (자소서/포트폴리오 생성 + 프로젝트 매칭) */
     JobApplication prepareApplication(Long userId, Long jobPostingId, Long templateId);
 
+    /** 커스텀 자소서/포트폴리오 지원 서류 준비 (문항별 AI 생성) */
+    JobApplication prepareCustomApplication(Long userId, Long jobPostingId,
+            String sectionsJson, String additionalRequest,
+            String portfolioSectionsJson, String portfolioAdditionalRequest);
+
     /** 최종 지원 실행 (Playwright 로봇 제출) */
     JobApplication submitApplication(Long userId, Long applicationId);
 
@@ -29,6 +34,9 @@ public interface JobApplyService {
 
     /** 서류 수정 */
     JobApplication updateDocuments(Long userId, Long applicationId, String coverLetter, String portfolio);
+
+    /** 매칭 프로젝트 선택 저장 (재생성 없이) */
+    JobApplication updateMatchedProjects(Long userId, Long applicationId, String projectIds);
 
     /** 프로젝트 다시 선택 → AI 재생성 */
     JobApplication regenerateWithProjects(Long userId, Long applicationId, String selectedProjectIds, Long templateId);

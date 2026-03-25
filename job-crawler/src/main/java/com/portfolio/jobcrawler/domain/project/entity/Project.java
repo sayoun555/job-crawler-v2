@@ -44,6 +44,9 @@ public class Project extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String aiSummary;
 
+    @Column(columnDefinition = "TEXT")
+    private String aiPortfolioContent;
+
     @ElementCollection
     @CollectionTable(name = "project_images", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "image_url", length = 1000)
@@ -78,6 +81,10 @@ public class Project extends BaseTimeEntity {
 
     public void updateAiSummary(String aiSummary) {
         this.aiSummary = aiSummary;
+    }
+
+    public void updatePortfolioContent(String content) {
+        this.aiPortfolioContent = content;
     }
 
     public void addImage(String imageUrl) {

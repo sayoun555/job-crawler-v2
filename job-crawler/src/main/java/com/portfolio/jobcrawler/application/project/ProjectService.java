@@ -19,4 +19,6 @@ public interface ProjectService {
             String githubUrl, String notionUrl, String techStack, String aiSummary);
 
     void deleteProject(Long userId, Long projectId);
+
+    Project updatePortfolio(Long userId, Long projectId, String content);
 }

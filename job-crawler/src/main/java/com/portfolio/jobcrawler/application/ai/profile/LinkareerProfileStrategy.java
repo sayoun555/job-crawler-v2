@@ -1,5 +1,6 @@
-package com.portfolio.jobcrawler.application.ai;
+package com.portfolio.jobcrawler.application.ai.profile;
 
+import com.portfolio.jobcrawler.application.ai.SiteProfileStrategy;
 import com.portfolio.jobcrawler.domain.resume.entity.Resume;
 import com.portfolio.jobcrawler.domain.user.entity.UserProfile;
 import org.springframework.stereotype.Component;

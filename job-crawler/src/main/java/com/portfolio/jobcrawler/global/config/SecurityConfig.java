@@ -38,7 +38,8 @@ public class SecurityConfig {
                         // Swagger, API Docs, Public APIs, Auth, Webhooks, Test endpoints
                         .requestMatchers(
                                 "/", "/api/v1/auth/**", "/api/v1/users/register",
-                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+                                "/v3/api-docs/**", "/api-docs/**", "/api-docs",
+                                "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**",
                                 "/api/v1/webhooks/**",
                                 "/api/test/**"
                         ).permitAll()
@@ -50,6 +51,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/templates/presets").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/templates/presets/refresh").hasRole("ADMIN")
                         .requestMatchers("/api/v1/crawler/**").hasRole("ADMIN")
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
@@ -76,7 +79,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
-                "http://localhost:3000", "http://localhost:5173", "https://job.eekky.com",
+                "http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "https://job.eekky.com",
                 "https://www.saramin.co.kr", "https://www.jobkorea.co.kr",
                 "https://www.jobplanet.co.kr", "https://linkareer.com",
                 "chrome-extension://*"
