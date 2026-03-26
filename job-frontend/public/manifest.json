@@ -1,0 +1,24 @@
+{
+  "name": "이끼잡 - 취업 자동화",
+  "short_name": "이끼잡",
+  "description": "AI 기반 취업 공고 크롤러 및 자동 지원 시스템",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
