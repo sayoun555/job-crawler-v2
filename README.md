@@ -21,7 +21,7 @@
 - **AI 기업 분석** — 웹 검색 + 공고 데이터 교차 분석 (모든 유저 공유 캐시)
 - **자기소개서 생성** — 기본 모드 + 커스텀 모드 + 2차 다듬기(polish). 학력/개인정보 자동 필터링
 - **포트폴리오 생성** — 프로젝트 단위 독립 관리. 기승전결 구조 + 2차 문체 교정. Tiptap 리치 에디터(이미지 삽입/리사이즈)
-- **GitHub 프로젝트 AI 분석** — 소스 코드, README, docs/ 기술 블로그 자동 분석 + 다이어그램 프롬프트 생성 (아키텍처 + 기능 흐름)
+- **GitHub 프로젝트 AI 분석** — 소스 코드, README, docs/ 기술 블로그 자동 분석 + Mermaid 다이어그램 코드 생성 (아키텍처 + 기능 흐름)
 - **Notion 페이지 크롤링** — 공개 페이지 텍스트 + 이미지 추출, 멀티모달 AI 전달
 - **합격 자소서 패턴 분석** — 구조, 패턴, 키워드, 강점 분석 + 템플릿 저장 (모든 유저 공유)
 - **OCR 이미지 텍스트 추출** — Tesseract 기반 한글 인식 (85~90%)
@@ -31,7 +31,7 @@
 - Tiptap 리치텍스트 에디터 (이미지 삽입/리사이즈/정렬/드래그앤드롭)
 - AI 2차 다듬기 (기승전결 구조, 문체 교정, AI 표현 제거)
 - 복사 / PDF 출력 / 저장 / 삭제
-- 다이어그램 프롬프트 생성 (Eraser.io/Miro AI에 바로 붙여넣기)
+- Mermaid 다이어그램 코드 자동 생성 (아키텍처 + 기능 흐름)
 
 ### 커스텀 자소서
 - 문항별 AI 생성 (제목 + 규칙 입력 → AI가 문항별 맞춤 작성)
@@ -86,13 +86,13 @@
 |------|------|
 | **Backend** | Java 21, Spring Boot 3.4, Spring Security, Spring Data JPA |
 | **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Tiptap |
-| **Database** | PostgreSQL 14, Redis |
+| **Database** | PostgreSQL 17, Redis |
 | **크롤링** | Playwright 1.49, JSoup 1.17 |
 | **인증/보안** | JWT (자동 갱신), AES-256-GCM 암호화, BCrypt |
 | **AI** | OpenClaw API (GPT 5.4 Codex), Tesseract OCR, 멀티모달 (텍스트+이미지) |
 | **모니터링** | Spring Boot Actuator, Micrometer, Prometheus |
 | **API 문서** | SpringDoc OpenAPI 3.0 (Swagger UI) |
-| **배포** | AWS EC2, Nginx, PM2, Let's Encrypt |
+| **배포** | Docker Compose, AWS EC2, Nginx, Let's Encrypt |
 
 ---
 
@@ -101,10 +101,13 @@
 ```
 job-crawler/
 ├── job-crawler/                    # Backend (Spring Boot)
+│   └── Dockerfile                 # Backend 빌드 (Playwright 포함)
 ├── job-frontend/                   # Frontend (Next.js)
+│   └── Dockerfile                 # Frontend 빌드 (standalone)
 ├── browser-extension/              # Chrome 확장 프로그램
 ├── docs/                           # 기술 블로그 & 아키텍처 문서
 │   └── education/                 # 트러블슈팅 & CS 학습 기록
+├── docker-compose.yml              # 4개 서비스 통합 배포
 └── k6-load-test.js                # 부하 테스트 스크립트
 ```
 
@@ -202,12 +205,18 @@ job-frontend/src/
 ## 인프라 구성
 
 ```
-[사용자] → [Nginx :443] → [Next.js :3000] (프론트엔드)
-                        → [Spring Boot :8080] (API)
-                              ├── [PostgreSQL :5432]
-                              ├── [Redis :6379]
-                              ├── [Playwright] (크롤링/자동지원/이력서동기화)
-                              └── [OpenClaw AI API] (자소서/포트폴리오/분석)
+┌─── docker-compose.yml ────────────────────────────┐
+│                                                   │
+│  [사용자] → [Next.js :3000] (프론트엔드)            │
+│           → [Spring Boot :8080] (API)              │
+│                  ├── [PostgreSQL 17 :5432]          │
+│                  ├── [Redis 7 :6379]                │
+│                  ├── [Playwright] (크롤링/자동지원)   │
+│                  └── [OpenClaw AI API]              │
+│                                                   │
+└───────────────────────────────────────────────────┘
+
+운영 환경: Nginx :443 (SSL) → 위 구성
 ```
 
 ---

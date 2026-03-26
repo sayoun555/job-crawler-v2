@@ -627,32 +627,75 @@ public class OpenClawAiGenerator implements AiTextGenerator {
                     ============================================================
                     architectureDiagramPrompt 작성 규칙 (시스템 아키텍처)
                     ============================================================
-                    Eraser.io(DiagramGPT), Miro AI 등에 바로 붙여넣으면 시스템 아키텍처 다이어그램이 생성되는 영어 프롬프트.
+                    Mermaid 문법으로 시스템 아키텍처 다이어그램 코드를 직접 생성하라.
+                    자연어 프롬프트가 아니라 Mermaid 코드 자체를 출력해야 한다.
 
-                    형식 (영어, 3~5문장):
-                    1문장: "Create a system architecture diagram for [서비스명]. The system is [한줄 설명]."
-                    2문장: "The architecture has N layers: [레이어 나열]."
-                    3문장: "Key components include [컴포넌트+기술명 나열]."
-                    4문장: "Data flows as follows: [요청 흐름 설명]."
-                    5문장: "[외부 연동, 인프라, 배포 정보]."
+                    형식: graph TD 또는 graph LR (방향은 구조에 맞게 선택)
+
+                    규칙:
+                    - 실제 컴포넌트명 + 기술명 + 포트를 노드에 표시. 예: "Backend[Spring Boot :8080]"
+                    - 화살표에 프로토콜/데이터 흐름 명시. 예: "-->|REST API|", "-->|WebSocket STOMP|"
+                    - subgraph로 레이어 구분 (Client, Backend, Data, External 등)
+                    - 색상 지정 금지. Mermaid 기본 스타일 사용.
+                    - 노드 10~20개 수준. 너무 적으면 빈약하고, 너무 많으면 읽기 어려움.
+                    - 설명 텍스트 없이 Mermaid 코드만 출력. ```mermaid 블록 없이 순수 코드만.
+
+                    레퍼런스:
+                    graph TD
+                        subgraph Client
+                            Browser[Next.js :3000]
+                            Extension[Chrome Extension]
+                        end
+                        subgraph Backend
+                            API[Spring Boot API :8080]
+                            Crawler[Playwright Crawler]
+                            AI[AI Generator]
+                        end
+                        subgraph Data
+                            DB[(PostgreSQL :5432)]
+                            Cache[(Redis :6379)]
+                        end
+                        Browser -->|REST API| API
+                        Browser -->|WebSocket STOMP| API
+                        API --> DB
+                        API --> Cache
+                        API --> Crawler
+                        API --> AI
+                        Crawler -->|Headless Browser| ExternalSites[채용 사이트 4곳]
 
                     ============================================================
                     featureDiagramPrompt 작성 규칙 (주요 기능/사용자 흐름)
                     ============================================================
-                    Eraser.io(DiagramGPT), Miro AI 등에 바로 붙여넣으면 기능 흐름도가 생성되는 영어 프롬프트.
+                    Mermaid 문법으로 사용자 흐름도를 직접 생성하라.
+                    자연어 프롬프트가 아니라 Mermaid 코드 자체를 출력해야 한다.
 
-                    형식 (영어, 3~5문장):
-                    1문장: "Create a feature flow diagram for [서비스명] showing all major user-facing and admin features."
-                    2문장: "User features include: [사용자 기능 나열 with 기술명]."
-                    3문장: "Admin features include: [관리자 기능 나열 with 기술명]."
-                    4문장: "The user journey flows as: [사용자 흐름 단계별 설명]."
-                    5문장: "Background processes include: [크롤링, 배치, AI 보강 등 자동화 흐름]."
+                    형식: flowchart TD 또는 flowchart LR
+
+                    규칙:
+                    - 사용자 행동을 시간순으로 나열. 조건 분기는 {}로 표현.
+                    - 각 노드에 기능명 + 핵심 기술 표시. 예: "크롤링 시작[Playwright 4개 사이트 병렬]"
+                    - 사용자 흐름과 백그라운드 프로세스를 subgraph으로 구분.
+                    - 설명 텍스트 없이 Mermaid 코드만 출력. ```mermaid 블록 없이 순수 코드만.
+
+                    레퍼런스:
+                    flowchart TD
+                        subgraph 사용자 흐름
+                            Login[회원가입/로그인] --> Crawl[공고 크롤링 시작]
+                            Crawl --> Browse[공고 목록 조회/필터]
+                            Browse --> Apply{지원 준비}
+                            Apply --> AI_CL[AI 자소서 생성]
+                            Apply --> AI_PF[AI 포트폴리오 생성]
+                            AI_CL --> Submit[원클릭 자동 지원]
+                        end
+                        subgraph 백그라운드
+                            Schedule[스케줄러] --> AutoCrawl[자동 크롤링]
+                            AutoCrawl --> Notify[Discord 알림]
+                        end
 
                     공통 규칙:
-                    - 반드시 영어로 작성. AI 다이어그램 도구가 영어 프롬프트에 최적화되어 있음.
-                    - 컴포넌트/기능명에 구체적 기술명 포함.
-                    - 복사해서 바로 붙여넣을 수 있는 완결된 프롬프트. 설명이나 가이드 텍스트 금지.
-                    - 줄바꿈(\\n)으로 문장 구분.
+                    - 소스 코드에서 확인된 실제 기능만 포함. 추측 금지.
+                    - 복사해서 Mermaid Live Editor에 바로 붙여넣을 수 있는 완결된 코드.
+                    - 줄바꿈(\\n)으로 코드 라인 구분.
 
                     [레포지토리 데이터]
                     %s
@@ -970,14 +1013,14 @@ public class OpenClawAiGenerator implements AiTextGenerator {
                 ============================================================
                 분량 제한 (절대 준수)
                 ============================================================
-                - 전체 포트폴리오는 3,000~4,000자 이내. 절대 5,000자를 넘기지 마라.
-                - 섹션 1(동기/개요): 300자 이내로 압축
-                - 섹션 2(기술적 의사결정): 항목 수 제한 없음. 항목당 2~3문장으로 압축. 전문적으로 짧게
-                - 섹션 3(문제 해결)이 포트폴리오의 핵심. 항목 수 제한 없음. 대신 항목당 3~4문장으로 짧고 전문적으로 압축. 시니어 엔지니어가 기술 블로그에 쓰는 밀도로.
-                - 섹션 4(협업): 300자 이내
-                - 섹션 5(직무 역량): 200자 이내
-                - 섹션 3을 제외한 나머지는 압축해서 짧게.
-                - 핵심: 항목 수가 아니라 한 항목의 밀도가 중요. 전문가처럼 압축하면 항목이 많아도 짧다.
+                - 전체 포트폴리오는 5,000~6,500자 이내. 절대 7,000자를 넘기지 마라.
+                - 섹션 1(동기/개요): 400자 이내로 압축
+                - 섹션 2(기술적 의사결정): 항목 수 제한 없음. 항목당 3~5문장. 왜 그 기술을 선택했는지 근거까지.
+                - 섹션 3(문제 해결)이 포트폴리오의 핵심. 항목 수 제한 없음. 항목당 4~6문장으로 충분히 서술. 시니어 엔지니어가 기술 블로그에 쓰는 밀도와 깊이로.
+                - 섹션 4(협업): 400자 이내
+                - 섹션 5(직무 역량): 300자 이내
+                - 섹션 3에 가장 많은 분량을 할당하되, 나머지 섹션도 내용이 빈약하지 않게 작성.
+                - 핵심: 항목의 밀도가 중요하지만, 충분한 설명이 뒷받침되어야 설득력이 생긴다.
 
                 ============================================================
                 작성 원칙
@@ -1261,7 +1304,7 @@ public class OpenClawAiGenerator implements AiTextGenerator {
         body.put("model", "openai-codex/gpt-5.4");
         body.put("messages", List.of(message));
         body.put("temperature", aiTemperature);
-        body.put("max_tokens", 4096);
+        body.put("max_tokens", 8192);
         body.put("stream", false);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
