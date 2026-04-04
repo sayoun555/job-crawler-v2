@@ -3,6 +3,7 @@
 import { JobPosting } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BookmarkButton } from "@/components/bookmark-button";
 import Link from "next/link";
 
 const sourceBadge: Record<string, { label: string; className: string }> = {
@@ -10,6 +11,8 @@ const sourceBadge: Record<string, { label: string; className: string }> = {
     JOBPLANET: { label: "잡플래닛", className: "bg-purple-600 hover:bg-purple-700" },
     LINKAREER: { label: "링커리어", className: "bg-green-600 hover:bg-green-700" },
     JOBKOREA: { label: "잡코리아", className: "bg-red-600 hover:bg-red-700" },
+    JOBALIO: { label: "공기업", className: "bg-amber-600 hover:bg-amber-700" },
+    WANTED: { label: "원티드", className: "bg-sky-600 hover:bg-sky-700" },
 };
 
 function matchScoreColor(score: number): string {
@@ -25,7 +28,7 @@ const methodBadge: Record<string, string> = {
     UNKNOWN: "-",
 };
 
-export function JobCard({ job, matchScore }: { job: JobPosting; matchScore?: number }) {
+export function JobCard({ job, matchScore, bookmarked }: { job: JobPosting; matchScore?: number; bookmarked?: boolean }) {
     const src = sourceBadge[job.source];
     return (
         <Link href={`/jobs/${job.id}`} target="_blank">
@@ -35,11 +38,14 @@ export function JobCard({ job, matchScore }: { job: JobPosting; matchScore?: num
                         <CardTitle className="text-base font-semibold line-clamp-2 group-hover:text-emerald-500 transition-colors">
                             {job.title}
                         </CardTitle>
-                        {matchScore != null && matchScore > 0 && (
-                            <Badge variant="secondary" className={`shrink-0 ${matchScoreColor(matchScore)}`}>
-                                {matchScore}%
-                            </Badge>
-                        )}
+                        <div className="flex items-center gap-1 shrink-0">
+                            {matchScore != null && matchScore > 0 && (
+                                <Badge variant="secondary" className={matchScoreColor(matchScore)}>
+                                    {matchScore}%
+                                </Badge>
+                            )}
+                            <BookmarkButton jobId={job.id} initialBookmarked={bookmarked} />
+                        </div>
                     </div>
                     <p className="text-sm text-muted-foreground">{job.company}</p>
                 </CardHeader>
@@ -77,7 +83,7 @@ export function JobCard({ job, matchScore }: { job: JobPosting; matchScore?: num
     );
 }
 
-export function JobListItem({ job, matchScore }: { job: JobPosting; matchScore?: number }) {
+export function JobListItem({ job, matchScore, bookmarked }: { job: JobPosting; matchScore?: number; bookmarked?: boolean }) {
     const src = sourceBadge[job.source];
     return (
         <Link href={`/jobs/${job.id}`} target="_blank" className="block">
@@ -100,6 +106,7 @@ export function JobListItem({ job, matchScore }: { job: JobPosting; matchScore?:
                 <div className="flex items-center gap-2 shrink-0">
                     <Badge className={`${src.className} text-xs`}>{src.label}</Badge>
                     <Badge variant="outline" className="text-xs">{methodBadge[job.applicationMethod]}</Badge>
+                    <BookmarkButton jobId={job.id} initialBookmarked={bookmarked} />
                 </div>
             </div>
         </Link>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { jobsApi, aiApi, JobPosting } from "@/lib/api";
+import { jobsApi, aiApi, bookmarksApi, JobPosting } from "@/lib/api";
 import { JobCard, JobListItem } from "@/components/job-card";
 import { useAuth } from "@/lib/auth-context";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,6 +16,7 @@ type ViewMode = "card" | "list";
 type Filters = {
   career: string; education: string; salary: string; location: string;
   saraminJobCategory: string; jobPlanetJobCategory: string; applicationMethod: string; minMatchScore: string; status: string; sortBy: string;
+  tag: string;
 };
 
 function HomeContent() {
@@ -27,6 +28,7 @@ function HomeContent() {
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [loading, setLoading] = useState(true);
   const [matchScores, setMatchScores] = useState<Record<number, number>>({});
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<number>>(new Set());
   
   const keyword = searchParams.get("keyword") || "";
   const [searchInput, setSearchInput] = useState(keyword);
@@ -36,7 +38,7 @@ function HomeContent() {
   
   const [viewMode, setViewMode] = useState<ViewMode>("card");
   const [totalPages, setTotalPages] = useState(0);
-  const [stats, setStats] = useState({ saramin: 0, jobplanet: 0, linkareer: 0, jobkorea: 0, total: 0 });
+  const [stats, setStats] = useState({ saramin: 0, jobplanet: 0, linkareer: 0, jobkorea: 0, jobalio: 0, wanted: 0, total: 0 });
 
   const filters: Filters = {
     career: searchParams.get("career") || "",
@@ -49,6 +51,7 @@ function HomeContent() {
     minMatchScore: searchParams.get("minMatchScore") || "",
     status: searchParams.get("status") || "",
     sortBy: searchParams.get("sortBy") || "latest",
+    tag: searchParams.get("tag") || "",
   };
 
   const updateUrl = useCallback((newParams: Record<string, string | number | undefined>) => {
@@ -102,20 +105,26 @@ function HomeContent() {
         education: searchParams.get("education") || undefined,
         location: searchParams.get("location") || undefined,
         applicationMethod: searchParams.get("applicationMethod") || undefined,
+        tag: searchParams.get("tag") || undefined,
         sort: sortMap[sortByParam] || "createdAt,DESC",
       });
       setJobs(data.content);
       setTotalPages(data.totalPages);
 
-      // 로그인 상태면 유저별 적합률 조회
+      // 로그인 상태면 유저별 적합률 + 북마크 조회
       if (token && data.content.length > 0) {
+        const jobIds = data.content.map((j: JobPosting) => j.id);
         try {
-          const jobIds = data.content.map((j: JobPosting) => j.id);
           const scores = await aiApi.batchMatchScores(token, jobIds);
           setMatchScores(scores);
         } catch { /* 적합률 조회 실패해도 공고 목록은 표시 */ }
+        try {
+          const ids = await bookmarksApi.batchCheck(token, jobIds);
+          setBookmarkedIds(new Set(ids));
+        } catch { /* 북마크 조회 실패 무시 */ }
       } else {
         setMatchScores({});
+        setBookmarkedIds(new Set());
       }
     } catch {
       setJobs([]);
@@ -168,6 +177,8 @@ function HomeContent() {
               <Badge className="bg-purple-600 px-3 py-1">잡플래닛 {stats.jobplanet}</Badge>
               <Badge className="bg-green-600 px-3 py-1">링커리어 {stats.linkareer}</Badge>
               <Badge className="bg-red-600 px-3 py-1">잡코리아 {stats.jobkorea}</Badge>
+              <Badge className="bg-sky-600 px-3 py-1">원티드 {stats.wanted}</Badge>
+              <Badge className="bg-amber-600 px-3 py-1">공기업 {stats.jobalio}</Badge>
             </div>
           </div>
         </div>
@@ -198,22 +209,30 @@ function HomeContent() {
             <TabsTrigger value="JOBPLANET">잡플래닛</TabsTrigger>
             <TabsTrigger value="LINKAREER">링커리어</TabsTrigger>
             <TabsTrigger value="JOBKOREA">잡코리아</TabsTrigger>
+            <TabsTrigger value="WANTED">원티드</TabsTrigger>
+            <TabsTrigger value="JOBALIO">공기업</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-4">
-            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} />
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
           </TabsContent>
           <TabsContent value="SARAMIN" className="mt-4">
-            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} />
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
           </TabsContent>
           <TabsContent value="JOBPLANET" className="mt-4">
-            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} />
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
           </TabsContent>
           <TabsContent value="LINKAREER" className="mt-4">
-            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} />
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
           </TabsContent>
           <TabsContent value="JOBKOREA" className="mt-4">
-            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} />
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
+          </TabsContent>
+          <TabsContent value="WANTED" className="mt-4">
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
+          </TabsContent>
+          <TabsContent value="JOBALIO" className="mt-4">
+            <JobList jobs={jobs} loading={loading} viewMode={viewMode} matchScores={matchScores} bookmarkedIds={bookmarkedIds} />
           </TabsContent>
         </Tabs>
 
@@ -258,8 +277,8 @@ export default function HomePage() {
   );
 }
 
-function JobList({ jobs, loading, viewMode, matchScores }: {
-  jobs: JobPosting[]; loading: boolean; viewMode: ViewMode; matchScores: Record<number, number>;
+function JobList({ jobs, loading, viewMode, matchScores, bookmarkedIds }: {
+  jobs: JobPosting[]; loading: boolean; viewMode: ViewMode; matchScores: Record<number, number>; bookmarkedIds: Set<number>;
 }) {
   if (loading) {
     const { CardSkeleton } = require("@/components/ui/skeleton");
@@ -283,14 +302,14 @@ function JobList({ jobs, loading, viewMode, matchScores }: {
   if (viewMode === "card") {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {jobs.map((job) => <JobCard key={job.id} job={job} matchScore={matchScores[job.id]} />)}
+        {jobs.map((job) => <JobCard key={job.id} job={job} matchScore={matchScores[job.id]} bookmarked={bookmarkedIds.has(job.id)} />)}
       </div>
     );
   }
 
   return (
     <div className="border rounded-lg">
-      {jobs.map((job) => <JobListItem key={job.id} job={job} matchScore={matchScores[job.id]} />)}
+      {jobs.map((job) => <JobListItem key={job.id} job={job} matchScore={matchScores[job.id]} bookmarked={bookmarkedIds.has(job.id)} />)}
     </div>
   );
 }

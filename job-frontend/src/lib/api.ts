@@ -98,7 +98,8 @@ export const jobsApi = {
         return api<PageResponse<JobPosting>>(`/jobs?${qs}`);
     },
     get: (id: number) => api<JobPosting>(`/jobs/${id}`),
-    stats: () => api<{ saramin: number; jobplanet: number; linkareer: number; jobkorea: number; total: number }>("/jobs/stats"),
+    stats: () => api<{ saramin: number; jobplanet: number; linkareer: number; jobkorea: number; jobalio: number; wanted: number; total: number }>("/jobs/stats"),
+    detailedStats: () => api<DetailedStats>("/jobs/stats/detailed"),
 };
 
 // === User ===
@@ -121,6 +122,8 @@ export const adminApi = {
         api<void>(`/admin/users/${userId}/approve`, { method: "PATCH", token }),
     suspendUser: (token: string, userId: number) =>
         api<void>(`/admin/users/${userId}/suspend`, { method: "PATCH", token }),
+    aiUsage: (token: string) =>
+        api<AiUsageStats>("/admin/ai-usage", { token }),
 };
 
 // === Projects ===
@@ -138,7 +141,13 @@ export const projectsApi = {
     updatePortfolio: (token: string, id: number, content: string) =>
         api<{ content: string }>(`/projects/${id}/portfolio`, { method: "PUT", body: { content }, token }),
     generateDiagramPrompt: (token: string, id: number) =>
-        api<{ architectureDiagramPrompt?: string; featureDiagramPrompt?: string; raw?: string }>(`/projects/${id}/diagram-prompt`, { method: "POST", token }),
+        api<{ architectureDiagramPrompt?: string; featureDiagramPrompt?: string; sequenceDiagramPrompt?: string; raw?: string }>(
+            `/projects/${id}/diagram-prompt`, { method: "POST", token }),
+    generateDiagramMermaid: (token: string, id: number) =>
+        api<{ architectureMermaid?: string; featureMermaid?: string; sequenceMermaid?: string; raw?: string }>(
+            `/projects/${id}/diagram-mermaid`, { method: "POST", token }),
+    updateFeatureDescription: (token: string, id: number, featureDescription: string) =>
+        api<{ featureDescription: string }>(`/projects/${id}/feature-description`, { method: "PUT", body: { featureDescription }, token }),
     uploadPortfolioImage: async (token: string, projectId: number, file: File) => {
         const formData = new FormData();
         formData.append("file", file);
@@ -216,6 +225,12 @@ export const aiApi = {
     },
     asyncProjectPortfolio: (token: string, projectId: number) =>
         api<{ taskId: string }>(`/ai/async/portfolio/project/${projectId}`, { method: "POST", token }),
+    asyncFeatureDescription: (token: string, projectId: number) =>
+        api<{ taskId: string }>(`/ai/async/feature-description/${projectId}`, { method: "POST", token }),
+    asyncPortfolioDocument: (token: string, projectId: number) =>
+        api<{ taskId: string }>(`/ai/async/portfolio-document/${projectId}`, { method: "POST", token }),
+    asyncProjectSummary: (token: string, githubUrl: string) =>
+        api<{ taskId: string }>(`/ai/async/project/summary`, { method: "POST", body: { githubUrl }, token }),
     asyncStatus: (token: string, taskId: string) =>
         api<{ status: string; type?: string; userId?: string; result?: string; taskId: string }>(`/ai/async/status/${taskId}`, { token }),
     batchMatchScores: (token: string, jobIds: number[]) =>
@@ -285,6 +300,20 @@ export const crawlerApi = {
     getClosedJobs: (token: string, page = 0, size = 20) =>
         api<{ content: JobPosting[]; totalElements: number; totalPages: number; currentPage: number }>(
             `/crawler/jobs/closed?page=${page}&size=${size}`, { token }),
+};
+
+// === Bookmarks ===
+export const bookmarksApi = {
+    add: (token: string, jobId: number) =>
+        api<Bookmark>(`/bookmarks/${jobId}`, { method: "POST", token }),
+    remove: (token: string, jobId: number) =>
+        api<void>(`/bookmarks/${jobId}`, { method: "DELETE", token }),
+    list: (token: string, page?: number, size?: number) =>
+        api<PageResponse<Bookmark>>(`/bookmarks?page=${page || 0}&size=${size || 20}`, { token }),
+    isBookmarked: (token: string, jobId: number) =>
+        api<{ bookmarked: boolean }>(`/bookmarks/${jobId}/exists`, { token }),
+    batchCheck: (token: string, jobIds: number[]) =>
+        api<number[]>(`/bookmarks/batch-check`, { method: "POST", body: jobIds, token }),
 };
 
 // === Job Preferences ===
@@ -453,7 +482,7 @@ export type UserProfile = {
 export type JobPosting = {
     id: number; title: string; company: string; companyLogoUrl?: string;
     location?: string; url: string; description?: string;
-    source: "SARAMIN" | "JOBPLANET" | "LINKAREER" | "JOBKOREA";
+    source: "SARAMIN" | "JOBPLANET" | "LINKAREER" | "JOBKOREA" | "JOBALIO" | "WANTED";
     applicationMethod: "DIRECT_APPLY" | "HOMEPAGE" | "EMAIL" | "UNKNOWN";
     education?: string; career?: string; salary?: string;
     deadline?: string; techStack?: string;
@@ -464,7 +493,7 @@ export type JobPosting = {
 export type Project = {
     id: number; name: string; description?: string;
     githubUrl?: string; notionUrl?: string; techStack?: string;
-    aiSummary?: string; aiPortfolioContent?: string; imageUrls: string[];
+    aiSummary?: string; aiPortfolioContent?: string; featureDescription?: string; portfolioDocument?: string; imageUrls: string[];
 };
 export type ProjectInput = Omit<Project, "id" | "imageUrls" | "aiPortfolioContent">;
 
@@ -504,6 +533,12 @@ export type CoverLetterItem = {
     companyType?: string; careerType?: string; school?: string;
     major?: string; gpa?: string; specs?: string; content: string;
     scrapCount: number; sourceUrl: string; createdAt: string;
+};
+
+export type Bookmark = {
+    id: number;
+    jobPosting: JobPosting;
+    createdAt: string;
 };
 
 export type PageResponse<T> = {
@@ -561,6 +596,24 @@ export type ResumeActivity = {
 
 export type ResumePortfolioLink = {
     id: number; linkType?: string; url?: string; description?: string;
+};
+
+export type DetailedStats = {
+    career: Record<string, number>;
+    education: Record<string, number>;
+    location: Record<string, number>;
+};
+
+export type AiUsageUserStat = {
+    userId: number;
+    email: string;
+    total: number;
+    byType: Record<string, number>;
+};
+
+export type AiUsageStats = {
+    users: AiUsageUserStat[];
+    totalByType: Record<string, number>;
 };
 
 export type ResumeSyncResult = {

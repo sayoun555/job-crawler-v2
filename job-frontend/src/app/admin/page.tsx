@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { crawlerApi, jobsApi, coverLettersApi, adminApi, type User } from "@/lib/api";
+import { crawlerApi, jobsApi, coverLettersApi, adminApi, type User, type DetailedStats, type AiUsageStats } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,7 @@ export default function AdminPage() {
     const [keyword, setKeyword] = useState("");
     const [crawling, setCrawling] = useState(false);
     const [crawlResult, setCrawlResult] = useState("");
-    const [selectedSites, setSelectedSites] = useState<string[]>(["SARAMIN", "JOBPLANET", "LINKAREER", "JOBKOREA"]);
+    const [selectedSites, setSelectedSites] = useState<string[]>(["SARAMIN", "JOBPLANET", "LINKAREER", "JOBKOREA", "WANTED", "JOBALIO"]);
     const [stats, setStats] = useState<{ saramin: number; jobplanet: number; total: number } | null>(null);
     const [loadingStats, setLoadingStats] = useState(false);
     const [sched1Hour, setSched1Hour] = useState("9");
@@ -37,6 +37,10 @@ export default function AdminPage() {
     const [loadingClosed, setLoadingClosed] = useState(false);
     const [users, setUsers] = useState<User[]>([]);
     const [loadingUsers, setLoadingUsers] = useState(false);
+    const [detailedStats, setDetailedStats] = useState<DetailedStats | null>(null);
+    const [loadingDetailed, setLoadingDetailed] = useState(false);
+    const [aiUsage, setAiUsage] = useState<AiUsageStats | null>(null);
+    const [loadingAiUsage, setLoadingAiUsage] = useState(false);
 
     const loadUsers = async () => {
         if (!token) return;
@@ -70,7 +74,28 @@ export default function AdminPage() {
         finally { setLoadingStats(false); }
     };
 
-    const siteLabels: Record<string, string> = { SARAMIN: "사람인", JOBPLANET: "잡플래닛", LINKAREER: "링커리어", JOBKOREA: "잡코리아" };
+    const loadDetailedStats = async () => {
+        setLoadingDetailed(true);
+        try { setDetailedStats(await jobsApi.detailedStats()); }
+        catch { setDetailedStats(null); }
+        finally { setLoadingDetailed(false); }
+    };
+
+    const loadAiUsage = async () => {
+        if (!token) return;
+        setLoadingAiUsage(true);
+        try { setAiUsage(await adminApi.aiUsage(token)); }
+        catch { setAiUsage(null); }
+        finally { setLoadingAiUsage(false); }
+    };
+
+    const AI_TYPE_LABELS: Record<string, string> = {
+        MATCH_SCORE: "적합률",
+        COMPANY_ANALYSIS: "기업분석",
+        COVER_LETTER_PATTERN: "자소서패턴",
+    };
+
+    const siteLabels: Record<string, string> = { SARAMIN: "사람인", JOBPLANET: "잡플래닛", LINKAREER: "링커리어", JOBKOREA: "잡코리아", WANTED: "원티드", JOBALIO: "공기업" };
 
     const toggleSite = (site: string) => {
         setSelectedSites(prev =>
@@ -84,13 +109,15 @@ export default function AdminPage() {
         setCrawling(true);
         setCrawlResult("");
         try {
-            const label = selectedSites.length === 4
+            const allSites = ["SARAMIN", "JOBPLANET", "LINKAREER", "JOBKOREA", "JOBALIO"];
+            const isAll = selectedSites.length === allSites.length;
+            const label = isAll
                 ? "전체"
                 : selectedSites.map(s => siteLabels[s]).join(", ");
             setCrawlResult(`⏳ ${label} 크롤링 진행 중... (1~2분 소요)`);
             const kw = keyword.trim() || undefined;
             const pages = parseInt(maxPages) || 50;
-            const res = selectedSites.length === 4
+            const res = isAll
                 ? await crawlerApi.crawlAll(token, kw, pages)
                 : await crawlerApi.crawlBySites(token, selectedSites, kw, pages);
             setCrawlResult(`✅ ${label} 크롤링 완료! ${res.savedCount}개 새 공고 저장`);
@@ -190,6 +217,138 @@ export default function AdminPage() {
                 </CardContent>
             </Card>
 
+            {/* 상세 통계 (경력/학력/지역) */}
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <CardTitle>채용 공고 상세 분포</CardTitle>
+                        <Button variant="outline" size="sm" onClick={loadDetailedStats} disabled={loadingDetailed}>
+                            {loadingDetailed ? "로딩..." : "분석"}
+                        </Button>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    {detailedStats ? (
+                        <div className="space-y-6">
+                            {/* 경력별 */}
+                            <div>
+                                <h4 className="text-sm font-semibold mb-2 text-muted-foreground">경력별</h4>
+                                <div className="space-y-1.5">
+                                    {Object.entries(detailedStats.career).map(([label, count]) => {
+                                        const total = Object.values(detailedStats.career).reduce((a, b) => a + b, 0);
+                                        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                                        return (
+                                            <div key={label} className="flex items-center gap-2">
+                                                <span className="text-sm w-16 shrink-0">{label}</span>
+                                                <div className="flex-1 h-5 bg-muted rounded-full overflow-hidden">
+                                                    <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                                                </div>
+                                                <span className="text-xs text-muted-foreground w-16 text-right">{count}건 ({pct}%)</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            {/* 학력별 */}
+                            <div>
+                                <h4 className="text-sm font-semibold mb-2 text-muted-foreground">학력별</h4>
+                                <div className="space-y-1.5">
+                                    {Object.entries(detailedStats.education).map(([label, count]) => {
+                                        const total = Object.values(detailedStats.education).reduce((a, b) => a + b, 0);
+                                        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                                        return (
+                                            <div key={label} className="flex items-center gap-2">
+                                                <span className="text-sm w-24 shrink-0 truncate" title={label}>{label}</span>
+                                                <div className="flex-1 h-5 bg-muted rounded-full overflow-hidden">
+                                                    <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                                                </div>
+                                                <span className="text-xs text-muted-foreground w-16 text-right">{count}건 ({pct}%)</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            {/* 지역별 */}
+                            <div>
+                                <h4 className="text-sm font-semibold mb-2 text-muted-foreground">지역별 TOP 10</h4>
+                                <div className="space-y-1.5">
+                                    {Object.entries(detailedStats.location).map(([label, count]) => {
+                                        const max = Math.max(...Object.values(detailedStats.location));
+                                        const pct = max > 0 ? Math.round((count / max) * 100) : 0;
+                                        return (
+                                            <div key={label} className="flex items-center gap-2">
+                                                <span className="text-sm w-16 shrink-0">{label}</span>
+                                                <div className="flex-1 h-5 bg-muted rounded-full overflow-hidden">
+                                                    <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                                                </div>
+                                                <span className="text-xs text-muted-foreground w-12 text-right">{count}건</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground text-center py-4">
+                            &quot;분석&quot; 버튼을 눌러 경력/학력/지역별 분포를 확인하세요
+                        </p>
+                    )}
+                </CardContent>
+            </Card>
+
+            {/* AI 이용 현황 */}
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <CardTitle>AI 이용 현황</CardTitle>
+                        <Button variant="outline" size="sm" onClick={loadAiUsage} disabled={loadingAiUsage}>
+                            {loadingAiUsage ? "로딩..." : "조회"}
+                        </Button>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    {aiUsage ? (
+                        <div className="space-y-4">
+                            {/* 전체 타입별 집계 */}
+                            <div className="grid grid-cols-3 gap-3 text-center">
+                                {Object.entries(aiUsage.totalByType).map(([type, count]) => (
+                                    <div key={type} className="p-3 rounded-lg bg-indigo-50 dark:bg-indigo-950">
+                                        <p className="text-xl font-bold text-indigo-600">{count}</p>
+                                        <p className="text-xs text-muted-foreground">{AI_TYPE_LABELS[type] || type}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            {/* 유저별 */}
+                            <div className="space-y-2 max-h-80 overflow-y-auto">
+                                <h4 className="text-sm font-semibold text-muted-foreground">유저별 이용 횟수</h4>
+                                {aiUsage.users.map(u => (
+                                    <div key={u.userId} className="flex items-center justify-between p-3 border rounded-lg text-sm">
+                                        <div className="flex items-center gap-2 min-w-0">
+                                            <span className="font-medium truncate">{u.email}</span>
+                                            <Badge className="bg-indigo-600 shrink-0">{u.total}회</Badge>
+                                        </div>
+                                        <div className="flex gap-1.5 shrink-0">
+                                            {Object.entries(u.byType).map(([type, count]) => (
+                                                <span key={type} className="text-xs px-2 py-0.5 rounded-full bg-muted">
+                                                    {AI_TYPE_LABELS[type] || type} {count}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                                {aiUsage.users.length === 0 && (
+                                    <p className="text-sm text-muted-foreground text-center py-2">AI 이용 기록이 없습니다</p>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground text-center py-4">
+                            &quot;조회&quot; 버튼을 눌러 유저별 AI 이용 현황을 확인하세요
+                        </p>
+                    )}
+                </CardContent>
+            </Card>
+
             {/* 크롤링 */}
             <Card>
                 <CardHeader><CardTitle>🕷 크롤링</CardTitle></CardHeader>
@@ -228,6 +387,8 @@ export default function AdminPage() {
                                 { site: "JOBPLANET", color: "bg-purple-600", border: "border-purple-600" },
                                 { site: "LINKAREER", color: "bg-green-600", border: "border-green-600" },
                                 { site: "JOBKOREA", color: "bg-red-600", border: "border-red-600" },
+                                { site: "WANTED", color: "bg-sky-600", border: "border-sky-600" },
+                                { site: "JOBALIO", color: "bg-amber-600", border: "border-amber-600" },
                             ].map(({ site, color, border }) => {
                                 const checked = selectedSites.includes(site);
                                 return (
@@ -250,9 +411,9 @@ export default function AdminPage() {
                                 type="button"
                                 className="text-xs text-muted-foreground underline ml-1"
                                 onClick={() => setSelectedSites(prev =>
-                                    prev.length === 4 ? [] : ["SARAMIN", "JOBPLANET", "LINKAREER", "JOBKOREA"]
+                                    prev.length === 6 ? [] : ["SARAMIN", "JOBPLANET", "LINKAREER", "JOBKOREA", "WANTED", "JOBALIO"]
                                 )}>
-                                {selectedSites.length === 4 ? "전체 해제" : "전체 선택"}
+                                {selectedSites.length === 6 ? "전체 해제" : "전체 선택"}
                             </button>
                         </div>
                         <Button
@@ -427,6 +588,8 @@ export default function AdminPage() {
                             { site: "JOBPLANET", label: "잡플래닛", color: "bg-purple-600 hover:bg-purple-700" },
                             { site: "LINKAREER", label: "링커리어", color: "bg-green-600 hover:bg-green-700" },
                             { site: "JOBKOREA", label: "잡코리아", color: "bg-red-600 hover:bg-red-700" },
+                            { site: "WANTED", label: "원티드", color: "bg-sky-600 hover:bg-sky-700" },
+                            { site: "JOBALIO", label: "공기업", color: "bg-amber-600 hover:bg-amber-700" },
                         ].map(({ site, label, color }) => (
                             <Button key={site} variant="outline" disabled={deleting}
                                 onClick={async () => {

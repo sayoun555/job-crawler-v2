@@ -109,6 +109,7 @@ public class ApplicationVerificationScheduler {
             case JOBKOREA -> "https://www.jobkorea.co.kr/User/Appl/Main";
             case JOBPLANET -> "https://www.jobplanet.co.kr/users/job_applications";
             case LINKAREER -> "https://linkareer.com/my-career/applications";
+            case JOBALIO, WANTED -> null;
         };
     }
 
@@ -118,6 +119,7 @@ public class ApplicationVerificationScheduler {
             case JOBKOREA -> ".tit_job a, .list-post .tit, [class*=apply] .title";
             case JOBPLANET -> "[class*=application] h4, [class*=apply] .title, .job-title";
             case LINKAREER -> "[class*=application] h4, [class*=apply] p, .activity-title";
+            case JOBALIO, WANTED -> null;
         };
 
         Locator appliedItems = page.locator(selector);

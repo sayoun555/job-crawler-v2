@@ -57,7 +57,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private void sendMatchingNotifications(List<User> users) {
         var recentJobs = jobPostingRepository.searchJobs(null, null, null,
-                null, null, null, null,
+                null, null, null, null, null,
                 PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "createdAt")));
 
         for (User user : users) {

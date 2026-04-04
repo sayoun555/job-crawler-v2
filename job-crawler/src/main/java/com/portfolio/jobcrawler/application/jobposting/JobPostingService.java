@@ -13,11 +13,13 @@ import java.util.Map;
 public interface JobPostingService {
     Page<JobPosting> searchJobs(SourceSite source, String keyword, String jobCategory,
                                String career, String education, String location, String applicationMethod,
-                               Pageable pageable);
+                               String tag, Pageable pageable);
 
     JobPosting getJobPosting(Long id);
 
     Map<String, Long> getStats();
+
+    Map<String, Object> getDetailedStats();
 
     void deleteJob(Long id);
 
@@ -26,4 +28,6 @@ public interface JobPostingService {
     void deleteAllJobs();
 
     int deleteJobsBySite(String site);
+
+    int deleteEmptyPostings();
 }

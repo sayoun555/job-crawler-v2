@@ -35,13 +35,14 @@ public class JobPostingController {
             @Parameter(description = "학력 조건") @RequestParam(required = false) String education,
             @Parameter(description = "근무 지역") @RequestParam(required = false) String location,
             @Parameter(description = "지원 방식") @RequestParam(required = false) String applicationMethod,
+            @Parameter(description = "태그 검색 (techStack)") @RequestParam(required = false) String tag,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         SourceSite site = null;
         if (source != null && !source.isBlank()) {
             try { site = SourceSite.valueOf(source.toUpperCase()); } catch (Exception ignored) {}
         }
         return ResponseEntity.ok(ApiResponse.ok(
-                jobPostingService.searchJobs(site, keyword, jobCategory, career, education, location, applicationMethod, pageable)));
+                jobPostingService.searchJobs(site, keyword, jobCategory, career, education, location, applicationMethod, tag, pageable)));
     }
 
     @Operation(summary = "채용 공고 상세 조회")
@@ -55,5 +56,11 @@ public class JobPostingController {
     @GetMapping("/stats")
     public ResponseEntity<ApiResponse<Map<String, Long>>> stats() {
         return ResponseEntity.ok(ApiResponse.ok(jobPostingService.getStats()));
+    }
+
+    @Operation(summary = "채용 공고 상세 통계 (경력/학력/지역별 분포)")
+    @GetMapping("/stats/detailed")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> detailedStats() {
+        return ResponseEntity.ok(ApiResponse.ok(jobPostingService.getDetailedStats()));
     }
 }

@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * 잡코리아 크롤러 (Composition 패턴)
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -26,8 +23,8 @@ public class JobKoreaScraper implements JobScraper {
     }
 
     @Override
-    public List<CrawledJobData> scrapeJobs(String keyword, String jobCategory, int maxPages) {
-        log.info("[JobKoreaScraper] 잡코리아 크롤링 시작 - maxPages: {}", maxPages <= 0 ? "무제한" : maxPages);
-        return scrapingEngine.scrape(parser, keyword, jobCategory, maxPages, 30_000);
+    public List<CrawledJobData> scrapeJobs(String keyword, String jobCategory, int maxPages, String companyType) {
+        log.info("[JobKoreaScraper] 잡코리아 크롤링 시작 - maxPages: {}, companyType: {}", maxPages <= 0 ? "무제한" : maxPages, companyType);
+        return scrapingEngine.scrape(parser, keyword, jobCategory, maxPages, 30_000, companyType);
     }
 }

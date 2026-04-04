@@ -31,7 +31,8 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             "AND (:career IS NULL OR LOWER(j.career) LIKE LOWER(CONCAT('%', CAST(:career AS text), '%'))) " +
             "AND (:education IS NULL OR LOWER(j.education) LIKE LOWER(CONCAT('%', CAST(:education AS text), '%'))) " +
             "AND (:location IS NULL OR LOWER(j.location) LIKE LOWER(CONCAT('%', CAST(:location AS text), '%'))) " +
-            "AND (:applicationMethod IS NULL OR j.applicationMethod = :applicationMethod)")
+            "AND (:applicationMethod IS NULL OR j.applicationMethod = :applicationMethod) " +
+            "AND (:tag IS NULL OR LOWER(CAST(j.techStack AS text)) LIKE LOWER(CONCAT('%', CAST(:tag AS text), '%')))")
     Page<JobPosting> searchJobs(
             @Param("source") SourceSite source,
             @Param("keyword") String keyword,
@@ -40,6 +41,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
             @Param("education") String education,
             @Param("location") String location,
             @Param("applicationMethod") ApplicationMethod applicationMethod,
+            @Param("tag") String tag,
             Pageable pageable);
 
     long countBySourceAndClosedFalse(SourceSite source);
@@ -60,4 +62,16 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     @Query("SELECT j FROM JobPosting j WHERE j.closed = false AND j.deadline IS NULL AND j.createdAt < :before")
     List<JobPosting> findStaleNoDeadlinePostings(@Param("before") java.time.LocalDateTime before);
+
+    @Query("SELECT j.career, COUNT(j) FROM JobPosting j WHERE j.closed = false GROUP BY j.career ORDER BY COUNT(j) DESC")
+    List<Object[]> countByCareerGroup();
+
+    @Query("SELECT j.education, COUNT(j) FROM JobPosting j WHERE j.closed = false GROUP BY j.education ORDER BY COUNT(j) DESC")
+    List<Object[]> countByEducationGroup();
+
+    @Query("SELECT j.location, COUNT(j) FROM JobPosting j WHERE j.closed = false GROUP BY j.location ORDER BY COUNT(j) DESC")
+    List<Object[]> countByLocationGroup();
+
+    @Query("SELECT j FROM JobPosting j WHERE (j.description IS NULL OR j.description = '') AND (j.requirements IS NULL OR j.requirements = '')")
+    List<JobPosting> findEmptyPostings();
 }

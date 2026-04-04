@@ -39,40 +39,26 @@ public class JobPlanetParser implements SiteParser {
     }
 
     @Override
-    public String buildSearchUrl(String keyword, String jobCategory) {
+    public String buildSearchUrl(String keyword, String jobCategory, String companyType) {
         StringBuilder urlBuilder = new StringBuilder(JOBPLANET_BASE_URL);
         urlBuilder.append("/search/job?");
 
-        boolean hasQuery = false;
+        boolean hasParam = false;
         if (keyword != null && !keyword.isBlank()) {
             try {
                 urlBuilder.append("query=").append(URLEncoder.encode(keyword, StandardCharsets.UTF_8.toString()));
-                hasQuery = true;
+                hasParam = true;
             } catch (Exception ignored) {}
         }
 
-        if (jobCategory != null && !jobCategory.isBlank() && !jobCategory.equals("전체") && !jobCategory.equals("all")) {
-            String catId = JobPlanetJobCategory.getCodeByDisplayName(jobCategory);
-            if (catId != null) {
-                if (hasQuery) urlBuilder.append("&");
-                urlBuilder.append("category_ids%5B%5D=").append(catId);
-                hasQuery = true;
-            } else {
-                try {
-                    String encodedCat = URLEncoder.encode(jobCategory, StandardCharsets.UTF_8.toString());
-                    if (hasQuery) urlBuilder.append("+").append(encodedCat);
-                    else urlBuilder.append("query=").append(encodedCat);
-                    hasQuery = true;
-                } catch (Exception ignored) {}
-            }
+        // 잡플래닛은 항상 개발 직군 카테고리 고정
+        for (String code : JobPlanetJobCategory.getDevCategoryCodes()) {
+            if (hasParam) urlBuilder.append("&");
+            urlBuilder.append("category_ids%5B%5D=").append(code);
+            hasParam = true;
         }
 
-        if (hasQuery) {
-            urlBuilder.append("&order_by=recent");
-        } else {
-            urlBuilder.append("order_by=recent");
-        }
-
+        urlBuilder.append("&order_by=recent");
         return urlBuilder.toString();
     }
 

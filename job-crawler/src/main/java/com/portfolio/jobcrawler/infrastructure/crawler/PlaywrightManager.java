@@ -30,6 +30,7 @@ public class PlaywrightManager {
                                 "--no-sandbox", "--disable-dev-shm-usage",
                                 "--disable-infobars", "--disable-extensions", "--disable-gpu",
                                 "--window-position=-9999,-9999",
+                                "--window-size=1,1",
                                 "--no-focus-on-navigate")));
     }
 
@@ -119,6 +120,7 @@ public class PlaywrightManager {
                                     "--no-sandbox", "--disable-dev-shm-usage",
                                     "--disable-infobars", "--disable-extensions", "--disable-gpu",
                                     "--window-position=-9999,-9999",
+                                    "--window-size=1,1",
                                     "--no-focus-on-navigate")));
         }
 

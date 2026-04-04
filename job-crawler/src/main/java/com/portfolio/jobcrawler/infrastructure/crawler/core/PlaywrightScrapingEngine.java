@@ -45,7 +45,7 @@ public class PlaywrightScrapingEngine {
         return cancelRequested;
     }
 
-    public List<CrawledJobData> scrape(SiteParser parser, String keyword, String jobCategory, int maxPages, int timeoutMs) {
+    public List<CrawledJobData> scrape(SiteParser parser, String keyword, String jobCategory, int maxPages, int timeoutMs, String companyType) {
         String siteName = parser.getSiteName();
         boolean unlimited = maxPages <= 0;
         log.info("[{}] 크롤링 시작 - 키워드: {}, 카테고리: {}, 최대페이지: {}", siteName, keyword, jobCategory, unlimited ? "무제한" : maxPages);
@@ -55,7 +55,7 @@ public class PlaywrightScrapingEngine {
 
         try (BrowserContext context = playwrightManager.createStealthContext()) {
             Page page = setupPage(context, timeoutMs);
-            navigateToSearchUrl(page, parser, siteName, keyword, jobCategory);
+            navigateToSearchUrl(page, parser, siteName, keyword, jobCategory, companyType);
 
             for (int pageNum = 1; unlimited || pageNum <= maxPages; pageNum++) {
                 if (cancelRequested) {
@@ -97,8 +97,8 @@ public class PlaywrightScrapingEngine {
         return page;
     }
 
-    private void navigateToSearchUrl(Page page, SiteParser parser, String siteName, String keyword, String jobCategory) {
-        String url = parser.buildSearchUrl(keyword, jobCategory);
+    private void navigateToSearchUrl(Page page, SiteParser parser, String siteName, String keyword, String jobCategory, String companyType) {
+        String url = parser.buildSearchUrl(keyword, jobCategory, companyType);
         page.navigate(url);
         parser.waitForListLoaded(page);
     }
@@ -184,7 +184,16 @@ public class PlaywrightScrapingEngine {
         // Phase 2: 신규 공고만 상세 페이지 병렬 보강 (스레드별 독립 Playwright 인스턴스)
         fetchDetailsWithIsolatedWorkers(parser, siteName, newItems);
 
-        results.addAll(newItems);
+        List<CrawledJobData> enrichedItems = newItems.stream()
+                .filter(CrawledJobData::hasContent)
+                .toList();
+
+        int emptyCount = newItems.size() - enrichedItems.size();
+        if (emptyCount > 0) {
+            log.warn("[{}] 상세 파싱 실패로 본문 비어있는 공고 {} 건 제외", siteName, emptyCount);
+        }
+
+        results.addAll(enrichedItems);
     }
 
     /**
@@ -283,15 +292,20 @@ public class PlaywrightScrapingEngine {
                 detailPage.navigate(data.getUrl(), new Page.NavigateOptions()
                         .setWaitUntil(waitUntil));
                 parser.enrichFromDetailPage(detailPage, data);
-                return true;
+
+                if (data.hasContent()) {
+                    return true;
+                }
+                log.warn("[{}] 상세 파싱 후 본문 비어있음 (시도 {}/{}) - {}",
+                        siteName, attempt, MAX_DETAIL_RETRIES, data.getUrl());
             } catch (Exception e) {
                 log.warn("[{}] 상세 페이지 실패 (시도 {}/{}) - {}: {}",
                         siteName, attempt, MAX_DETAIL_RETRIES, data.getUrl(), e.getMessage());
-                if (attempt < MAX_DETAIL_RETRIES) {
-                    playwrightManager.randomDelay(2000 * attempt, 4000 * attempt);
-                }
             } finally {
                 try { detailPage.close(); } catch (Exception ignored) {}
+            }
+            if (attempt < MAX_DETAIL_RETRIES) {
+                playwrightManager.randomDelay(2000 * attempt, 4000 * attempt);
             }
         }
         return false;

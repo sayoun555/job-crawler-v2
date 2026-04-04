@@ -33,6 +33,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     private final JobApplicationRepository jobApplicationRepository;
     private final com.portfolio.jobcrawler.domain.aianalysis.repository.AiAnalysisResultRepository aiAnalysisResultRepository;
     private final com.portfolio.jobcrawler.domain.notification.repository.NotificationHistoryRepository notificationHistoryRepository;
+    private final com.portfolio.jobcrawler.domain.bookmark.repository.BookmarkRepository bookmarkRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -49,7 +50,7 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     public Page<JobPosting> searchJobs(SourceSite source, String keyword, String jobCategory,
                                        String career, String education, String location, String applicationMethod,
-                                       Pageable pageable) {
+                                       String tag, Pageable pageable) {
         ApplicationMethod method = null;
         if (applicationMethod != null && !applicationMethod.isBlank()) {
             try { method = ApplicationMethod.valueOf(applicationMethod); } catch (Exception ignored) {}
@@ -57,7 +58,7 @@ public class JobPostingServiceImpl implements JobPostingService {
 
         // 목록 캐시: 로컬 DB가 0.1ms로 충분히 빨라 직렬화 오버헤드가 더 큼.
         // 클라우드(DB 네트워크 지연 1~5ms) 환경에서만 캐시 적용 권장.
-        return jobPostingRepository.searchJobs(source, keyword, jobCategory, career, education, location, method, pageable);
+        return jobPostingRepository.searchJobs(source, keyword, jobCategory, career, education, location, method, tag, pageable);
     }
 
     @Override
@@ -116,13 +117,17 @@ public class JobPostingServiceImpl implements JobPostingService {
         long jobplanet = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.JOBPLANET);
         long linkareer = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.LINKAREER);
         long jobkorea = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.JOBKOREA);
+        long jobalio = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.JOBALIO);
+        long wanted = jobPostingRepository.countBySourceAndClosedFalse(SourceSite.WANTED);
 
         Map<String, Long> stats = new HashMap<>();
         stats.put("saramin", saramin);
         stats.put("jobplanet", jobplanet);
         stats.put("linkareer", linkareer);
         stats.put("jobkorea", jobkorea);
-        stats.put("total", saramin + jobplanet + linkareer + jobkorea);
+        stats.put("jobalio", jobalio);
+        stats.put("wanted", wanted);
+        stats.put("total", saramin + jobplanet + linkareer + jobkorea + wanted);
 
         try {
             String json = objectMapper.writeValueAsString(stats);
@@ -137,9 +142,12 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     @Transactional
     public void deleteJob(Long id) {
+        jobPostingRepository.findById(id).ifPresent(job ->
+                clearCrawledCacheByUrl(job.getUrl(), job.getSource().name()));
         aiAnalysisResultRepository.deleteByJobPostingId(id);
         notificationHistoryRepository.deleteByJobPostingId(id);
         jobApplicationRepository.deleteByJobPostingId(id);
+        bookmarkRepository.deleteByJobPostingId(id);
         jobPostingRepository.deleteById(id);
         evictJobCaches();
     }
@@ -147,9 +155,12 @@ public class JobPostingServiceImpl implements JobPostingService {
     @Override
     @Transactional
     public void deleteJobs(java.util.List<Long> ids) {
+        jobPostingRepository.findAllById(ids).forEach(job ->
+                clearCrawledCacheByUrl(job.getUrl(), job.getSource().name()));
         aiAnalysisResultRepository.deleteByJobPostingIdIn(ids);
         notificationHistoryRepository.deleteByJobPostingIdIn(ids);
         jobApplicationRepository.deleteByJobPostingIdIn(ids);
+        bookmarkRepository.deleteByJobPostingIdIn(ids);
         jobPostingRepository.deleteAllByIdInBatch(ids);
         evictJobCaches();
     }
@@ -160,6 +171,7 @@ public class JobPostingServiceImpl implements JobPostingService {
         aiAnalysisResultRepository.deleteAllInBatch();
         notificationHistoryRepository.deleteAllInBatch();
         jobApplicationRepository.deleteAllInBatch();
+        bookmarkRepository.deleteAllInBatch();
         jobPostingRepository.deleteAllInBatch();
         clearCrawledCache();
         evictJobCaches();
@@ -175,9 +187,78 @@ public class JobPostingServiceImpl implements JobPostingService {
         aiAnalysisResultRepository.deleteByJobPostingIdIn(ids);
         notificationHistoryRepository.deleteByJobPostingIdIn(ids);
         jobApplicationRepository.deleteByJobPostingIdIn(ids);
+        bookmarkRepository.deleteByJobPostingIdIn(ids);
         jobPostingRepository.deleteAllInBatch(jobs);
+        clearCrawledCacheBySite(site.toUpperCase());
         evictJobCaches();
         return ids.size();
+    }
+
+    @Override
+    @Transactional
+    public int deleteEmptyPostings() {
+        java.util.List<JobPosting> emptyPostings = jobPostingRepository.findEmptyPostings();
+        if (emptyPostings.isEmpty()) return 0;
+
+        java.util.List<Long> ids = emptyPostings.stream().map(JobPosting::getId).toList();
+        emptyPostings.forEach(job -> clearCrawledCacheByUrl(job.getUrl(), job.getSource().name()));
+        aiAnalysisResultRepository.deleteByJobPostingIdIn(ids);
+        notificationHistoryRepository.deleteByJobPostingIdIn(ids);
+        jobApplicationRepository.deleteByJobPostingIdIn(ids);
+        bookmarkRepository.deleteByJobPostingIdIn(ids);
+        jobPostingRepository.deleteAllInBatch(emptyPostings);
+        evictJobCaches();
+        return ids.size();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> getDetailedStats() {
+        Map<String, Object> result = new HashMap<>();
+
+        // 경력별 (신입/경력/경력무관으로 정규화)
+        Map<String, Long> careerStats = new java.util.LinkedHashMap<>();
+        long rookie = 0, experienced = 0, noMatter = 0, other = 0;
+        for (Object[] row : jobPostingRepository.countByCareerGroup()) {
+            String career = row[0] != null ? ((String) row[0]).trim() : "";
+            long count = (Long) row[1];
+            if (career.contains("신입") && !career.contains("경력")) rookie += count;
+            else if (career.contains("경력무관") || career.isEmpty()) noMatter += count;
+            else if (career.contains("경력") || career.matches(".*\\d+년.*")) experienced += count;
+            else other += count;
+        }
+        careerStats.put("신입", rookie);
+        careerStats.put("경력", experienced);
+        careerStats.put("경력무관", noMatter);
+        if (other > 0) careerStats.put("기타", other);
+        result.put("career", careerStats);
+
+        // 학력별
+        Map<String, Long> educationStats = new java.util.LinkedHashMap<>();
+        for (Object[] row : jobPostingRepository.countByEducationGroup()) {
+            String edu = row[0] != null ? ((String) row[0]).trim() : "미표기";
+            if (edu.isEmpty()) edu = "미표기";
+            educationStats.put(edu, (Long) row[1]);
+        }
+        result.put("education", educationStats);
+
+        // 지역별 (시/구 단위로 정규화 → 상위 10개)
+        Map<String, Long> locationStats = new java.util.LinkedHashMap<>();
+        Map<String, Long> tempLocation = new java.util.LinkedHashMap<>();
+        for (Object[] row : jobPostingRepository.countByLocationGroup()) {
+            String loc = row[0] != null ? ((String) row[0]).trim() : "미표기";
+            if (loc.isEmpty()) loc = "미표기";
+            // "서울 강남구" → "서울" 로 광역 단위 집계
+            String region = loc.split(" ")[0];
+            tempLocation.merge(region, (Long) row[1], Long::sum);
+        }
+        tempLocation.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(10)
+                .forEach(e -> locationStats.put(e.getKey(), e.getValue()));
+        result.put("location", locationStats);
+
+        return result;
     }
 
     /** 공고 변경 시 관련 캐시 무효화 */
@@ -204,6 +285,28 @@ public class JobPostingServiceImpl implements JobPostingService {
             }
         } catch (Exception e) {
             log.warn("Redis 캐시 삭제 실패: {}", e.getMessage());
+        }
+    }
+
+    private void clearCrawledCacheBySite(String site) {
+        try {
+            Set<String> keys = redisTemplate.keys("crawled:job:" + site + ":*");
+            if (keys != null && !keys.isEmpty()) {
+                redisTemplate.delete(keys);
+                log.info("Redis [{}] 크롤링 캐시 {} 건 삭제", site, keys.size());
+            }
+        } catch (Exception e) {
+            log.warn("Redis 사이트별 캐시 삭제 실패: {}", e.getMessage());
+        }
+    }
+
+    private void clearCrawledCacheByUrl(String url, String site) {
+        if (url == null || site == null) return;
+        try {
+            String redisKey = "crawled:job:" + site + ":" + url.hashCode();
+            redisTemplate.delete(redisKey);
+        } catch (Exception e) {
+            log.debug("Redis URL 캐시 삭제 실패: {}", e.getMessage());
         }
     }
 }

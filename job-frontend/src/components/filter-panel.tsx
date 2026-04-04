@@ -18,11 +18,12 @@ type FilterValues = {
     minMatchScore: string;
     status: string;
     sortBy: string;
+    tag: string;
 };
 
 const INITIAL_FILTERS: FilterValues = {
     career: "", education: "", salary: "", location: "", saraminJobCategory: "", jobPlanetJobCategory: "",
-    applicationMethod: "", minMatchScore: "", status: "", sortBy: "latest",
+    applicationMethod: "", minMatchScore: "", status: "", sortBy: "latest", tag: "",
 };
 
 const SARAMIN_CATEGORIES = ["전체", "서버/네트워크/보안", "웹개발", "앱개발", "프론트엔드", "퍼블리싱/UI개발", "게임개발", "데이터/AI", "기획/PM", "QA/테스트"];
@@ -65,6 +66,25 @@ const JOBKOREA_CATEGORIES = ["전체", "백엔드개발자", "프론트엔드개
 const JOBKOREA_CAREER = ["전체", "신입", "경력", "신입·경력", "인턴", "정규직", "계약직"];
 const JOBKOREA_EDUCATION = ["전체", "학력무관", "고졸↑", "초대졸↑", "대졸↑", "석사↑", "박사↑"];
 const JOBKOREA_METHOD = [
+    { value: "", label: "전체" },
+    { value: "HOMEPAGE", label: "홈페이지 지원" },
+];
+
+// 원티드: 경력, 회사 규모, 연봉, 복지
+const WANTED_CAREER = ["전체", "신입", "경력", "인턴", "경력 1-3년", "경력 3-5년", "경력 5년 이상"];
+const WANTED_EDUCATION = ["전체", "학력무관"];
+const WANTED_METHOD = [
+    { value: "", label: "전체" },
+    { value: "HOMEPAGE", label: "홈페이지 지원" },
+];
+const WANTED_COMPANY_SIZE = ["전체", "50명이하", "51~300명", "301~1,000명", "1,001~10,000명"];
+const WANTED_SALARY_LEVEL = ["전체", "연봉상위2~5%", "연봉상위6~10%", "연봉상위11~20%"];
+const WANTED_BENEFITS = ["전체", "재택근무", "유연근무", "스톡옵션", "식대지원", "AI 선도 기업", "인원 급성장"];
+
+// 잡알리오(공기업): 채용구분, 학력
+const JOBALIO_CAREER = ["전체", "신입", "경력", "신입+경력"];
+const JOBALIO_EDUCATION = ["전체", "학력무관", "고졸", "대졸(2~3년)", "대졸(4년)", "석사", "박사"];
+const JOBALIO_METHOD = [
     { value: "", label: "전체" },
     { value: "HOMEPAGE", label: "홈페이지 지원" },
 ];
@@ -121,6 +141,8 @@ export default function FilterPanel({
         if (source === "JOBPLANET") return JOBPLANET_CAREER;
         if (source === "LINKAREER") return LINKAREER_CAREER;
         if (source === "JOBKOREA") return JOBKOREA_CAREER;
+        if (source === "WANTED") return WANTED_CAREER;
+        if (source === "JOBALIO") return JOBALIO_CAREER;
         return COMMON_CAREER;
     };
 
@@ -129,6 +151,8 @@ export default function FilterPanel({
         if (source === "JOBPLANET") return JOBPLANET_EDUCATION;
         if (source === "LINKAREER") return [];
         if (source === "JOBKOREA") return JOBKOREA_EDUCATION;
+        if (source === "WANTED") return WANTED_EDUCATION;
+        if (source === "JOBALIO") return JOBALIO_EDUCATION;
         return COMMON_EDUCATION;
     };
 
@@ -137,6 +161,8 @@ export default function FilterPanel({
         if (source === "JOBPLANET") return JOBPLANET_METHOD;
         if (source === "LINKAREER") return LINKAREER_METHOD;
         if (source === "JOBKOREA") return JOBKOREA_METHOD;
+        if (source === "WANTED") return WANTED_METHOD;
+        if (source === "JOBALIO") return JOBALIO_METHOD;
         return COMMON_METHOD;
     };
 
@@ -203,6 +229,29 @@ export default function FilterPanel({
                         ))}
                     </SelectContent>
                 </Select>
+            </div>
+            )}
+
+            {/* 원티드: 회사규모/연봉/복지 */}
+            {source === "WANTED" && (
+            <div className="space-y-4">
+                <div>
+                    <label className="text-sm font-medium mb-2 block text-sky-600">회사 규모</label>
+                    <Select value={filters.tag || ""} onValueChange={(v) => update("tag", v)}>
+                        <SelectTrigger><SelectValue placeholder="전체" /></SelectTrigger>
+                        <SelectContent>
+                            {WANTED_COMPANY_SIZE.map((o) => (
+                                <SelectItem key={o} value={o === "전체" ? "all" : o}>{o}</SelectItem>
+                            ))}
+                            {WANTED_SALARY_LEVEL.slice(1).map((o) => (
+                                <SelectItem key={o} value={o}>{o}</SelectItem>
+                            ))}
+                            {WANTED_BENEFITS.slice(1).map((o) => (
+                                <SelectItem key={o} value={o}>{o}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
             )}
 

@@ -20,7 +20,7 @@ public interface SiteParser {
      * @param keyword 검색 키워드 (예: "카카오")
      * @param jobCategory 직무 카테고리 (예: "서버/백엔드 개발")
      */
-    String buildSearchUrl(String keyword, String jobCategory);
+    String buildSearchUrl(String keyword, String jobCategory, String companyType);
 
     /**
      * 검색 목록 페이지에서 공고 리스트 아이템들의 Locator 반환

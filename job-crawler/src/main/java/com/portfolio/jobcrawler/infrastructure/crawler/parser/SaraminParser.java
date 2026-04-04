@@ -35,7 +35,7 @@ public class SaraminParser implements SiteParser {
     }
 
     @Override
-    public String buildSearchUrl(String keyword, String jobCategory) {
+    public String buildSearchUrl(String keyword, String jobCategory, String companyType) {
         StringBuilder urlBuilder = new StringBuilder(SARAMIN_BASE_URL);
         // 실제 사람인 job-category 페이지 파라미터 (page, page_count, sort)
         urlBuilder.append("/zf_user/jobs/list/job-category?cat_mcls=2");
@@ -57,6 +57,10 @@ public class SaraminParser implements SiteParser {
             if (catCode != null) {
                 urlBuilder.append("&cat_scls=").append(catCode);
             }
+        }
+
+        if ("public".equalsIgnoreCase(companyType)) {
+            urlBuilder.append("&company_type%5B%5D=public");
         }
 
         return urlBuilder.toString();

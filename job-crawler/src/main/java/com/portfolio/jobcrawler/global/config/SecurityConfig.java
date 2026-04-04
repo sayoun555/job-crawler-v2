@@ -81,6 +81,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:3000", "http://localhost:3001", "http://localhost:5173", "https://job.eekky.com",
+                "https://*.trycloudflare.com",
                 "https://www.saramin.co.kr", "https://www.jobkorea.co.kr",
                 "https://www.jobplanet.co.kr", "https://linkareer.com",
                 "chrome-extension://*"

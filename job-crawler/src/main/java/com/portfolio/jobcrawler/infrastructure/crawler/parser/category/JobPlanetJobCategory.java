@@ -1,6 +1,12 @@
 package com.portfolio.jobcrawler.infrastructure.crawler.parser.category;
 
+import java.util.List;
+
 public enum JobPlanetJobCategory {
+    // 상위 카테고리 — 개발 직군 전체
+    DEV("개발", null, "개발"),
+
+    // 하위 카테고리
     WEB("웹개발", "116", "웹개발"),
     SERVER("서버개발", "117", "서버", "백엔드", "backend"),
     FRONTEND("프론트엔드개발", "119", "프론트", "front"),
@@ -12,6 +18,11 @@ public enum JobPlanetJobCategory {
     QA("QA", "131", "qa", "테스트"),
     PLANNING("기획자", "123", "기획"),
     DESIGN("디자이너", "124", "디자인", "디자이너");
+
+    // 개발 직군 하위 카테고리 코드 목록
+    private static final List<String> DEV_CODES = List.of(
+            "116", "117", "119", "121", "122", "125", "126", "127", "131"
+    );
 
     private final String displayName;
     private final String code;
@@ -46,5 +57,19 @@ public enum JobPlanetJobCategory {
             }
         }
         return null;
+    }
+
+    /**
+     * "개발" 상위 카테고리인지 판별
+     */
+    public static boolean isDevCategory(String displayName) {
+        return "개발".equals(displayName);
+    }
+
+    /**
+     * 개발 직군 하위 카테고리 코드 목록 반환
+     */
+    public static List<String> getDevCategoryCodes() {
+        return DEV_CODES;
     }
 }

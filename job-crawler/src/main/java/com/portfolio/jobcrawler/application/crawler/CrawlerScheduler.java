@@ -102,7 +102,7 @@ public class CrawlerScheduler {
             }
             try {
                 log.info("=== [스케줄] 자동 크롤링 (전체) - 최대 {} 페이지 ===", config.getMaxPages());
-                int saved = crawlerService.crawlAll(null, null, config.getMaxPages());
+                int saved = crawlerService.crawlAll(null, null, config.getMaxPages(), null);
                 log.info("[스케줄] 크롤링 완료 - 신규 {} 건 (알림은 유저별 설정 시간에 발송)", saved);
             } finally {
                 crawling.set(false);

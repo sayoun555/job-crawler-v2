@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
-import { jobsApi, aiApi, applicationsApi, templatesApi, JobPosting, Template } from "@/lib/api";
+import { jobsApi, aiApi, applicationsApi, templatesApi, bookmarksApi, JobPosting, Template } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -89,6 +89,8 @@ const sourceBadge: Record<string, { label: string; className: string }> = {
     JOBPLANET: { label: "잡플래닛", className: "bg-purple-600" },
     LINKAREER: { label: "링커리어", className: "bg-green-600" },
     JOBKOREA: { label: "잡코리아", className: "bg-red-600" },
+    JOBALIO: { label: "공기업", className: "bg-amber-600" },
+    WANTED: { label: "원티드", className: "bg-sky-600" },
 };
 
 function getTechList(techStack: unknown): string[] {
@@ -108,15 +110,80 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
     const [analysis, setAnalysis] = useState<string | null>(null);
     const [analyzingCompany, setAnalyzingCompany] = useState(false);
     const [preparing, setPreparing] = useState(false);
+
+    // 새로고침 시 localStorage에서 AI 진행 상태 복구
+    useEffect(() => {
+        const restore = (key: string, setter: (v: boolean) => void) => {
+            try {
+                const s = localStorage.getItem(key);
+                if (s) { const { ts } = JSON.parse(s); if (Date.now() - ts < 5 * 60 * 1000) setter(true); else localStorage.removeItem(key); }
+            } catch { localStorage.removeItem(key); }
+        };
+        restore(`ai-score-${id}`, setAnalyzingScore);
+        restore(`ai-company-${id}`, setAnalyzingCompany);
+        restore(`ai-prepare-${id}`, setPreparing);
+    }, [id]);
     const [showTemplateDialog, setShowTemplateDialog] = useState(false);
     const [templates, setTemplates] = useState<Template[]>([]);
     const [message, setMessage] = useState("");
     const { token, isLoggedIn } = useAuth();
     const router = useRouter();
 
+    const setAnalyzingScorePersist = (v: boolean) => {
+        setAnalyzingScore(v);
+        if (v) localStorage.setItem(`ai-score-${id}`, JSON.stringify({ ts: Date.now() }));
+        else localStorage.removeItem(`ai-score-${id}`);
+    };
+    const setAnalyzingCompanyPersist = (v: boolean) => {
+        setAnalyzingCompany(v);
+        if (v) localStorage.setItem(`ai-company-${id}`, JSON.stringify({ ts: Date.now() }));
+        else localStorage.removeItem(`ai-company-${id}`);
+    };
+    const setPreparingPersist = (v: boolean, appId?: number) => {
+        setPreparing(v);
+        if (v) localStorage.setItem(`ai-prepare-${id}`, JSON.stringify({ ts: Date.now(), appId }));
+        else localStorage.removeItem(`ai-prepare-${id}`);
+    };
+
+    const [bookmarked, setBookmarked] = useState(false);
+
     useEffect(() => {
         jobsApi.get(Number(id)).then(setJob).catch(console.error);
     }, [id]);
+
+    useEffect(() => {
+        if (token) {
+            bookmarksApi.isBookmarked(token, Number(id))
+                .then(r => setBookmarked(r.bookmarked))
+                .catch(() => {});
+        }
+    }, [token, id]);
+
+    // 새로고침 후 preparing 상태이면 폴링으로 AI 완료 감지 → 자동 이동
+    useEffect(() => {
+        if (!token || !preparing) return;
+        setMessage("AI가 자소서를 생성하고 있습니다... 완료되면 자동으로 이동합니다.");
+        try {
+            const saved = localStorage.getItem(`ai-prepare-${id}`);
+            if (!saved) return;
+            const { appId } = JSON.parse(saved);
+            if (!appId) return;
+
+            const interval = setInterval(async () => {
+                try {
+                    const updated = await applicationsApi.get(token, appId);
+                    if ((updated.coverLetter && updated.coverLetter.trim()) ||
+                        (updated.coverLetterSections && updated.coverLetterSections.trim())) {
+                        clearInterval(interval);
+                        setPreparingPersist(false);
+                        router.push(`/applications/${appId}/preview`);
+                    }
+                } catch { /* 폴링 에러 무시 */ }
+            }, 5000);
+
+            return () => clearInterval(interval);
+        } catch { /* ignore */ }
+    }, [token, preparing]);
 
     // 저장된 AI 분석 결과 로드
     useEffect(() => {
@@ -132,7 +199,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
 
     const handleMatchScore = async (force?: boolean) => {
         if (!token) return;
-        setAnalyzingScore(true);
+        setAnalyzingScorePersist(true);
         setMessage("");
         try {
             const res = await aiApi.matchScore(token, Number(id), force);
@@ -144,23 +211,23 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
             } else {
                 setMessage("적합률 분석 실패 - 다시 시도해주세요");
             }
+            setAnalyzingScorePersist(false);
         } catch (e) {
             setMessage("적합률 분석 실패: " + (e instanceof Error ? e.message : "서버 오류"));
-        } finally {
             setAnalyzingScore(false);
         }
     };
 
     const handleAnalysis = async () => {
         if (!token) return;
-        setAnalyzingCompany(true);
+        setAnalyzingCompanyPersist(true);
         setMessage("");
         try {
             const res = await aiApi.companyAnalysis(token, Number(id));
             setAnalysis(res.analysis);
+            setAnalyzingCompanyPersist(false);
         } catch {
             setMessage("기업 분석 실패");
-        } finally {
             setAnalyzingCompany(false);
         }
     };
@@ -190,12 +257,22 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
         const validSections = customSections.filter(s => s.title.trim());
         if (validSections.length === 0) return;
         setShowCustomDialog(false);
-        setPreparing(true);
+        setPreparingPersist(true);
         setMessage("AI가 자소서를 생성하고 있습니다... 완료되면 자동으로 이동합니다.");
         try {
             const app = await applicationsApi.prepareCustom(
                 token, Number(id), validSections, additionalRequest);
             const appId = app.id;
+            setPreparingPersist(true, appId);
+
+            // 자소서가 이미 있으면 바로 이동
+            if ((app.coverLetter && app.coverLetter.trim()) ||
+                (app.coverLetterSections && app.coverLetterSections.trim())) {
+                setPreparingPersist(false);
+                router.push(`/applications/${appId}/preview`);
+                return;
+            }
+
             const { onAiTaskComplete } = require("@/lib/websocket");
             const cleanup = onAiTaskComplete((data: { taskId: string; status: string; result: string }) => {
                 if (typeof data.result === "string"
@@ -205,13 +282,28 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                     router.push(`/applications/${appId}/preview`);
                 }
             });
+
+            // 폴링 fallback: 5초마다 지원서 확인
+            const pollInterval = setInterval(async () => {
+                try {
+                    const updated = await applicationsApi.get(token, appId);
+                    if ((updated.coverLetter && updated.coverLetter.trim()) ||
+                        (updated.coverLetterSections && updated.coverLetterSections.trim())) {
+                        clearInterval(pollInterval);
+                        cleanup();
+                        router.push(`/applications/${appId}/preview`);
+                    }
+                } catch { /* 폴링 에러 무시 */ }
+            }, 5000);
+
             setTimeout(() => {
+                clearInterval(pollInterval);
                 cleanup();
                 router.push(`/applications/${appId}/preview`);
-            }, 90000);
+            }, 180000);
         } catch (e: unknown) {
             setMessage(e instanceof Error ? e.message : "준비 실패");
-            setPreparing(false);
+            setPreparingPersist(false);
         }
     };
 
@@ -231,15 +323,23 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
     const handlePrepare = async (templateId?: number) => {
         if (!token) return;
         setShowTemplateDialog(false);
-        setPreparing(true);
+        setPreparingPersist(true);
         setMessage("AI가 자소서를 생성하고 있습니다... 완료되면 자동으로 이동합니다.");
         try {
             const app = await applicationsApi.prepare(token, Number(id), templateId);
             const appId = app.id;
+            setPreparingPersist(true, appId);
+
+            // 자소서가 이미 있으면 바로 이동
+            if (app.coverLetter && app.coverLetter.trim()) {
+                setPreparingPersist(false);
+                router.push(`/applications/${appId}/preview`);
+                return;
+            }
+
             // WebSocket으로 AI 완료 대기
             const { onAiTaskComplete } = require("@/lib/websocket");
             const cleanup = onAiTaskComplete((data: { taskId: string; status: string; result: string }) => {
-                // PREPARE_COMPLETE + 정확한 applicationId 매칭만
                 if (typeof data.result === "string"
                     && data.result.includes("PREPARE_COMPLETE")
                     && data.result.includes(`"applicationId":${appId}`)) {
@@ -247,14 +347,28 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                     router.push(`/applications/${appId}/preview`);
                 }
             });
-            // fallback: 90초 후 강제 이동
+
+            // 폴링 fallback: 5초마다 지원서 확인
+            const pollInterval = setInterval(async () => {
+                try {
+                    const updated = await applicationsApi.get(token, appId);
+                    if (updated.coverLetter && updated.coverLetter.trim()) {
+                        clearInterval(pollInterval);
+                        cleanup();
+                        router.push(`/applications/${appId}/preview`);
+                    }
+                } catch { /* 폴링 에러 무시 */ }
+            }, 5000);
+
+            // 최대 3분 대기 후 강제 이동
             setTimeout(() => {
+                clearInterval(pollInterval);
                 cleanup();
                 router.push(`/applications/${appId}/preview`);
-            }, 90000);
+            }, 180000);
         } catch (e: unknown) {
             setMessage(e instanceof Error ? e.message : "준비 실패");
-            setPreparing(false);
+            setPreparingPersist(false);
         }
     };
 
@@ -284,7 +398,35 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                             <CardTitle className="text-2xl">{job.title}</CardTitle>
                             <p className="mt-1 text-lg text-muted-foreground">{job.company}</p>
                         </div>
-                        <Badge className={src.className}>{src.label}</Badge>
+                        <div className="flex items-center gap-2">
+                            <Badge className={src.className}>{src.label}</Badge>
+                            {isLoggedIn && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={async () => {
+                                        if (!token) return;
+                                        try {
+                                            if (bookmarked) {
+                                                await bookmarksApi.remove(token, job.id);
+                                                setBookmarked(false);
+                                            } else {
+                                                await bookmarksApi.add(token, job.id);
+                                                setBookmarked(true);
+                                            }
+                                        } catch {}
+                                    }}
+                                    className={bookmarked ? "text-red-500 hover:text-red-600" : "text-muted-foreground hover:text-red-500"}
+                                    title={bookmarked ? "관심 공고 해제" : "관심 공고 추가"}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        fill={bookmarked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"
+                                        strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                                    </svg>
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -578,19 +720,25 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
                 </Card>
             )}
 
-            {/* 상세 내용 - 섹션별 분리 */}
-            {job.description && (
-                <DescriptionSections description={job.description} companyImages={job.companyImages} />
-            )}
-
-            {/* 자격 요건 */}
-            {job.requirements && (
-                <Card>
-                    <CardHeader><CardTitle className="text-lg">자격 요건</CardTitle></CardHeader>
-                    <CardContent>
-                        <ContentRenderer text={job.requirements} />
-                    </CardContent>
-                </Card>
+            {/* 상세 내용 */}
+            {job.source === "JOBALIO" && job.description ? (
+                <JobAlioDetail description={job.description} requirements={job.requirements} />
+            ) : job.source === "WANTED" && job.description ? (
+                <WantedDetail description={job.description} requirements={job.requirements} />
+            ) : (
+                <>
+                    {job.description && (
+                        <DescriptionSections description={job.description} companyImages={job.companyImages} />
+                    )}
+                    {job.requirements && (
+                        <Card>
+                            <CardHeader><CardTitle className="text-lg">자격 요건</CardTitle></CardHeader>
+                            <CardContent>
+                                <ContentRenderer text={job.requirements} />
+                            </CardContent>
+                        </Card>
+                    )}
+                </>
             )}
 
             {/* AI 기업 분석 결과 */}
@@ -717,8 +865,8 @@ function TabTable({ rows }: { rows: string[][] }) {
 }
 
 function HtmlRenderer({ html, companyImages }: { html: string; companyImages?: string }) {
-    // 상단에 표시된 이미지와 동일한 img 태그 제거
-    let processed = html;
+    // src 없는 img 태그 제거 (엑박 방지) + 상단에 표시된 이미지와 동일한 img 태그 제거
+    let processed = html.replace(/<img(?![^>]*\bsrc\s*=)[^>]*>/gi, '');
     if (companyImages) {
         const imgUrls = companyImages.split(",").map(u => u.trim()).filter(Boolean);
         imgUrls.forEach(url => {
@@ -729,8 +877,10 @@ function HtmlRenderer({ html, companyImages }: { html: string; companyImages?: s
         ? DOMPurify.sanitize(processed, {
             ALLOWED_TAGS: ["table","thead","tbody","tfoot","tr","td","th","caption",
                 "p","br","b","strong","em","i","u","ul","ol","li",
-                "h1","h2","h3","h4","h5","h6","div","span","a","img","col","colgroup"],
-            ALLOWED_ATTR: ["colspan","rowspan","href","src","alt","width","height","border","cellspacing","cellpadding"],
+                "h1","h2","h3","h4","h5","h6","div","span","a","img","col","colgroup",
+                "map","area"],
+            ALLOWED_ATTR: ["colspan","rowspan","href","src","alt","width","height","border","cellspacing","cellpadding",
+                "usemap","name","shape","coords","target"],
         })
         : html;
     return (
@@ -769,6 +919,200 @@ function ContentRenderer({ text, companyImages }: { text: string; companyImages?
         .join("\n")
         .replace(/\n{3,}/g, "\n\n");
     return <Markdown>{cleaned}</Markdown>;
+}
+
+function WantedDetail({ description, requirements }: { description: string; requirements?: string }) {
+    const [activeTab, setActiveTab] = useState("intro");
+
+    // <h3> 마커로 섹션 분리
+    const sections: Record<string, string> = {};
+    const parts = description.split(/<h3>/);
+    for (const part of parts) {
+        if (!part.trim()) continue;
+        const endTag = part.indexOf("</h3>");
+        if (endTag === -1) { sections["intro"] = (sections["intro"] || "") + part; continue; }
+        const title = part.substring(0, endTag).trim();
+        const content = part.substring(endTag + 5).trim();
+        if (title.includes("포지션 소개")) sections["intro"] = content;
+        else if (title.includes("주요업무")) sections["duties"] = content;
+        else if (title.includes("자격요건")) sections["qualifications"] = content;
+        else if (title.includes("우대사항")) sections["preferred"] = content;
+        else if (title.includes("혜택") || title.includes("복지")) sections["benefits"] = content;
+        else if (title.includes("채용 전형")) sections["process"] = content;
+        else if (title.includes("태그")) sections["tags"] = content;
+        else sections["intro"] = (sections["intro"] || "") + content;
+    }
+
+    const tabs = [
+        { key: "intro", label: "포지션 소개", icon: "💼" },
+        { key: "duties", label: "주요업무", icon: "📋" },
+        { key: "qualifications", label: "자격요건", icon: "✅" },
+        { key: "preferred", label: "우대사항", icon: "⭐" },
+        { key: "benefits", label: "혜택 및 복지", icon: "🎁" },
+        { key: "process", label: "채용 전형", icon: "📊" },
+        { key: "tags", label: "태그", icon: "🏷" },
+    ].filter(t => !!sections[t.key]);
+
+    const renderSection = (html: string) => (
+        <div className="prose prose-sm dark:prose-invert max-w-none
+            [&_p]:text-sm [&_p]:leading-7 [&_p]:text-foreground/85 [&_p]:mb-3 [&_p]:whitespace-pre-line">
+            <HtmlRenderer html={html} />
+        </div>
+    );
+
+    return (
+        <Card>
+            <CardContent className="p-0">
+                <div className="flex border-b overflow-x-auto">
+                    {tabs.map(tab => (
+                        <button key={tab.key}
+                            onClick={() => setActiveTab(tab.key)}
+                            className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
+                                activeTab === tab.key
+                                    ? "border-sky-500 text-sky-600 bg-sky-50 dark:bg-sky-950/30"
+                                    : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                            }`}>
+                            <span className="mr-1.5">{tab.icon}</span>{tab.label}
+                        </button>
+                    ))}
+                </div>
+                <div className="p-5">
+                    {tabs.map(tab => activeTab === tab.key && sections[tab.key] && (
+                        <div key={tab.key}>
+                            {tab.key === "tags" ? (
+                                <div className="flex flex-wrap gap-2
+                                    [&_li]:inline-flex [&_li]:px-3 [&_li]:py-1.5 [&_li]:rounded-full
+                                    [&_li]:bg-sky-50 [&_li]:dark:bg-sky-950/30 [&_li]:text-sky-700 [&_li]:dark:text-sky-300
+                                    [&_li]:text-sm [&_li]:font-medium
+                                    [&_ul]:flex [&_ul]:flex-wrap [&_ul]:gap-2 [&_ul]:list-none [&_ul]:p-0">
+                                    <HtmlRenderer html={sections[tab.key]} />
+                                </div>
+                            ) : (
+                                renderSection(sections[tab.key])
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
+function JobAlioDetail({ description, requirements }: { description: string; requirements?: string }) {
+    const [activeTab, setActiveTab] = useState("summary");
+
+    // description을 <h3> 마커로 분리
+    const sections: Record<string, string> = {};
+    const parts = description.split(/<h3>/);
+    for (const part of parts) {
+        if (!part.trim()) continue;
+        const endTag = part.indexOf("</h3>");
+        if (endTag === -1) {
+            sections["summary"] = (sections["summary"] || "") + part;
+            continue;
+        }
+        const title = part.substring(0, endTag).trim();
+        const content = part.substring(endTag + 5).trim();
+        if (title.includes("채용 요약")) sections["summary"] = content;
+        else if (title.includes("상세요강")) sections["detail"] = content;
+        else if (title.includes("전형단계별")) sections["process"] = content;
+        else if (title.includes("첨부파일")) sections["files"] = content;
+        else sections["summary"] = (sections["summary"] || "") + content;
+    }
+
+    // 공고 URL 분리
+    const urlMatch = description.match(/<p><strong>공고 URL<\/strong>:[\s\S]*?<\/p>/);
+    const externalUrl = urlMatch?.[0] || "";
+    if (externalUrl && sections["detail"]) {
+        sections["detail"] = sections["detail"].replace(externalUrl, "");
+    }
+
+    const tabs = [
+        { key: "summary", label: "채용 요약", icon: "📋" },
+        { key: "detail", label: "상세요강", icon: "📄" },
+        ...(requirements ? [{ key: "requirements", label: "응시자격/우대", icon: "✅" }] : []),
+        { key: "process", label: "전형단계", icon: "📊" },
+        { key: "files", label: "첨부파일", icon: "📎" },
+    ].filter(t => t.key === "requirements" ? !!requirements : !!sections[t.key]);
+
+    return (
+        <Card>
+            <CardContent className="p-0">
+                {/* 탭 헤더 */}
+                <div className="flex border-b overflow-x-auto">
+                    {tabs.map(tab => (
+                        <button key={tab.key}
+                            onClick={() => setActiveTab(tab.key)}
+                            className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
+                                activeTab === tab.key
+                                    ? "border-amber-500 text-amber-600 bg-amber-50 dark:bg-amber-950/30"
+                                    : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                            }`}>
+                            <span className="mr-1.5">{tab.icon}</span>{tab.label}
+                        </button>
+                    ))}
+                </div>
+
+                {/* 탭 콘텐츠 */}
+                <div className="p-5">
+                    {activeTab === "summary" && sections["summary"] && (
+                        <div className="space-y-3">
+                            <HtmlRenderer html={sections["summary"]} />
+                            {externalUrl && (
+                                <div className="mt-4 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
+                                    <HtmlRenderer html={externalUrl} />
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === "detail" && sections["detail"] && (
+                        <div className="prose prose-sm dark:prose-invert max-w-none
+                            [&_h4]:text-base [&_h4]:font-semibold [&_h4]:text-amber-600 [&_h4]:dark:text-amber-400
+                            [&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:pb-1 [&_h4]:border-b [&_h4]:border-amber-200
+                            [&_p]:text-sm [&_p]:leading-relaxed [&_p]:text-foreground/80 [&_p]:mb-4">
+                            <HtmlRenderer html={sections["detail"]} />
+                        </div>
+                    )}
+
+                    {activeTab === "requirements" && requirements && (
+                        <div className="space-y-4">
+                            {requirements.split(/\[([^\]]+)\]/).filter(Boolean).reduce((acc: { title: string; content: string }[], part, i, arr) => {
+                                if (i % 2 === 0) {
+                                    acc.push({ title: part.trim(), content: arr[i + 1]?.trim() || "" });
+                                }
+                                return acc;
+                            }, []).filter(s => s.content).map((section, i) => (
+                                <div key={i} className="rounded-lg border p-4">
+                                    <h4 className="text-sm font-semibold text-amber-600 mb-2">{section.title}</h4>
+                                    <p className="text-sm leading-relaxed text-foreground/80 whitespace-pre-line">{section.content}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === "process" && sections["process"] && (
+                        <div className="overflow-x-auto
+                            [&_table]:w-full [&_table]:border-collapse [&_table]:text-sm [&_table]:mb-4
+                            [&_td]:border [&_td]:border-border [&_td]:px-3 [&_td]:py-2 [&_td]:text-center
+                            [&_th]:border [&_th]:border-border [&_th]:px-3 [&_th]:py-2 [&_th]:text-center [&_th]:font-medium [&_th]:bg-amber-50 [&_th]:dark:bg-amber-950/30
+                            [&_.interviewName]:text-left [&_.interviewName]:bg-muted/50 [&_.interviewName]:font-semibold">
+                            <HtmlRenderer html={sections["process"]} />
+                        </div>
+                    )}
+
+                    {activeTab === "files" && sections["files"] && (
+                        <div className="space-y-2
+                            [&_a]:text-amber-600 [&_a]:hover:text-amber-700 [&_a]:underline [&_a]:text-sm
+                            [&_li]:py-1.5 [&_li]:border-b [&_li]:border-dashed [&_li]:border-border [&_li]:last:border-0
+                            [&_p]:text-sm [&_p]:text-muted-foreground [&_p]:mt-3">
+                            <HtmlRenderer html={sections["files"]} />
+                        </div>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
+    );
 }
 
 function DescriptionSections({ description, companyImages }: { description: string; companyImages?: string }) {

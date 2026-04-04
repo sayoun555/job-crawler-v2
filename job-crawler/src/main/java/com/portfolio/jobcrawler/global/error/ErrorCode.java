@@ -43,6 +43,10 @@ public enum ErrorCode {
     // CoverLetter
     COVER_LETTER_NOT_FOUND(HttpStatus.NOT_FOUND, "CL001", "자기소개서를 찾을 수 없습니다."),
 
+    // Bookmark
+    ALREADY_BOOKMARKED(HttpStatus.CONFLICT, "BK001", "이미 관심 공고에 추가된 공고입니다."),
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "BK002", "관심 공고를 찾을 수 없습니다."),
+
     // Application
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "AP001", "지원 이력을 찾을 수 없습니다."),
     ALREADY_APPLIED(HttpStatus.CONFLICT, "AP002", "이미 지원한 공고입니다."),

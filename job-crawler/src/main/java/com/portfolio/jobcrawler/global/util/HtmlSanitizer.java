@@ -12,13 +12,17 @@ import org.jsoup.safety.Safelist;
 public final class HtmlSanitizer {
 
     private static final Safelist SAFELIST = Safelist.relaxed()
-            .addTags("table", "thead", "tbody", "tfoot", "tr", "td", "th", "caption", "col", "colgroup")
+            .addTags("table", "thead", "tbody", "tfoot", "tr", "td", "th", "caption", "col", "colgroup",
+                     "map", "area")
             .addAttributes("td", "colspan", "rowspan")
             .addAttributes("th", "colspan", "rowspan")
             .addAttributes("table", "width", "border", "cellspacing", "cellpadding")
             .addAttributes("col", "width")
-            .addAttributes("img", "src", "alt", "width", "height")
-            .addProtocols("img", "src", "http", "https");
+            .addAttributes("img", "src", "alt", "width", "height", "usemap")
+            .addAttributes("map", "name")
+            .addAttributes("area", "shape", "coords", "href", "target", "alt")
+            .addProtocols("img", "src", "http", "https")
+            .addProtocols("area", "href", "http", "https");
     // style 속성을 어디에도 허용하지 않음 → 인라인 CSS 전부 제거
 
     private HtmlSanitizer() {}
@@ -29,7 +33,13 @@ public final class HtmlSanitizer {
      */
     public static String sanitize(String dirtyHtml) {
         if (dirtyHtml == null || dirtyHtml.isBlank()) return "";
-        return Jsoup.clean(dirtyHtml, SAFELIST);
+        // 프로토콜 상대경로(//로 시작)를 https://로 정규화 (Jsoup이 프로토콜 검증 시 제거하지 않도록)
+        String normalized = dirtyHtml.replace("src=\"//", "src=\"https://")
+                                     .replace("src='//", "src='https://");
+        String cleaned = Jsoup.clean(normalized, SAFELIST);
+        Document doc = Jsoup.parseBodyFragment(cleaned);
+        doc.select("img:not([src]), img[src=''], img[src='about:blank']").remove();
+        return doc.body().html();
     }
 
     /**

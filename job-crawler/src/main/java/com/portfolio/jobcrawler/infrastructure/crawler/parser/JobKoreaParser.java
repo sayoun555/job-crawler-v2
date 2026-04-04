@@ -32,10 +32,13 @@ public class JobKoreaParser implements SiteParser {
     }
 
     @Override
-    public String buildSearchUrl(String keyword, String jobCategory) {
+    public String buildSearchUrl(String keyword, String jobCategory, String companyType) {
         StringBuilder urlBuilder = new StringBuilder(IT_DUTY_URL);
         if (keyword != null && !keyword.isBlank()) {
             urlBuilder.append("&stext=").append(keyword);
+        }
+        if ("public".equalsIgnoreCase(companyType)) {
+            urlBuilder.append("&cotype=8");
         }
         return urlBuilder.toString();
     }

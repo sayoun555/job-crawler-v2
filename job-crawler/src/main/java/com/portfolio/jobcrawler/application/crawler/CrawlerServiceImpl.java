@@ -30,12 +30,13 @@ public class CrawlerServiceImpl implements CrawlerService {
     private static final int BATCH_SIZE = 50;
 
     @Override
-    public int crawlAll(String keyword, String jobCategory, int maxPages) {
+    public int crawlAll(String keyword, String jobCategory, int maxPages, String companyType) {
         int total = 0;
         for (JobScraper scraper : scrapers) {
             try {
-                log.info("[{}] 크롤링 시작 - keyword: {}, category: {}, maxPages: {}", scraper.getSiteName(), keyword, jobCategory, maxPages);
-                List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages);
+                log.info("[{}] 크롤링 시작 - keyword: {}, category: {}, companyType: {}, maxPages: {}",
+                        scraper.getSiteName(), keyword, jobCategory, companyType, maxPages);
+                List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages, companyType);
                 log.info("[{}] {} 건 수집", scraper.getSiteName(), data.size());
                 total += saveNewPostingsInBatch(data);
             } catch (Exception e) {
@@ -48,18 +49,18 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     @Override
-    public int crawlBySite(String siteName, String keyword, String jobCategory, int maxPages) {
+    public int crawlBySite(String siteName, String keyword, String jobCategory, int maxPages, String companyType) {
         return scrapers.stream()
                 .filter(s -> s.getSiteName().equalsIgnoreCase(siteName))
                 .findFirst()
                 .map(scraper -> {
-                    List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages);
+                    List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages, companyType);
                     return saveNewPostingsInBatch(data);
                 }).orElse(0);
     }
 
     @Override
-    public int crawlBySites(List<String> siteNames, String keyword, String jobCategory, int maxPages) {
+    public int crawlBySites(List<String> siteNames, String keyword, String jobCategory, int maxPages, String companyType) {
         int total = 0;
         for (JobScraper scraper : scrapers) {
             boolean matched = siteNames.stream()
@@ -67,8 +68,9 @@ public class CrawlerServiceImpl implements CrawlerService {
             if (!matched) continue;
 
             try {
-                log.info("[{}] 크롤링 시작 - keyword: {}, category: {}, maxPages: {}", scraper.getSiteName(), keyword, jobCategory, maxPages);
-                List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages);
+                log.info("[{}] 크롤링 시작 - keyword: {}, category: {}, companyType: {}, maxPages: {}",
+                        scraper.getSiteName(), keyword, jobCategory, companyType, maxPages);
+                List<CrawledJobData> data = scraper.scrapeJobs(keyword, jobCategory, maxPages, companyType);
                 log.info("[{}] {} 건 수집", scraper.getSiteName(), data.size());
                 total += saveNewPostingsInBatch(data);
             } catch (Exception e) {
@@ -95,6 +97,11 @@ public class CrawlerServiceImpl implements CrawlerService {
                 continue;
             }
 
+            if (isEmptyContent(data)) {
+                log.warn("[크롤링] 본문 비어있는 공고 스킵: {} - {}", data.getCompany(), data.getTitle());
+                continue;
+            }
+
             newPostings.add(converter.toJobPosting(data));
             redisTemplate.opsForValue().set(redisKey, "1", CRAWLED_TTL);
         }
@@ -109,6 +116,11 @@ public class CrawlerServiceImpl implements CrawlerService {
         }
 
         return saved;
+    }
+
+    private boolean isEmptyContent(CrawledJobData data) {
+        return (data.getDescription() == null || data.getDescription().isBlank())
+                && (data.getRequirements() == null || data.getRequirements().isBlank());
     }
 
     private void invalidateStatsCache(int savedCount) {

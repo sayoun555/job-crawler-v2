@@ -4,5 +4,7 @@ public enum SourceSite {
     SARAMIN,
     JOBPLANET,
     LINKAREER,
-    JOBKOREA
+    JOBKOREA,
+    JOBALIO,
+    WANTED
 }

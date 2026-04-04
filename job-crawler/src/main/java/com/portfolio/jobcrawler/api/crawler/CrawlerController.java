@@ -42,8 +42,9 @@ public class CrawlerController {
     public ResponseEntity<ApiResponse<Map<String, Object>>> crawlAll(
             @Parameter(description = "검색 키워드") @RequestParam(required = false) String keyword,
             @Parameter(description = "직무 카테고리") @RequestParam(required = false) String jobCategory,
-            @Parameter(description = "최대 크롤링 페이지 수") @RequestParam(required = false, defaultValue = "50") int maxPages) {
-        int saved = crawlerService.crawlAll(keyword, jobCategory, maxPages);
+            @Parameter(description = "최대 크롤링 페이지 수") @RequestParam(required = false, defaultValue = "50") int maxPages,
+            @Parameter(description = "기업형태 (public=공기업)") @RequestParam(required = false) String companyType) {
+        int saved = crawlerService.crawlAll(keyword, jobCategory, maxPages, companyType);
         return ResponseEntity.ok(ApiResponse.ok(
                 Map.of("keyword", keyword != null ? keyword : "전체", "savedCount", saved), "크롤링 완료"));
     }
@@ -62,8 +63,9 @@ public class CrawlerController {
         String keyword = (String) body.get("keyword");
         String jobCategory = (String) body.get("jobCategory");
         int maxPages = body.get("maxPages") != null ? Integer.parseInt(body.get("maxPages").toString()) : 50;
+        String companyType = (String) body.get("companyType");
 
-        int saved = crawlerService.crawlBySites(sites, keyword, jobCategory, maxPages);
+        int saved = crawlerService.crawlBySites(sites, keyword, jobCategory, maxPages, companyType);
         return ResponseEntity.ok(ApiResponse.ok(
                 Map.of("sites", sites, "keyword", keyword != null ? keyword : "전체", "savedCount", saved),
                 sites.size() + "개 사이트 크롤링 완료"));
@@ -75,8 +77,9 @@ public class CrawlerController {
             @Parameter(description = "사이트 이름 (saramin, jobplanet 등)") @PathVariable String site,
             @Parameter(description = "검색 키워드") @RequestParam(required = false) String keyword,
             @Parameter(description = "직무 카테고리") @RequestParam(required = false) String jobCategory,
-            @Parameter(description = "최대 크롤링 페이지 수") @RequestParam(required = false, defaultValue = "50") int maxPages) {
-        int saved = crawlerService.crawlBySite(site, keyword, jobCategory, maxPages);
+            @Parameter(description = "최대 크롤링 페이지 수") @RequestParam(required = false, defaultValue = "50") int maxPages,
+            @Parameter(description = "기업형태 (public=공기업)") @RequestParam(required = false) String companyType) {
+        int saved = crawlerService.crawlBySite(site, keyword, jobCategory, maxPages, companyType);
         return ResponseEntity.ok(ApiResponse.ok(
                 Map.of("site", site, "keyword", keyword != null ? keyword : "전체", "savedCount", saved), site + " 크롤링 완료"));
     }
@@ -154,6 +157,14 @@ public class CrawlerController {
     public ResponseEntity<ApiResponse<Void>> deleteJobsBySite(@Parameter(description = "사이트 이름") @PathVariable String site) {
         int deleted = jobPostingService.deleteJobsBySite(site);
         return ResponseEntity.ok(ApiResponse.ok(null, site + " 공고 " + deleted + "개 삭제 완료"));
+    }
+
+    @Operation(summary = "내용 비어있는 공고 일괄 삭제")
+    @DeleteMapping("/jobs/empty")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> deleteEmptyPostings() {
+        int deleted = jobPostingService.deleteEmptyPostings();
+        return ResponseEntity.ok(ApiResponse.ok(
+                Map.of("deletedCount", deleted), "빈 공고 " + deleted + "개 삭제 완료"));
     }
 
     @Operation(summary = "디스코드 알림 발송 테스트")

@@ -19,5 +19,5 @@ public interface JobScraper {
      * @param jobCategory 직무 카테고리
      * @param maxPages 최대 수집 페이지 수
      */
-    List<CrawledJobData> scrapeJobs(String keyword, String jobCategory, int maxPages);
+    List<CrawledJobData> scrapeJobs(String keyword, String jobCategory, int maxPages, String companyType);
 }

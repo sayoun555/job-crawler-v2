@@ -28,7 +28,7 @@ public class LinkareerParser implements SiteParser {
     }
 
     @Override
-    public String buildSearchUrl(String keyword, String jobCategory) {
+    public String buildSearchUrl(String keyword, String jobCategory, String companyType) {
         StringBuilder urlBuilder = new StringBuilder(LINKAREER_BASE_URL);
         urlBuilder.append("/list/recruit?filterBy_activityTypeID=5");
         urlBuilder.append("&filterBy_status=OPEN");
@@ -37,6 +37,10 @@ public class LinkareerParser implements SiteParser {
 
         if (keyword != null && !keyword.isBlank()) {
             urlBuilder.append("&filterBy_keyword=").append(keyword);
+        }
+
+        if ("public".equalsIgnoreCase(companyType)) {
+            urlBuilder.append("&filterBy_orgTypeIDs=3");
         }
 
         return urlBuilder.toString();

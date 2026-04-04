@@ -45,6 +45,9 @@ export default function Navbar() {
                             <Link href="/resume" className="text-muted-foreground hover:text-foreground transition-colors">
                                 이력서
                             </Link>
+                            <Link href="/bookmarks" className="text-muted-foreground hover:text-foreground transition-colors">
+                                관심 공고
+                            </Link>
                             <Link href="/applications" className="text-muted-foreground hover:text-foreground transition-colors">
                                 지원 이력
                             </Link>

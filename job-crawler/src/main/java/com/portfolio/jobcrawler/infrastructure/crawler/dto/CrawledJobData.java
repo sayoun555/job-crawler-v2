@@ -53,6 +53,10 @@ public class CrawledJobData {
         if (isNotBlank(applicationMethod)) this.applicationMethod = applicationMethod;
     }
 
+    public boolean hasContent() {
+        return isNotBlank(description) || isNotBlank(requirements);
+    }
+
     private boolean isNotBlank(String value) {
         return value != null && !value.isBlank();
     }
