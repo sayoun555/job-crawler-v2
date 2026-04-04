@@ -1,7 +1,8 @@
 "use client";
+export const runtime = "edge";
 
 import { useState, useEffect, use, useRef } from "react";
-import { projectsApi, Project } from "@/lib/api";
+import { projectsApi, aiApi, Project } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Markdown } from "@/components/ui/markdown";
+import dynamic from "next/dynamic";
+
+const MermaidDiagram = dynamic(() => import("@/components/ui/mermaid-diagram"), { ssr: false });
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
@@ -30,8 +34,65 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
     const [aiSummary, setAiSummary] = useState("");
     const [aiAnalysis, setAiAnalysis] = useState<{ keyFeatures?: string[]; architecture?: string } | null>(null);
     const [diagramPrompt, setDiagramPrompt] = useState("");
+    const [mermaidCodes, setMermaidCodes] = useState<{ architecture?: string; feature?: string; sequence?: string }>({});
+    const [diagramTab, setDiagramTab] = useState<"prompt" | "mermaid">("mermaid");
     const [saving, setSaving] = useState(false);
     const [analyzing, setAnalyzing] = useState(false);
+    const setAnalyzingPersist = (v: boolean, url?: string) => {
+        setAnalyzing(v);
+        if (v) localStorage.setItem(`ai-project-${id}`, JSON.stringify({ ts: Date.now(), githubUrl: url || "" }));
+        else localStorage.removeItem(`ai-project-${id}`);
+    };
+    useEffect(() => {
+        try {
+            const s = localStorage.getItem(`ai-project-${id}`);
+            if (!s) return;
+            const { ts, githubUrl: savedUrl, taskId } = JSON.parse(s);
+            if (Date.now() - ts >= 5 * 60 * 1000) {
+                localStorage.removeItem(`ai-project-${id}`);
+                return;
+            }
+            setAnalyzing(true);
+            if (savedUrl) setGithubUrl(savedUrl);
+            setMessage("AI가 GitHub 프로젝트를 분석하고 있습니다...");
+
+            // taskId가 있으면 폴링 재시작
+            if (taskId && token) {
+                const pollInterval = setInterval(async () => {
+                    try {
+                        const res = await aiApi.asyncStatus(token, taskId);
+                        if (res.status === "COMPLETED" && res.result) {
+                            clearInterval(pollInterval);
+                            try {
+                                let jsonStr = res.result;
+                                if (jsonStr.includes("```json")) {
+                                    jsonStr = jsonStr.substring(jsonStr.indexOf("```json") + 7);
+                                    jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+                                } else if (jsonStr.includes("```")) {
+                                    jsonStr = jsonStr.substring(jsonStr.indexOf("```") + 3);
+                                    jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+                                }
+                                jsonStr = jsonStr.trim();
+                                if (jsonStr.startsWith("{")) {
+                                    const parsed = JSON.parse(jsonStr);
+                                    applyAnalysisResult({ ...parsed, summary: res.result });
+                                }
+                            } catch {
+                                setDescription(res.result);
+                            }
+                            setAnalyzingPersist(false);
+                            setMessage("GitHub 분석 완료! 프로젝트명, 설명, 기술스택이 자동으로 채워졌습니다.");
+                        } else if (res.status === "FAILED") {
+                            clearInterval(pollInterval);
+                            setAnalyzingPersist(false);
+                            setMessage("분석 실패: " + (res.result || ""));
+                        }
+                    } catch { /* 폴링 에러 무시 */ }
+                }, 3000);
+                return () => clearInterval(pollInterval);
+            }
+        } catch { localStorage.removeItem(`ai-project-${id}`); }
+    }, [id, token]);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
@@ -59,6 +120,13 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                         );
                     } else if (parsed.diagramPrompt) {
                         setDiagramPrompt(parsed.diagramPrompt);
+                    }
+                    if (parsed.architectureMermaid || parsed.featureMermaid || parsed.sequenceMermaid) {
+                        setMermaidCodes({
+                            architecture: parsed.architectureMermaid || "",
+                            feature: parsed.featureMermaid || "",
+                            sequence: parsed.sequenceMermaid || "",
+                        });
                     }
                 } catch { /* aiSummary가 JSON이 아닌 경우 무시 */ }
             }
@@ -90,58 +158,92 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
         } catch { setMessage("이미지 업로드 실패"); }
     };
 
+    const applyAnalysisResult = async (data: Record<string, unknown>) => {
+        const pName = (data.projectName as string) || name || githubUrl.replace(/\/$/, "").split("/").pop() || "";
+        const pDesc = (data.description as string) || description || (data.summary as string) || "";
+        const pTech = (data.techStack as string) || techStack || "";
+
+        setName(pName);
+        setDescription(pDesc);
+        setTechStack(pTech);
+
+        const analysis = {
+            keyFeatures: (data.keyFeatures as string[]) || [],
+            architecture: (data.architecture as string) || "",
+            architectureDiagramPrompt: (data.architectureDiagramPrompt as string) || "",
+            featureDiagramPrompt: (data.featureDiagramPrompt as string) || "",
+        };
+        setAiAnalysis(analysis);
+        const summary = JSON.stringify(analysis);
+        setAiSummary(summary);
+
+        if (data.architectureDiagramPrompt || data.featureDiagramPrompt) {
+            setDiagramPrompt(
+                (data.architectureDiagramPrompt ? "[ 아키텍처 다이어그램 ]\n" + data.architectureDiagramPrompt : "")
+                + (data.architectureDiagramPrompt && data.featureDiagramPrompt ? "\n\n" : "")
+                + (data.featureDiagramPrompt ? "[ 기능 흐름 다이어그램 ]\n" + data.featureDiagramPrompt : "")
+            );
+        }
+
+        // AI 분석 완료 시 자동 저장
+        if (token && pName.trim()) {
+            try {
+                const saveData = { name: pName, description: pDesc, githubUrl, notionUrl, techStack: pTech, aiSummary: summary };
+                if (isNew) {
+                    await projectsApi.create(token, saveData);
+                } else {
+                    await projectsApi.update(token, Number(id), saveData);
+                }
+            } catch { /* 자동 저장 실패는 무시 — 수동 저장 가능 */ }
+        }
+    };
+
     const handleGitHubAnalyze = async () => {
         if (!token || !githubUrl.trim()) return;
-        setAnalyzing(true);
-        setMessage("");
+        setAnalyzingPersist(true, githubUrl);
+        setMessage("AI가 GitHub 프로젝트를 분석하고 있습니다...");
         try {
-            const res = await fetch(`${API_BASE}/projects/ai-analyze`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ githubUrl }),
-            });
-            const json = await res.json();
-            if (json.success) {
-                const data = json.data;
+            const { taskId } = await aiApi.asyncProjectSummary(token, githubUrl);
+            // localStorage에 taskId 저장 (새로고침 복구용)
+            localStorage.setItem(`ai-project-${id}`, JSON.stringify({ ts: Date.now(), githubUrl, taskId }));
 
-                // AI 분석 결과로 필드 자동 채우기
-                if (data.projectName) setName(data.projectName);
-                if (data.description) setDescription(data.description);
-                if (data.techStack) setTechStack(data.techStack);
-
-                // AI 분석 상세 결과 저장 (keyFeatures, architecture, diagramPrompt)
-                const analysis = {
-                    keyFeatures: data.keyFeatures || [],
-                    architecture: data.architecture || "",
-                    architectureDiagramPrompt: data.architectureDiagramPrompt || "",
-                    featureDiagramPrompt: data.featureDiagramPrompt || "",
-                };
-                setAiAnalysis(analysis);
-                setAiSummary(JSON.stringify(analysis));
-
-                if (data.architectureDiagramPrompt || data.featureDiagramPrompt) {
-                    setDiagramPrompt(
-                        (data.architectureDiagramPrompt ? "[ 아키텍처 다이어그램 ]\n" + data.architectureDiagramPrompt : "")
-                        + (data.architectureDiagramPrompt && data.featureDiagramPrompt ? "\n\n" : "")
-                        + (data.featureDiagramPrompt ? "[ 기능 흐름 다이어그램 ]\n" + data.featureDiagramPrompt : "")
-                    );
-                }
-
-                // JSON 파싱 실패 시 (summary만 있는 경우) 폴백
-                if (!data.projectName && !name.trim()) {
-                    const parts = githubUrl.replace(/\/$/, "").split("/");
-                    setName(parts[parts.length - 1] || "");
-                }
-                if (!data.description && !description.trim()) {
-                    setDescription(data.summary || "");
-                }
-
-                setMessage("GitHub 분석 완료! 프로젝트명, 설명, 기술스택이 자동으로 채워졌습니다.");
-            } else {
-                setMessage("분석 실패: " + json.message);
-            }
-        } catch { setMessage("GitHub 분석 실패"); }
-        finally { setAnalyzing(false); }
+            // 폴링으로 완료 감지
+            const pollInterval = setInterval(async () => {
+                try {
+                    const res = await aiApi.asyncStatus(token, taskId);
+                    if (res.status === "COMPLETED" && res.result) {
+                        clearInterval(pollInterval);
+                        // JSON 파싱 시도
+                        try {
+                            let jsonStr = res.result;
+                            if (jsonStr.includes("```json")) {
+                                jsonStr = jsonStr.substring(jsonStr.indexOf("```json") + 7);
+                                jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+                            } else if (jsonStr.includes("```")) {
+                                jsonStr = jsonStr.substring(jsonStr.indexOf("```") + 3);
+                                jsonStr = jsonStr.substring(0, jsonStr.indexOf("```"));
+                            }
+                            jsonStr = jsonStr.trim();
+                            if (jsonStr.startsWith("{")) {
+                                const parsed = JSON.parse(jsonStr);
+                                applyAnalysisResult({ ...parsed, summary: res.result });
+                            }
+                        } catch {
+                            setDescription(res.result);
+                        }
+                        setAnalyzingPersist(false);
+                        setMessage("GitHub 분석 완료! 프로젝트명, 설명, 기술스택이 자동으로 채워졌습니다.");
+                    } else if (res.status === "FAILED") {
+                        clearInterval(pollInterval);
+                        setAnalyzingPersist(false);
+                        setMessage("분석 실패: " + (res.result || ""));
+                    }
+                } catch { /* 폴링 에러 무시 */ }
+            }, 3000);
+        } catch {
+            setMessage("GitHub 분석 요청 실패");
+            setAnalyzing(false);
+        }
     };
 
     const handleDelete = async () => {
@@ -312,57 +414,128 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 </Card>
             )}
 
-            {/* 다이어그램 프롬프트 */}
-            <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium">다이어그램 프롬프트</label>
-                    <div className="flex gap-2">
-                        <Button variant="outline" size="sm"
-                            disabled={analyzing || !name.trim()}
-                            onClick={async () => {
-                                if (!token || isNew) return;
-                                setAnalyzing(true);
-                                setMessage("");
-                                try {
-                                    const res = await projectsApi.generateDiagramPrompt(token, Number(id));
-                                    const parts: string[] = [];
-                                    if (res.architectureDiagramPrompt) parts.push("[ 아키텍처 다이어그램 ]\n" + res.architectureDiagramPrompt);
-                                    if (res.featureDiagramPrompt) parts.push("[ 기능 흐름 다이어그램 ]\n" + res.featureDiagramPrompt);
-                                    if (res.raw && parts.length === 0) parts.push(res.raw);
-                                    setDiagramPrompt(parts.join("\n\n"));
-                                    // aiSummary에도 저장
+            {/* 다이어그램 */}
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <CardTitle className="text-base">다이어그램</CardTitle>
+                        <div className="flex gap-2">
+                            <Button variant="outline" size="sm"
+                                disabled={analyzing || !name.trim()}
+                                onClick={async () => {
+                                    if (!token || isNew) return;
+                                    setAnalyzingPersist(true);
+                                    setMessage("텍스트 프롬프트 생성 중...");
                                     try {
-                                        const current = aiSummary ? JSON.parse(aiSummary) : {};
-                                        current.architectureDiagramPrompt = res.architectureDiagramPrompt || "";
-                                        current.featureDiagramPrompt = res.featureDiagramPrompt || "";
-                                        setAiSummary(JSON.stringify(current));
-                                    } catch {}
-                                    setMessage("다이어그램 프롬프트 생성 완료");
-                                } catch { setMessage("다이어그램 프롬프트 생성 실패"); }
-                                finally { setAnalyzing(false); }
-                            }}>
-                            {analyzing ? "생성중..." : "프롬프트 생성"}
-                        </Button>
-                        {diagramPrompt && (
-                            <Button variant="outline" size="sm" onClick={() => {
-                                navigator.clipboard.writeText(diagramPrompt);
-                                setMessage("클립보드에 복사되었습니다.");
-                            }}>복사</Button>
-                        )}
+                                        const res = await projectsApi.generateDiagramPrompt(token, Number(id));
+                                        const parts: string[] = [];
+                                        if (res.architectureDiagramPrompt) parts.push("[ 아키텍처 다이어그램 ]\n" + res.architectureDiagramPrompt);
+                                        if (res.featureDiagramPrompt) parts.push("[ 기능 흐름 다이어그램 ]\n" + res.featureDiagramPrompt);
+                                        if (res.sequenceDiagramPrompt) parts.push("[ 시퀀스 다이어그램 ]\n" + res.sequenceDiagramPrompt);
+                                        if (res.raw && parts.length === 0) parts.push(res.raw);
+                                        setDiagramPrompt(parts.join("\n\n"));
+                                        setDiagramTab("prompt");
+                                        try {
+                                            const current = aiSummary ? JSON.parse(aiSummary) : {};
+                                            current.architectureDiagramPrompt = res.architectureDiagramPrompt || "";
+                                            current.featureDiagramPrompt = res.featureDiagramPrompt || "";
+                                            current.sequenceDiagramPrompt = res.sequenceDiagramPrompt || "";
+                                            setAiSummary(JSON.stringify(current));
+                                        } catch {}
+                                        setMessage("텍스트 프롬프트 생성 완료");
+                                        setAnalyzingPersist(false);
+                                    } catch { setMessage("텍스트 프롬프트 생성 실패"); setAnalyzing(false); }
+                                }}>
+                                {analyzing ? "생성중..." : "텍스트 프롬프트"}
+                            </Button>
+                            <Button variant="outline" size="sm"
+                                className="text-indigo-600 border-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950"
+                                disabled={analyzing || !name.trim()}
+                                onClick={async () => {
+                                    if (!token || isNew) return;
+                                    setAnalyzingPersist(true);
+                                    setMessage("Mermaid 다이어그램 생성 중...");
+                                    try {
+                                        const res = await projectsApi.generateDiagramMermaid(token, Number(id));
+                                        setMermaidCodes({
+                                            architecture: res.architectureMermaid || "",
+                                            feature: res.featureMermaid || "",
+                                            sequence: res.sequenceMermaid || "",
+                                        });
+                                        setDiagramTab("mermaid");
+                                        try {
+                                            const current = aiSummary ? JSON.parse(aiSummary) : {};
+                                            current.architectureMermaid = res.architectureMermaid || "";
+                                            current.featureMermaid = res.featureMermaid || "";
+                                            current.sequenceMermaid = res.sequenceMermaid || "";
+                                            setAiSummary(JSON.stringify(current));
+                                        } catch {}
+                                        setMessage("Mermaid 다이어그램 생성 완료");
+                                        setAnalyzingPersist(false);
+                                    } catch { setMessage("Mermaid 다이어그램 생성 실패"); setAnalyzing(false); }
+                                }}>
+                                {analyzing ? "생성중..." : "Mermaid 다이어그램"}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                    Eraser.io, Miro AI 등에 붙여넣으면 다이어그램이 생성됩니다.
-                </p>
-                {diagramPrompt && (
-                    <textarea
-                        className="w-full p-3 border rounded-md text-sm resize-y bg-muted/30 font-sans leading-relaxed"
-                        style={{ minHeight: "200px" }}
-                        value={diagramPrompt}
-                        readOnly
-                    />
-                )}
-            </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {(diagramPrompt || mermaidCodes.architecture) && (
+                        <div className="flex gap-1 border-b">
+                            <button
+                                className={`px-3 py-1.5 text-sm font-medium border-b-2 transition-colors ${
+                                    diagramTab === "mermaid" ? "border-emerald-600 text-emerald-600" : "border-transparent text-muted-foreground hover:text-foreground"
+                                }`}
+                                onClick={() => setDiagramTab("mermaid")}>
+                                Mermaid 다이어그램
+                            </button>
+                            <button
+                                className={`px-3 py-1.5 text-sm font-medium border-b-2 transition-colors ${
+                                    diagramTab === "prompt" ? "border-emerald-600 text-emerald-600" : "border-transparent text-muted-foreground hover:text-foreground"
+                                }`}
+                                onClick={() => setDiagramTab("prompt")}>
+                                텍스트 프롬프트
+                            </button>
+                        </div>
+                    )}
+
+                    {diagramTab === "mermaid" && (mermaidCodes.architecture || mermaidCodes.feature || mermaidCodes.sequence) && (
+                        <div className="space-y-6">
+                            {mermaidCodes.architecture && <MermaidDiagram code={mermaidCodes.architecture} title="아키텍처 다이어그램" />}
+                            {mermaidCodes.feature && <MermaidDiagram code={mermaidCodes.feature} title="기능 흐름 다이어그램" />}
+                            {mermaidCodes.sequence && <MermaidDiagram code={mermaidCodes.sequence} title="시퀀스 다이어그램" />}
+                        </div>
+                    )}
+
+                    {diagramTab === "prompt" && diagramPrompt && (
+                        <div className="space-y-2">
+                            <div className="flex justify-end">
+                                <Button variant="outline" size="sm" onClick={() => {
+                                    navigator.clipboard.writeText(diagramPrompt);
+                                    setMessage("클립보드에 복사되었습니다.");
+                                }}>전체 복사</Button>
+                            </div>
+                            <textarea
+                                className="w-full p-3 border rounded-md text-sm resize-y bg-muted/30 font-sans leading-relaxed"
+                                style={{ minHeight: "200px" }}
+                                value={diagramPrompt}
+                                readOnly
+                            />
+                            <p className="text-xs text-muted-foreground">
+                                ChatGPT, Eraser.io 등에 붙여넣으면 다이어그램 이미지가 생성됩니다.
+                            </p>
+                        </div>
+                    )}
+
+                    {!diagramPrompt && !mermaidCodes.architecture && (
+                        <p className="text-sm text-muted-foreground text-center py-4">
+                            버튼을 눌러 다이어그램을 생성하세요.
+                        </p>
+                    )}
+                </CardContent>
+            </Card>
+
+
 
             <Separator />
 

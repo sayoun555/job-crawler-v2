@@ -1,4 +1,5 @@
 "use client";
+export const runtime = "edge";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -112,6 +113,17 @@ export default function PreviewPage() {
 
     const aiQueue = useAiTaskQueue(token);
 
+    // 새로고침 후 AI 큐에 활성 태스크가 있으면 regenerating 복구
+    useEffect(() => {
+        if (aiQueue.hasActiveTasks && !regenerating) {
+            const coverLetterTask = aiQueue.activeTasks.find(t => t.type === "COVER_LETTER");
+            const portfolioTask = aiQueue.activeTasks.find(t => t.type === "PORTFOLIO");
+            if (coverLetterTask || portfolioTask) {
+                updateRegenerating(coverLetterTask ? "coverLetter" : "all");
+            }
+        }
+    }, [aiQueue.hasActiveTasks]);
+
     useEffect(() => {
         if (!token || !id) return;
         loadApplication();
@@ -122,12 +134,19 @@ export default function PreviewPage() {
         if (!token) return;
         const { onAiTaskComplete } = require("@/lib/websocket");
         const cleanup = onAiTaskComplete((data: { taskId: string; status: string; result: string }) => {
-            if (data.status === "COMPLETED") {
+            if (data.status === "COMPLETED" || data.status === "FAILED") {
                 loadApplication();
             }
         });
         return cleanup;
     }, [token]);
+
+    // 폴링 fallback: regenerating 중이면 10초마다 지원서 확인
+    useEffect(() => {
+        if (!token || !regenerating) return;
+        const interval = setInterval(() => { loadApplication(); }, 10000);
+        return () => clearInterval(interval);
+    }, [token, regenerating]);
 
     const loadApplication = async () => {
         try {
@@ -136,7 +155,8 @@ export default function PreviewPage() {
                 setApp(found);
                 setCoverLetter(found.coverLetter || "");
 
-                if (found.coverLetter) {
+                // regenerating 해제: AI 큐에 활성 태스크가 없을 때만
+                if (regenerating && !aiQueue.hasActiveTasks) {
                     updateRegenerating(null);
                 }
 

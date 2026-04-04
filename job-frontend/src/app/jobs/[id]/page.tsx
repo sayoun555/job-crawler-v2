@@ -1,4 +1,5 @@
 "use client";
+export const runtime = "edge";
 
 import { useState, useEffect, use } from "react";
 import { jobsApi, aiApi, applicationsApi, templatesApi, bookmarksApi, JobPosting, Template } from "@/lib/api";

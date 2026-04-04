@@ -1,4 +1,5 @@
 "use client";
+export const runtime = "edge";
 
 import { useState, useEffect, use } from "react";
 import { coverLettersApi, aiApi, templatesApi, CoverLetterItem } from "@/lib/api";
@@ -54,6 +55,17 @@ export default function CoverLetterDetailPage({ params }: { params: Promise<{ id
     const { token } = useAuth();
     const [item, setItem] = useState<CoverLetterItem | null>(null);
     const [analyzing, setAnalyzing] = useState(false);
+    const setAnalyzingPersist = (v: boolean) => {
+        setAnalyzing(v);
+        if (v) localStorage.setItem(`ai-cl-analyze-${id}`, JSON.stringify({ ts: Date.now() }));
+        else localStorage.removeItem(`ai-cl-analyze-${id}`);
+    };
+    useEffect(() => {
+        try {
+            const s = localStorage.getItem(`ai-cl-analyze-${id}`);
+            if (s) { const { ts } = JSON.parse(s); if (Date.now() - ts < 5 * 60 * 1000) setAnalyzing(true); else localStorage.removeItem(`ai-cl-analyze-${id}`); }
+        } catch { localStorage.removeItem(`ai-cl-analyze-${id}`); }
+    }, [id]);
     const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
     const [savingTemplate, setSavingTemplate] = useState(false);
     const [message, setMessage] = useState("");
@@ -64,7 +76,7 @@ export default function CoverLetterDetailPage({ params }: { params: Promise<{ id
 
     const handleAnalyze = async () => {
         if (!token) return;
-        setAnalyzing(true);
+        setAnalyzingPersist(true);
         setMessage("");
         try {
             const result = await aiApi.analyzeCoverLetter(token, Number(id));
@@ -75,9 +87,11 @@ export default function CoverLetterDetailPage({ params }: { params: Promise<{ id
                 strengths: result.strengths,
                 template: result.template,
             });
+            setAnalyzingPersist(false);
         } catch {
             setMessage("AI 분석 실패");
-        } finally {
+            // localStorage는 지우지 않음 — 새로고침 후에도 비활성 유지
+            // useEffect에서 5분 만료로 자동 해제
             setAnalyzing(false);
         }
     };
